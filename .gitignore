@@ -1,0 +1,13 @@
+# Claude Code per-machine settings
+.claude/settings.local.json
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Node (in case a build step is added later)
+node_modules/
