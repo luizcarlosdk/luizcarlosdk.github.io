@@ -888,14 +888,75 @@
     transition:background .15s, transform .15s;
   }
   .topnav .tn-cta:hover{background:var(--accent); transform:translateY(-1px)}
+  /* Hamburger button — desktop hidden, mobile only */
+  .tn-burger{
+    display:none;
+    background:transparent; border:0; padding:8px; margin-left:auto;
+    width:40px; height:40px; border-radius:8px;
+    cursor:pointer;
+    align-items:center; justify-content:center;
+    flex-direction:column; gap:4px;
+  }
+  .tn-burger:hover{background:rgba(58,49,40,.06)}
+  .tn-burger:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .tn-burger span{display:block; width:20px; height:2px; background:var(--ink); border-radius:2px; transition:transform .25s, opacity .25s}
+  body.drawer-open .tn-burger span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+  body.drawer-open .tn-burger span:nth-child(2){opacity:0}
+  body.drawer-open .tn-burger span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+  /* Drawer + scrim */
+  .drawer-scrim{
+    position:fixed; inset:0; z-index:90;
+    background:rgba(58,49,40,.42);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  body.drawer-open .drawer-scrim{opacity:1; pointer-events:auto}
+  .drawer{
+    position:fixed; top:0; right:0; z-index:100;
+    width:min(82vw, 340px); height:100vh; height:100dvh;
+    background:var(--cream);
+    border-left:1px solid var(--line);
+    box-shadow:-20px 0 40px -28px rgba(58,49,40,.45);
+    transform:translateX(100%);
+    transition:transform .35s cubic-bezier(.2,.8,.25,1);
+    display:flex; flex-direction:column;
+    padding:18px 22px 24px;
+  }
+  body.drawer-open .drawer{transform:translateX(0)}
+  .drawer-head{display:flex; align-items:center; justify-content:space-between; padding-bottom:18px; border-bottom:1px solid var(--line); margin-bottom:14px}
+  .drawer-brand{font-family:"Fraunces",Georgia,serif; font-style:italic; font-size:18px; color:var(--ink)}
+  .drawer-brand b{font-weight:500; font-style:normal; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin-left:6px}
+  .drawer-close{background:transparent; border:0; padding:6px; cursor:pointer; color:var(--ink); border-radius:6px; line-height:0}
+  .drawer-close:hover{background:rgba(58,49,40,.06)}
+  .drawer-close:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .drawer-nav{display:flex; flex-direction:column; gap:2px}
+  .drawer-nav a{
+    display:flex; align-items:center; gap:14px;
+    padding:14px 8px; border-radius:8px;
+    font-family:"JetBrains Mono",monospace; font-size:14px;
+    color:var(--ink); letter-spacing:.02em;
+    transition:background .15s, color .15s;
+  }
+  .drawer-nav a:hover, .drawer-nav a:active{background:rgba(58,49,40,.06)}
+  .drawer-nav a .num{font-size:11px; color:var(--caramel); min-width:22px; font-weight:500}
+  .drawer-nav a.active{color:var(--accent)}
+  .drawer-foot{margin-top:auto; padding-top:18px; border-top:1px solid var(--line); font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--ink-soft)}
+  .drawer-foot a{color:inherit; transition:color .15s}
+  .drawer-foot a:hover{color:var(--ink)}
+
   @media (max-width:720px){
-    .topnav{left:0; padding:0 14px; height:46px}
-    .topnav .tn-brand{display:none}
-    .topnav .tn-links{gap:0; overflow-x:auto; scrollbar-width:none}
-    .topnav .tn-links::-webkit-scrollbar{display:none}
-    .topnav .tn-links a{padding:6px 10px; flex:0 0 auto}
-    .topnav .tn-links a .num{display:none}
-    .topnav .tn-cta{padding:6px 11px; font-size:10px}
+    .topnav{left:0; padding:0 8px 0 14px; height:52px; gap:8px}
+    .topnav .tn-brand{display:inline; font-size:14px; padding-right:0; margin-right:0; border-right:0; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .topnav .tn-links{display:none}
+    .topnav .tn-cta{display:none}
+    .tn-burger{display:flex}
+    /* Lock body scroll while drawer is open */
+    body.drawer-open{overflow:hidden}
+  }
+  /* Drawer never visible on desktop */
+  @media (min-width:721px){
+    .drawer, .drawer-scrim{display:none !important}
   }
 
   /* mobile adjustments for desk */
@@ -1629,11 +1690,18 @@
       .filter(Boolean);
     const links = nav.querySelectorAll('.tn-links a');
 
+    const drawerLinks = document.querySelectorAll('.drawer-nav a');
+    const isMobile = () => window.matchMedia('(max-width:720px)').matches;
     const onScroll = () => {
-      // reveal after user has scrolled past the about section's top
-      const threshold = about ? about.getBoundingClientRect().top + window.scrollY + 120 : 600;
-      if (window.scrollY > threshold) nav.classList.add('show');
-      else nav.classList.remove('show');
+      // mobile: always visible (it carries the hamburger)
+      // desktop: reveal after scrolling past the about section's top
+      if (isMobile()){
+        nav.classList.add('show');
+      } else {
+        const threshold = about ? about.getBoundingClientRect().top + window.scrollY + 120 : 600;
+        if (window.scrollY > threshold) nav.classList.add('show');
+        else nav.classList.remove('show');
+      }
 
       // active link — whichever section's midpoint crosses 40% of viewport first
       const mark = window.scrollY + window.innerHeight * 0.35;
@@ -1642,13 +1710,14 @@
         if (s.offsetTop <= mark) active = s.id;
       }
       links.forEach(a => a.classList.toggle('active', a.dataset.section === active));
+      drawerLinks.forEach(a => a.classList.toggle('active', a.dataset.section === active));
     };
     onScroll();
     window.addEventListener('scroll', onScroll, {passive:true});
     window.addEventListener('resize', onScroll);
 
-    // smooth scroll with offset for the nav height
-    links.forEach(a => {
+    // smooth scroll with offset for the nav height (topnav links + drawer links)
+    [...links, ...drawerLinks].forEach(a => {
       a.addEventListener('click', (e) => {
         const href = a.getAttribute('href');
         if (!href || !href.startsWith('#')) return;
@@ -1658,6 +1727,40 @@
         const top = el.getBoundingClientRect().top + window.scrollY - 60;
         window.scrollTo({top, behavior:'smooth'});
       });
+    });
+  })();
+
+  /* Mobile drawer nav */
+  (() => {
+    const burger = document.getElementById('tn-burger');
+    const drawer = document.getElementById('drawer');
+    const scrim  = document.getElementById('drawer-scrim');
+    const closeBtn = document.getElementById('drawer-close');
+    if (!burger || !drawer || !scrim) return;
+
+    const open = () => {
+      document.body.classList.add('drawer-open');
+      burger.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+      scrim.setAttribute('aria-hidden', 'false');
+    };
+    const close = () => {
+      document.body.classList.remove('drawer-open');
+      burger.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      scrim.setAttribute('aria-hidden', 'true');
+    };
+
+    burger.addEventListener('click', () => {
+      document.body.classList.contains('drawer-open') ? close() : open();
+    });
+    scrim.addEventListener('click', close);
+    closeBtn?.addEventListener('click', close);
+    drawer.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', () => setTimeout(close, 50));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) close();
     });
   })();
 
