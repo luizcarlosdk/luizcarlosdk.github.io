@@ -829,7 +829,7 @@
   }
 
   /* reveal on scroll */
-  .reveal{opacity:0; transform:translateY(20px); transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal{opacity:0; transform:translateY(12px); transition:opacity .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1)}
   .reveal.in{opacity:1; transform:none}
 
   @media (prefers-reduced-motion: reduce){
@@ -1458,9 +1458,13 @@
   }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // stagger reveals within each container
-  document.querySelectorAll('.archives .folder, .ledger div, .toolkit .card, .dossier .entry, .works .work, .offclock .feed, .links a').forEach((el,i) => {
-    el.style.transitionDelay = (i*0.06)+'s';
+  // stagger reveals within each container (reset per-container, capped)
+  ['.ledger', '.toolkit', '.dossier', '.works', '.offclock', '.channels'].forEach(sel => {
+    document.querySelectorAll(sel).forEach(group => {
+      Array.from(group.children).forEach((el, i) => {
+        el.style.transitionDelay = Math.min(i * 0.04, 0.16) + 's';
+      });
+    });
   });
 
   // animated counter
@@ -1658,7 +1662,7 @@
       '106,90,72',    // cocoa
       '255,248,230',  // cream highlight
     ];
-    const N = 110;
+    const N = 55;
     const parts = Array.from({length:N}, () => {
       const r = 0.8 + Math.random()*2.6;
       return {
@@ -1673,7 +1677,15 @@
         glow: Math.random() < 0.25,
       };
     });
+    let visible = true;
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) requestAnimationFrame(loop);
+      }, {threshold:0}).observe(canvas);
+    }
     const loop = () => {
+      if (!visible) return;
       ctx.clearRect(0,0,W,H);
       for (const p of parts) {
         p.x += p.vx; p.y += p.vy;
