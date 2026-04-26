@@ -1838,14 +1838,21 @@
       };
     });
     let visible = true;
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      requestAnimationFrame(loop);
+    };
     if ('IntersectionObserver' in window){
       new IntersectionObserver(([entry]) => {
+        const wasVisible = visible;
         visible = entry.isIntersecting;
-        if (visible) requestAnimationFrame(loop);
+        if (visible && !wasVisible) start();
       }, {threshold:0}).observe(canvas);
     }
     const loop = () => {
-      if (!visible) return;
+      if (!visible) { running = false; return; }
       ctx.clearRect(0,0,W,H);
       for (const p of parts) {
         p.x += p.vx; p.y += p.vy;
@@ -1870,7 +1877,7 @@
       }
       requestAnimationFrame(loop);
     };
-    loop();
+    start();
   })();
 
 </script>
