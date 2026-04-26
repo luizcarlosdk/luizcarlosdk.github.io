@@ -694,6 +694,11 @@
     background:var(--ink); border:1px solid var(--line);
     box-shadow:inset 0 0 0 3px rgba(245,236,220,.7);
   }
+  .work .thumb img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; display:block;
+    filter:saturate(.9) contrast(1.02);
+  }
   .work .thumb::after{
     content:""; position:absolute; inset:0;
     background:
@@ -1371,9 +1376,9 @@
           <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
         </div>
         <div class="thumb-col">
-          <div class="thumb t1">
+          <div class="thumb">
+            <img src="assets/portfolio.png" alt="Screenshot of the portfolio site" loading="lazy" decoding="async">
             <span class="sticker">Exhibit 01</span>
-            <div class="glyph">port-<br>folio</div>
           </div>
         </div>
       </article>
@@ -1390,9 +1395,9 @@
           </a>
         </div>
         <div class="thumb-col">
-          <div class="thumb t3">
+          <div class="thumb">
+            <img src="assets/capstone.png" alt="Screenshot of the capstone project" loading="lazy" decoding="async">
             <span class="sticker">Exhibit 02</span>
-            <div class="glyph">RAG<br>+ LLM</div>
           </div>
         </div>
       </article>
