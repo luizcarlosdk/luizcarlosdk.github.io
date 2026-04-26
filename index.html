@@ -1,0 +1,1693 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Luiz Carlos — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=JetBrains+Mono:wght@400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* lighter, less "wooden box" — warm off-white linen + muted terracotta accent */
+    --cream:#f7f2e8;
+    --paper:#f1ead9;
+    --paper-2:#e9e0cb;
+    --sand:#dccfb3;
+    --manila:#e9d3a2;
+    --manila-2:#d4b777;
+    --caramel:#b89e7d;
+    --cocoa:#6a5a48;
+    --ink:#3a3128;
+    --ink-soft:#6f6254;
+    --accent:#a0664a;
+    --red-stamp:#a8392e;
+    --line:rgba(58,49,40,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:"JetBrains Mono",ui-monospace,monospace;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:400;letter-spacing:-.01em;color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--ink);color:var(--cream)}
+
+  /* paper grain applied to body — much lighter than before */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.14;mix-blend-mode:multiply;
+    background-image:
+      radial-gradient(rgba(58,49,40,.08) 1px, transparent 1.2px),
+      radial-gradient(rgba(58,49,40,.06) 1px, transparent 1.2px);
+    background-size:3px 3px, 7px 7px;
+    background-position:0 0, 1px 2px;
+  }
+
+  /* =============================================================
+     DESKTOP SHELL — top of page
+     ============================================================= */
+  .desk{
+    min-height:100vh;
+    position:relative;
+    background:
+      radial-gradient(1200px 700px at 55% 20%, rgba(255,248,230,.7) 0%, transparent 65%),
+      radial-gradient(900px 500px at 85% 90%, rgba(184,158,125,.14) 0%, transparent 60%),
+      linear-gradient(180deg, #efe7d2 0%, #d9c9a4 100%);
+    overflow:hidden;
+    padding:0 0 110px;
+    display:flex; flex-direction:column;
+    border-bottom:1px solid rgba(58,49,40,.22);
+    box-shadow:0 18px 24px -24px rgba(58,49,40,.25) inset, 0 10px 20px -18px rgba(58,49,40,.18);
+  }
+  /* leave room for the fixed launcher on every page region */
+  body{padding-left:64px}
+  @media (max-width:720px){
+    body{padding-left:0; padding-bottom:64px}
+    .desk{padding-bottom:40px}
+  }
+  .desk::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 120px rgba(58,49,40,.07);
+  }
+
+  /* typewritten desk label, top-left */
+  .desk-label{
+    position:absolute; top:28px; left:40px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; letter-spacing:.08em; color:var(--ink-soft);
+    display:flex; gap:18px; align-items:baseline;
+  }
+  .desk-label b{font-weight:400;color:var(--ink);text-transform:uppercase;letter-spacing:.2em}
+
+  /* system clock, top-right */
+  .desk-clock{
+    position:absolute; top:28px; right:40px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; color:var(--ink-soft); letter-spacing:.08em;
+  }
+  .desk-clock .sep{margin:0 10px;color:var(--line)}
+
+  /* Title strip under the label */
+  .desk-title{
+    max-width:980px; margin:0 auto; padding:96px 40px 24px;
+    position:relative; z-index:2;
+  }
+  .desk-title .over{
+    font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--ink-soft);
+    display:flex; align-items:center; gap:14px; margin-bottom:18px;
+  }
+  .desk-title .over::before,
+  .desk-title .over::after{content:"";flex:1;height:1px;background:var(--line)}
+  .desk-title h1{
+    font-size:clamp(44px,6.4vw,84px); line-height:.95; letter-spacing:-.035em;
+    font-weight:300;
+    text-align:center;
+  }
+  .desk-title h1 em{font-style:italic;color:var(--accent)}
+  .desk-title .sig{
+    text-align:center; margin-top:22px;
+    font-family:"Fraunces",serif; font-style:italic; font-size:20px;
+    color:var(--ink-soft);
+  }
+  .desk-title .sig b{font-weight:500;color:var(--ink);font-style:normal;font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-left:10px;padding:3px 8px;border:1px solid var(--line);border-radius:2px}
+
+  /* The scattered desktop itself */
+  .desktop{
+    position:relative;
+    max-width:1180px; margin:0 auto; padding:40px 40px 16px;
+    min-height:640px;
+  }
+  @media (max-width:720px){ .desktop{padding:24px; min-height:auto} }
+
+  /* Polaroid portrait, pinned top-left */
+  .polaroid{
+    position:absolute; top:24px; left:60px;
+    width:240px; padding:14px 14px 48px; background:#fbf5e6;
+    box-shadow:
+      0 1px 0 rgba(59,45,33,.08),
+      0 18px 28px -18px rgba(59,45,33,.5),
+      0 4px 10px -4px rgba(59,45,33,.3);
+    transform:rotate(-5.5deg);
+    z-index:4;
+  }
+  .polaroid .pin{
+    position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+    width:18px; height:18px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #e0634e 0%, #a8392e 60%, #6b1f16 100%);
+    box-shadow:0 2px 4px rgba(59,45,33,.5), inset 0 -2px 3px rgba(0,0,0,.25), inset 0 2px 2px rgba(255,255,255,.3);
+    z-index:2;
+  }
+  .polaroid-img{
+    width:100%; aspect-ratio:4/5; background:var(--ink); overflow:hidden;
+    position:relative;
+  }
+  .polaroid-img img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter:sepia(.45) saturate(.85) contrast(1.08) brightness(1.02);
+  }
+  .polaroid-img::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(245,236,220,.12) 0%, rgba(140,90,60,.15) 60%, rgba(59,45,33,.22) 100%);
+    mix-blend-mode:multiply; pointer-events:none;
+  }
+  .polaroid .cap{
+    position:absolute; bottom:14px; left:0; right:0;
+    text-align:center; font-family:"JetBrains Mono",monospace;
+    font-size:12px; color:var(--ink-soft); letter-spacing:.06em;
+  }
+
+  /* Post-it intro note */
+  .postit{
+    position:absolute; top:40px; right:60px;
+    width:280px; padding:22px 22px 26px;
+    background:
+      linear-gradient(180deg, #fcebb2 0%, #f6dd8c 100%);
+    box-shadow:
+      0 12px 22px -14px rgba(59,45,33,.45),
+      0 2px 4px rgba(59,45,33,.12),
+      inset 0 0 40px rgba(176,137,104,.18);
+    transform:rotate(2.3deg);
+    font-family:"JetBrains Mono",monospace;
+    font-size:15px; line-height:1.5; color:var(--ink);
+    z-index:3;
+  }
+  .postit::before{
+    content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%) rotate(-6deg);
+    width:80px; height:22px;
+    background:linear-gradient(180deg, rgba(245,236,220,.85), rgba(214,193,155,.85));
+    box-shadow:0 1px 2px rgba(58,49,40,.1);
+    opacity:.8;
+  }
+  .postit b{font-weight:400;border-bottom:1px solid rgba(59,45,33,.4)}
+  .postit .sign{
+    margin-top:14px; font-family:"Fraunces",serif; font-style:italic;
+    font-size:18px; color:var(--accent);
+  }
+
+  /* Menu bar (desktop-style) */
+  .menubar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:22px;
+    padding:8px 20px; height:30px;
+    background:rgba(245,236,220,.82); backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .menubar .logo{font-size:13px; line-height:0; color:var(--ink); display:flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:rgba(58,49,40,.08)}
+  .menubar .app{font-weight:700}
+  .menubar .menu{color:var(--ink-soft); cursor:default}
+  .menubar .menu:hover{color:var(--ink)}
+  .menubar .spacer{flex:1}
+  .menubar .status{display:flex;align-items:center;gap:16px;color:var(--ink-soft);font-size:12px}
+  .menubar .status svg{width:14px;height:14px;display:block;color:var(--ink)}
+  .menubar .status .clk{font-variant-numeric:tabular-nums;color:var(--ink)}
+  @media (max-width:640px){.menubar{gap:10px;padding:6px 12px;font-size:12px}.menubar .menu:not(.app){display:none}}
+
+  /* Desk wallpaper area */
+  .deskarea{
+    flex:1; position:relative;
+    padding:40px 48px 48px;
+    min-height:70vh;
+  }
+  @media (max-width:720px){.deskarea{padding:24px 20px 32px}}
+
+  /* Icon grid — double-click or click to open */
+  .icons{
+    display:grid; grid-template-columns:repeat(auto-fit, 104px);
+    justify-content:end;
+    gap:12px 8px; max-width:100%;
+  }
+  @media (max-width:720px){.icons{justify-content:center}}
+  .icon{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:10px 6px; border-radius:8px;
+    cursor:pointer; text-align:center;
+    transition:background .15s;
+    user-select:none;
+  }
+  .icon:hover{background:rgba(59,45,33,.06)}
+  .icon:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .icon .glyph{
+    width:58px; height:72px; position:relative;
+    background:linear-gradient(180deg, #fcfaf3 0%, #ede0c9 100%);
+    border:1px solid rgba(59,45,33,.3);
+    border-radius:3px;
+    box-shadow:0 3px 6px -3px rgba(58,49,40,.18), inset 0 0 0 1px rgba(255,255,255,.55);
+    display:flex; align-items:flex-end; justify-content:center;
+    padding:6px;
+    font-family:"JetBrains Mono",monospace; font-size:9px; font-weight:700;
+    color:var(--cocoa); letter-spacing:.08em;
+  }
+  .icon .glyph::before{
+    content:""; position:absolute; top:-1px; right:-1px;
+    width:14px; height:14px;
+    background:var(--paper-2);
+    border-left:1px solid rgba(59,45,33,.3);
+    border-bottom:1px solid rgba(59,45,33,.3);
+    clip-path:polygon(0 0, 100% 0, 100% 100%);
+  }
+  .icon .ext{position:absolute; bottom:6px; left:0; right:0; text-align:center}
+  .icon[data-kind="dir"] .glyph{
+    background:linear-gradient(180deg, #e9c98a 0%, #c79a52 100%);
+    color:var(--ink);
+  }
+  .icon[data-kind="dir"] .glyph::before{display:none}
+  .icon[data-kind="dir"] .glyph::after{
+    content:""; position:absolute; top:-6px; left:6px; width:22px; height:10px;
+    background:linear-gradient(180deg, #e9c98a 0%, #d4ae66 100%);
+    border:1px solid rgba(59,45,33,.3); border-bottom:none;
+    border-radius:2px 2px 0 0;
+  }
+  .icon .name{
+    font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:500;
+    color:var(--ink); letter-spacing:.02em;
+    padding:1px 6px; border-radius:3px; line-height:1.3;
+    max-width:100px; word-break:break-all;
+  }
+  .icon:hover .name{background:rgba(176,137,104,.25)}
+
+  /* Centered welcome window (Linux-style) */
+  .window{
+    position:relative; max-width:640px; margin:6vh auto 0;
+    background:rgba(253,249,238,.94); backdrop-filter:blur(8px);
+    border:1px solid rgba(59,45,33,.25); border-radius:10px;
+    box-shadow:
+      0 30px 60px -40px rgba(58,49,40,.22),
+      0 12px 24px -20px rgba(58,49,40,.14),
+      inset 0 1px 0 rgba(255,255,255,.5);
+    overflow:hidden;
+    transform:translate(var(--wx,0px), var(--wy,0px));
+    touch-action:none;
+    will-change:transform;
+  }
+  .window.snapping{
+    transition:transform .5s cubic-bezier(.2,.8,.3,1);
+  }
+  .window .titlebar{cursor:grab}
+  .window.is-dragging .titlebar{cursor:grabbing}
+  .window.is-dragging{
+    box-shadow:
+      0 40px 80px -30px rgba(58,49,40,.3),
+      0 18px 36px -20px rgba(58,49,40,.2),
+      inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .window .titlebar{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 14px; height:36px;
+    background:linear-gradient(180deg, rgba(245,236,220,.9), rgba(237,224,201,.9));
+    border-bottom:1px solid var(--line);
+  }
+  .window .titlebar .title{
+    flex:1;
+    font-family:"JetBrains Mono",monospace; font-size:12px;
+    color:var(--ink-soft); letter-spacing:.04em;
+  }
+  .wctrls{display:flex; gap:6px; margin-left:auto}
+  .wctrls button{
+    width:20px;height:20px;border-radius:4px;border:1px solid rgba(59,45,33,.18);
+    background:rgba(255,255,255,.55);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);cursor:pointer;padding:0;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .wctrls button:hover{background:rgba(255,255,255,.9); color:var(--ink); border-color:rgba(59,45,33,.3)}
+  .wctrls button.close:hover{background:#d9644f;color:#fff;border-color:#c25a48}
+  .wctrls svg{width:10px;height:10px;display:block}
+  .window .path{
+    font-family:"JetBrains Mono",monospace; font-size:11px;
+    color:var(--ink-soft); padding:6px 16px;
+    border-bottom:1px solid var(--line);
+    background:rgba(245,236,220,.6);
+  }
+  .window .path .sep{color:rgba(59,45,33,.4); margin:0 4px}
+  .window .content{padding:28px 32px 30px}
+
+  /* Welcome content */
+  .welcome{display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:start}
+  @media (max-width:560px){.welcome{grid-template-columns:1fr;gap:16px}}
+  .welcome .avatar{
+    width:76px; height:76px; border-radius:14px; overflow:hidden;
+    background:var(--ink); flex-shrink:0;
+    border:1px solid rgba(59,45,33,.25);
+    box-shadow:0 4px 10px -6px rgba(58,49,40,.22);
+  }
+  .welcome .avatar img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.95) contrast(1.04)}
+  .welcome h1{
+    font-family:"Fraunces",serif; font-weight:300;
+    font-size:clamp(28px,3.6vw,40px); line-height:1.05; letter-spacing:-.025em;
+    color:var(--ink); margin-bottom:10px;
+  }
+  .welcome h1 em{font-style:italic;color:var(--accent)}
+  .welcome .sub{
+    font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--ink-soft);
+    line-height:1.7; letter-spacing:.01em;
+  }
+  .welcome .sub .k{color:var(--caramel)}
+  .welcome .sub .s{color:var(--ink); font-weight:500}
+  .welcome .hint{
+    grid-column:1/-1; margin-top:18px; padding-top:14px;
+    border-top:1px solid var(--line);
+    font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--ink-soft);
+    display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    letter-spacing:.04em;
+  }
+  .welcome .hint kbd{
+    font-family:inherit; font-size:10px; padding:1px 6px;
+    border:1px solid var(--line); border-bottom-width:2px; border-radius:3px;
+    background:var(--cream); color:var(--ink); margin:0 2px;
+  }
+
+  /* Launcher sidebar (Ubuntu-style) */
+  .launcher{
+    position:fixed; left:0; top:0; bottom:0;
+    width:64px;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    padding:14px 0 18px;
+    background:linear-gradient(180deg, #2c1e16 0%, #1f1510 100%);
+    border-right:1px solid rgba(0,0,0,.35);
+    box-shadow:inset -1px 0 0 rgba(255,255,255,.04), 2px 0 10px -6px rgba(0,0,0,.25);
+    z-index:50;
+  }
+  .launcher .brand{
+    width:36px; height:36px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, #b87333 0%, #7a3f1c 100%);
+    color:#fdf4e0; font-family:"Fraunces",serif; font-size:17px; font-style:italic;
+    margin-bottom:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .launcher a{
+    position:relative;
+    width:46px; height:46px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(180deg, var(--cream) 0%, var(--paper-2) 100%);
+    border:1px solid rgba(0,0,0,.25);
+    color:var(--ink);
+    transition:transform .18s cubic-bezier(.3,1.4,.4,1), box-shadow .2s, background .2s;
+  }
+  .launcher a::before{
+    content:""; position:absolute; left:-6px; top:10px; bottom:10px;
+    width:3px; border-radius:2px; background:transparent;
+    transition:background .15s;
+  }
+  .launcher a:hover{transform:translateX(3px) scale(1.05); box-shadow:0 6px 14px -6px rgba(0,0,0,.35)}
+  .launcher a:hover::before{background:#d9874a}
+  .launcher a svg{width:22px;height:22px;display:block}
+  .launcher a .tip{
+    position:absolute; left:calc(100% + 12px); top:50%; transform:translateY(-50%);
+    background:rgba(25,18,14,.96); color:#fdf4e0;
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    padding:5px 9px; border-radius:4px; white-space:nowrap;
+    opacity:0; pointer-events:none; transition:opacity .15s, transform .15s;
+    letter-spacing:.04em; z-index:10;
+  }
+  .launcher a .tip::before{
+    content:""; position:absolute; right:100%; top:50%; transform:translateY(-50%);
+    border:5px solid transparent; border-right-color:rgba(25,18,14,.96);
+  }
+  .launcher a:hover .tip{opacity:1; transform:translateY(-50%) translateX(2px)}
+  .launcher .sep{width:28px; height:1px; background:rgba(255,255,255,.15); margin:4px 0}
+  .launcher .spacer{flex:1}
+  .launcher .power{
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.06); color:rgba(255,255,255,.6);
+    border:1px solid rgba(255,255,255,.1);
+    cursor:default; transition:color .15s, background .15s;
+  }
+  .launcher .power:hover{color:#fdf4e0; background:rgba(255,255,255,.1)}
+  .launcher .power svg{width:16px;height:16px}
+  @media (max-width:720px){
+    .launcher{
+      left:0; right:0; top:auto; bottom:0; width:100%; height:64px;
+      flex-direction:row; justify-content:center; padding:0 14px;
+      border-right:none; border-top:1px solid rgba(0,0,0,.25);
+    }
+    .launcher .brand{margin:0 8px 0 0}
+    .launcher a::before{display:none}
+    .launcher .spacer{display:none}
+    .launcher a .tip{left:50%; top:auto; bottom:calc(100% + 10px); transform:translateX(-50%)}
+    .launcher a .tip::before{right:auto; left:50%; top:100%; transform:translateX(-50%); border:5px solid transparent; border-top-color:rgba(25,18,14,.96); border-right-color:transparent}
+    .launcher a:hover .tip{transform:translateX(-50%) translateY(-2px)}
+  }
+
+  /* Dock (legacy) */
+  .dock{
+    position:absolute; left:50%; bottom:22px; transform:translateX(-50%);
+    display:flex; align-items:flex-end; gap:10px;
+    padding:9px 14px; border-radius:18px;
+    background:rgba(253,249,238,.72); backdrop-filter:blur(18px);
+    border:1px solid rgba(59,45,33,.22);
+    box-shadow:
+      0 10px 24px -16px rgba(58,49,40,.22),
+      inset 0 1px 0 rgba(255,255,255,.5);
+    z-index:5;
+  }
+  .dock a{
+    width:46px; height:46px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(180deg, var(--cream) 0%, var(--paper-2) 100%);
+    border:1px solid rgba(59,45,33,.22);
+    color:var(--ink);
+    transition:transform .2s cubic-bezier(.3,1.4,.4,1), box-shadow .2s;
+    position:relative;
+  }
+  .dock a:hover{transform:translateY(-10px) scale(1.18); box-shadow:0 8px 14px -6px rgba(58,49,40,.22)}
+  .dock a svg{width:22px;height:22px;display:block}
+  .dock a .tip{
+    position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%);
+    background:rgba(59,45,33,.94); color:var(--cream);
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    padding:4px 8px; border-radius:4px; white-space:nowrap;
+    opacity:0; pointer-events:none; transition:opacity .15s;
+    letter-spacing:.04em;
+  }
+  .dock a:hover .tip{opacity:1}
+  .dock .sep{width:1px; height:36px; background:rgba(59,45,33,.2); margin:0 2px; align-self:center}
+  @media (max-width:560px){.dock{gap:6px;padding:7px 10px}.dock a{width:40px;height:40px}.dock a svg{width:20px;height:20px}}
+
+  /* Scroll cue (moved) */
+  .deskcue{
+    position:absolute; left:50%; bottom:26px; transform:translateX(-50%);
+    font-family:"JetBrains Mono",monospace; font-size:11px;
+    color:var(--ink-soft); letter-spacing:.08em;
+    display:flex; align-items:center; gap:8px;
+  }
+  .deskcue::before{content:"▾"; color:var(--accent); font-size:13px; animation:cuebob 2s ease-in-out infinite}
+  @keyframes cuebob{50%{transform:translateY(3px)}}
+  @media (max-width:720px){.deskcue{position:static;justify-content:center;margin-top:24px}}
+
+  /* =============================================================
+     SECTIONS BELOW THE DESK
+     ============================================================= */
+  .wrap{max-width:1100px;margin:0 auto;padding:0 40px}
+  @media (max-width:720px){.wrap{padding:0 24px}}
+
+  section{padding:120px 0;position:relative}
+  section.shade{background:var(--paper)}
+  section + section{border-top:1px solid var(--line)}
+  /* first section after the desktop gets a clean, explicit divider */
+  .desk + section{
+    background:var(--cream);
+    border-top:1px solid rgba(58,49,40,.12);
+    box-shadow:0 -1px 0 rgba(255,255,255,.9) inset;
+  }
+
+  /* editorial section header — clean, no "file" affordance */
+  .filehead{
+    display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:baseline;
+    padding-bottom:18px; margin-bottom:56px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .filehead::after{display:none}
+  .filehead .fileno{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--ink-soft);
+    padding:0; border:none; background:transparent;
+  }
+  .filehead h2{
+    font-size:clamp(34px,5vw,56px); letter-spacing:-.025em; line-height:1;
+    font-weight:300;
+  }
+  .filehead h2 em{font-style:italic;color:var(--accent)}
+  .filehead .meta{
+    font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--ink-soft);
+    text-align:right; letter-spacing:.08em; text-transform:uppercase;
+    max-width:22ch;
+  }
+
+  /* ABOUT / BIO — editorial two-column with margin annotations */
+  .bio{
+    display:grid; grid-template-columns:1fr 2fr; gap:64px; align-items:start;
+  }
+  @media (max-width:820px){.bio{grid-template-columns:1fr;gap:32px}}
+  .bio .margin{
+    font-family:"JetBrains Mono",monospace; font-size:12px; line-height:1.7;
+    color:var(--ink-soft); letter-spacing:.01em;
+  }
+  .bio .margin .k{
+    display:block; text-transform:uppercase; letter-spacing:.22em;
+    font-size:10px; color:var(--caramel); margin-bottom:6px;
+  }
+  .bio .margin .row{margin-bottom:22px}
+  .bio .margin b{color:var(--ink);font-weight:400}
+  .bio .body p{
+    font-family:"Fraunces",serif; font-size:21px; line-height:1.55;
+    color:var(--ink); margin-bottom:20px;
+    max-width:52ch;
+  }
+  .bio .body p:first-child::first-letter{
+    font-family:"Fraunces",serif; font-size:72px; float:left;
+    line-height:.85; padding:6px 10px 0 0;
+    color:var(--accent); font-style:italic; font-weight:300;
+  }
+  .bio .body p b{font-weight:500}
+  .bio .body .ledger{
+    margin-top:40px; padding-top:24px; border-top:1px solid var(--line);
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4px;
+  }
+  @media (max-width:620px){.bio .body .ledger{grid-template-columns:repeat(2,1fr)}}
+  .bio .body .ledger div{
+    padding:16px 14px; border:1px solid var(--line); margin:-1px;
+    background:var(--cream);
+  }
+  .bio .body .ledger .n{
+    font-family:"Fraunces",serif; font-size:40px; line-height:1;
+    color:var(--accent); font-weight:300;
+  }
+  .bio .body .ledger .l{
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-soft); margin-top:8px; line-height:1.3;
+  }
+
+  /* DOSSIER / EXPERIENCE — ledger format */
+  .dossier .entry{
+    display:grid; grid-template-columns:180px 1fr; gap:40px;
+    padding:32px 0; border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .dossier .entry:last-child{border-bottom:none}
+  @media (max-width:720px){.dossier .entry{grid-template-columns:1fr;gap:12px}}
+  .dossier .when{
+    font-family:"JetBrains Mono",monospace; font-size:12px;
+    letter-spacing:.12em; color:var(--ink);
+    text-transform:uppercase;
+  }
+  .dossier .when .dur{display:block;color:var(--ink-soft);margin-top:4px;font-size:10px;letter-spacing:.2em}
+  .dossier .entry h3{
+    font-size:30px; line-height:1.1; letter-spacing:-.02em; margin-bottom:4px;
+  }
+  .dossier .where{
+    font-family:"Fraunces",serif; font-style:italic; color:var(--ink-soft);
+    font-size:16px; margin-bottom:16px;
+  }
+  .dossier ul{list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:18px}
+  .dossier li{
+    font-family:"JetBrains Mono",monospace; font-size:13px;
+    line-height:1.55; color:var(--cocoa); padding-left:20px; position:relative;
+    max-width:64ch;
+  }
+  .dossier li::before{
+    content:"§"; position:absolute; left:0; color:var(--accent); font-family:"Fraunces",serif; font-style:italic;
+  }
+  .dossier .stack{display:flex;flex-wrap:wrap;gap:6px}
+  .dossier .stack span{
+    font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.08em;
+    padding:3px 9px; border:1px solid var(--line); background:var(--cream);
+    color:var(--ink-soft);
+  }
+  .dossier .stampmark{
+    position:absolute; top:28px; right:0;
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    letter-spacing:.3em; text-transform:uppercase; color:var(--red-stamp);
+    padding:4px 10px; border:1.5px solid var(--red-stamp);
+    transform:rotate(-4deg); opacity:.82;
+  }
+
+  /* TOOLKIT / SKILLS — index card layout */
+  .toolkit{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line)}
+  @media (max-width:820px){.toolkit{grid-template-columns:1fr}}
+  .toolkit .card{
+    background:var(--cream); padding:32px 28px; position:relative;
+    background-image:repeating-linear-gradient(180deg, transparent 0 22px, rgba(59,45,33,.08) 22px 23px);
+    background-position:0 56px;
+  }
+  .toolkit .card h4{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--red-stamp); margin-bottom:24px;
+    padding-bottom:8px; border-bottom:2px solid var(--ink);
+    display:flex; justify-content:space-between;
+  }
+  .toolkit .card h4 span{color:var(--ink-soft)}
+  .toolkit .card ul{list-style:none; display:flex; flex-direction:column}
+  .toolkit .card li{
+    padding:5px 0; font-size:15px; color:var(--ink);
+    display:flex; justify-content:space-between; align-items:baseline;
+    height:23px;
+  }
+  .toolkit .card li .lvl{
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    color:var(--caramel); letter-spacing:.14em;
+  }
+
+  /* WORK / PROJECTS — numbered list with left images */
+  .works{display:flex;flex-direction:column;gap:0}
+  .work{
+    display:grid; grid-template-columns:120px 1fr 1fr; gap:32px; align-items:start;
+    padding:40px 0; border-bottom:1px solid var(--line);
+    position:relative; cursor:pointer;
+    transition:background .3s;
+  }
+  .work:hover{background:rgba(176,137,104,.06)}
+  @media (max-width:820px){.work{grid-template-columns:80px 1fr;gap:20px}.work .thumb-col{grid-column:1/3;grid-row:2}}
+  .work .no{
+    font-family:"Fraunces",serif; font-size:64px; line-height:.85;
+    color:var(--accent); font-weight:300; letter-spacing:-.04em;
+  }
+  .work h3{
+    font-size:30px; line-height:1.1; letter-spacing:-.02em; margin-bottom:6px;
+  }
+  .work h3 em{font-style:italic;color:var(--ink-soft)}
+  .work .desc{
+    font-family:"Fraunces",serif; font-size:18px; line-height:1.5;
+    color:var(--ink-soft); margin-bottom:14px;
+  }
+  .work .role{
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--caramel);
+    margin-bottom:8px;
+  }
+  .work .stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .work .stack span{
+    font-family:"JetBrains Mono",monospace; font-size:10px;
+    padding:2px 8px; border:1px solid var(--line); color:var(--ink-soft);
+  }
+  .work .thumb{
+    aspect-ratio:5/3; position:relative; overflow:hidden;
+    background:var(--ink); border:1px solid var(--line);
+    box-shadow:inset 0 0 0 3px rgba(245,236,220,.7);
+  }
+  .work .thumb::after{
+    content:""; position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(0deg, transparent 0 2px, rgba(59,45,33,.08) 2px 3px);
+    mix-blend-mode:multiply;
+  }
+  .work .thumb .sticker{
+    position:absolute; top:10px; left:10px;
+    font-family:"JetBrains Mono",monospace; font-size:9px;
+    letter-spacing:.18em; text-transform:uppercase;
+    background:var(--cream); color:var(--ink);
+    padding:3px 8px;
+  }
+  .work .thumb .glyph{
+    position:absolute; inset:0; display:grid; place-items:center;
+    font-family:"Fraunces",serif; font-style:italic; font-weight:300;
+    font-size:56px; color:rgba(245,236,220,.85); letter-spacing:-.03em;
+  }
+  .work .thumb.t1{background:linear-gradient(135deg,#b08968 0%, #5a4330 100%)}
+  .work .thumb.t2{background:radial-gradient(circle at 30% 30%, #d6c19b 0%, #8c5a3c 90%)}
+  .work .thumb.t3{background:linear-gradient(180deg,#5a4330 0%, #2b1f17 100%)}
+  .work .thumb.t4{background:linear-gradient(45deg,#ede0c9 0%, #b08968 100%)}
+  .work .thumb.t5{background:linear-gradient(135deg,#8c5a3c 0%, #2b1f17 100%)}
+  /* HOBBIES — coverflow carousels for books + movies */
+  .hobbies-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+  @media (max-width:900px){.hobbies-grid{grid-template-columns:1fr;gap:64px}}
+  .reel-block{position:relative;margin:0;min-width:0}
+  .reel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .reel-head .sec-num{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+  .reel-title{font-family:"Fraunces",serif;font-size:clamp(22px,2.4vw,30px);letter-spacing:-.02em;line-height:1;margin-top:6px;font-weight:400}
+  .reel-title em{font-style:italic;color:var(--accent)}
+  .reel-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;background:var(--ink);color:var(--cream);border-radius:999px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:transform .25s, background .25s, box-shadow .25s}
+  .reel-cta:hover{transform:translateY(-2px);background:var(--accent);box-shadow:0 8px 16px -10px rgba(58,49,40,.22)}
+  .reel-cta .arr{transition:transform .25s}
+  .reel-cta:hover .arr{transform:translateX(4px)}
+
+  .reel{position:relative;margin:0;padding:20px 0 16px;height:260px;overflow:hidden}
+  .reel-track{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;perspective:1200px}
+  .reel-track .poster{position:absolute;top:50%;left:50%;transform-origin:center;transition:transform .55s cubic-bezier(.25,.8,.25,1), opacity .45s, filter .45s;will-change:transform,opacity;cursor:pointer}
+  .reel-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--cream);border:none;display:grid;place-items:center;cursor:pointer;z-index:5;transition:background .25s, transform .25s, box-shadow .25s;box-shadow:0 4px 10px -8px rgba(58,49,40,.22);font-family:"JetBrains Mono",monospace;font-size:16px;line-height:1}
+  .reel-nav:hover{background:var(--accent);transform:translateY(-50%) scale(1.08)}
+  .reel-nav.prev{left:2px}
+  .reel-nav.next{right:2px}
+  .reel-nav:focus-visible{outline:2px solid var(--caramel);outline-offset:3px}
+  @media (max-width:900px){.reel{height:240px}}
+  @media (max-width:640px){.reel{height:220px}}
+
+  .poster{position:relative;flex-shrink:0;width:150px;height:224px;border-radius:6px;padding:13px 12px;display:flex;flex-direction:column;justify-content:space-between;color:rgba(247,242,232,.95);background:linear-gradient(155deg, var(--p1) 0%, var(--p2) 100%);box-shadow:0 10px 20px -18px rgba(58,49,40,.28), inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden}
+  @media (max-width:640px){.poster{width:130px;height:194px;padding:12px 11px}}
+  .poster::before{content:"";position:absolute;inset:8px;border:1px solid rgba(247,242,232,.18);border-radius:3px;pointer-events:none}
+  .poster::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 20% 0%, rgba(255,255,255,.15) 0%, transparent 55%);pointer-events:none;mix-blend-mode:overlay}
+  .poster-rating{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;color:#f0a84a;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+  .poster-title{font-family:"Fraunces",serif;font-size:16px;line-height:1.15;letter-spacing:-.015em;font-weight:400;margin-top:auto}
+  .poster-title em{font-style:italic;color:rgba(247,242,232,.85)}
+  .poster-meta{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,242,232,.6);margin-top:8px}
+  .poster.is-book{width:145px;height:220px;background:linear-gradient(90deg, rgba(0,0,0,.18) 0%, transparent 6%, transparent 94%, rgba(0,0,0,.22) 100%), linear-gradient(155deg, var(--p1) 0%, var(--p2) 100%)}
+  .poster.is-book::before{border-color:rgba(247,242,232,.28)}
+  .poster.is-book .poster-rating{color:rgba(247,242,232,.85);letter-spacing:.18em;font-size:9px;text-transform:uppercase}
+  .poster.is-book .poster-meta{color:rgba(247,242,232,.7)}
+
+  .shelf-footnote{margin-top:18px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft)}
+
+  .feed .languages b{color:var(--ink);font-weight:400}
+
+  /* HIRE ME — clean dark footer */
+  .hire{
+    background:var(--ink); color:var(--cream); position:relative; overflow:hidden;
+    padding:120px 0 64px;
+  }
+  .hire::before{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(800px 500px at 15% 0%, rgba(160,102,74,.18) 0%, transparent 60%),
+      radial-gradient(700px 400px at 90% 100%, rgba(184,158,125,.12) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .hire .wrap{position:relative;z-index:1}
+  .hire .eyebrow{
+    font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.3em;
+    text-transform:uppercase; color:var(--caramel); margin-bottom:28px;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .hire .eyebrow::before{
+    content:""; width:28px; height:1px; background:var(--caramel);
+  }
+  .hire h2{
+    color:var(--cream); font-size:clamp(56px,8vw,112px); line-height:.95;
+    letter-spacing:-.04em; font-weight:300; margin-bottom:32px;
+    max-width:14ch;
+  }
+  .hire h2 em{font-style:italic;color:var(--sand)}
+  .hire .lede{
+    font-family:"Fraunces",serif; font-size:clamp(20px,2.2vw,26px); line-height:1.55;
+    color:rgba(247,242,232,.78); max-width:54ch; margin-bottom:56px;
+    font-weight:300;
+  }
+  .hire .lede b{color:var(--cream);font-weight:400;font-style:italic}
+
+  .hire .cta-row{
+    display:flex; flex-wrap:wrap; gap:16px; margin-bottom:72px;
+  }
+  .hire .cta{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:16px 26px; border-radius:999px;
+    font-family:"JetBrains Mono",monospace; font-size:13px; letter-spacing:.06em;
+    transition:transform .25s, background .25s, color .25s, border-color .25s;
+  }
+  .hire .cta.primary{
+    background:var(--cream); color:var(--ink);
+  }
+  .hire .cta.primary:hover{background:var(--sand);transform:translateY(-2px)}
+  .hire .cta.ghost{
+    border:1px solid rgba(247,242,232,.28); color:var(--cream);
+  }
+  .hire .cta.ghost:hover{border-color:var(--cream);transform:translateY(-2px)}
+  .hire .cta .arr{transition:transform .25s}
+  .hire .cta:hover .arr{transform:translateX(4px)}
+
+  .hire .channels{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:rgba(247,242,232,.14);
+    margin-bottom:64px;
+  }
+  @media (max-width:720px){.hire .channels{grid-template-columns:1fr}}
+  .hire .channels a{
+    background:var(--ink); padding:26px 28px; display:flex; flex-direction:column; gap:6px;
+    transition:background .25s;
+  }
+  .hire .channels a:hover{background:rgba(247,242,232,.05)}
+  .hire .channels .k{
+    font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--caramel);
+  }
+  .hire .channels .v{font-family:"JetBrains Mono",monospace;font-size:15px;color:var(--cream)}
+
+  .hire .signoff{
+    padding-top:28px; border-top:1px solid rgba(247,242,232,.16);
+    display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:12px;
+    font-family:"JetBrains Mono",monospace; font-size:11px;
+    letter-spacing:.12em; color:rgba(247,242,232,.5);
+  }
+  .hire .signoff .sig{
+    font-family:"Fraunces",serif; font-style:italic; font-size:22px;
+    color:var(--cream); letter-spacing:0; text-transform:none;
+  }
+
+  /* reveal on scroll */
+  .reveal{opacity:0; transform:translateY(20px); transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1; transform:none}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none}
+    .scroll-cue{animation:none}
+    .folder{transition:none}
+  }
+
+  /* Drop old archive / polaroid styles (no longer rendered) */
+  .polaroid,.postit,.archives,.folder,.desk-label,.desk-clock,.desk-title,.scroll-cue{display:none !important}
+
+  /* Sticky top nav — appears once you scroll past the desktop */
+  .topnav{
+    position:fixed; top:0; left:64px; right:0; height:52px; z-index:40;
+    display:flex; align-items:center; gap:8px;
+    padding:0 28px 0 22px;
+    background:rgba(247,242,232,.82);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(58,49,40,.14);
+    box-shadow:0 10px 24px -24px rgba(58,49,40,.25);
+    transform:translateY(-100%);
+    opacity:0;
+    transition:transform .45s cubic-bezier(.2,.8,.25,1), opacity .3s ease;
+    pointer-events:none;
+  }
+  .topnav.show{transform:translateY(0); opacity:1; pointer-events:auto}
+  .topnav .tn-brand{
+    font-family:"Fraunces",Georgia,serif; font-style:italic; font-size:16px;
+    color:var(--ink); letter-spacing:-.01em;
+    padding-right:14px; margin-right:8px;
+    border-right:1px solid rgba(58,49,40,.18);
+  }
+  .topnav .tn-brand b{font-weight:500; font-style:normal; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin-left:6px}
+  .topnav .tn-links{display:flex; gap:2px; flex:1; align-items:center}
+  .topnav .tn-links a{
+    position:relative;
+    font-family:"JetBrains Mono",monospace; font-size:12px;
+    color:var(--ink-soft); letter-spacing:.06em;
+    padding:8px 12px; border-radius:6px;
+    transition:color .15s, background .15s;
+  }
+  .topnav .tn-links a:hover{color:var(--ink); background:rgba(58,49,40,.06)}
+  .topnav .tn-links a.active{color:var(--ink)}
+  .topnav .tn-links a.active::after{
+    content:""; position:absolute; left:12px; right:12px; bottom:3px; height:2px;
+    background:var(--accent); border-radius:2px;
+  }
+  .topnav .tn-links a .num{font-size:10px; color:var(--caramel); margin-right:6px; font-weight:500}
+  .topnav .tn-cta{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:"JetBrains Mono",monospace; font-size:11px;
+    letter-spacing:.08em; text-transform:uppercase;
+    padding:8px 14px; border-radius:999px;
+    background:var(--ink); color:var(--cream);
+    transition:background .15s, transform .15s;
+  }
+  .topnav .tn-cta:hover{background:var(--accent); transform:translateY(-1px)}
+  @media (max-width:720px){
+    .topnav{left:0; padding:0 14px; height:46px}
+    .topnav .tn-brand{display:none}
+    .topnav .tn-links{gap:0; overflow-x:auto; scrollbar-width:none}
+    .topnav .tn-links::-webkit-scrollbar{display:none}
+    .topnav .tn-links a{padding:6px 10px; flex:0 0 auto}
+    .topnav .tn-links a .num{display:none}
+    .topnav .tn-cta{padding:6px 11px; font-size:10px}
+  }
+
+  /* mobile adjustments for desk */
+  @media (max-width:720px){
+    .deskarea{min-height:auto}
+    .icons{justify-content:center;margin-bottom:24px}
+    .dock{position:static;transform:none;margin:20px auto 0}
+  }
+</style>
+</head>
+<template id="__bundler_thumbnail" data-bg-color="#efe7d2">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#efe7d2"/>
+    <g transform="translate(360,200)">
+      <rect x="0" y="0" width="480" height="400" rx="14" fill="#fdf9ee" stroke="#3a3128" stroke-width="3"/>
+      <rect x="0" y="0" width="480" height="52" fill="#ede0c9" stroke="#3a3128" stroke-width="3"/>
+      <circle cx="28" cy="26" r="8" fill="#d9644f"/>
+      <circle cx="56" cy="26" r="8" fill="#e9c98a"/>
+      <circle cx="84" cy="26" r="8" fill="#b08968"/>
+      <text x="240" y="230" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="96" fill="#a0664a" font-weight="300">Luiz.</text>
+      <text x="240" y="300" text-anchor="middle" font-family="monospace" font-size="22" fill="#6f6254" letter-spacing="4">SOFTWARE ENGINEER</text>
+    </g>
+  </svg>
+</template>
+<body>
+
+<!-- Sticky top nav (shown after scrolling past about section) -->
+<header class="topnav" id="topnav" aria-label="Section navigation">
+  <span class="tn-brand">Luiz Carlos <b>/ readme</b></span>
+  <nav class="tn-links">
+    <a href="#about" data-section="about"><span class="num">01</span>About</a>
+    <a href="#experience" data-section="experience"><span class="num">02</span>Experience</a>
+    <a href="#toolkit" data-section="toolkit"><span class="num">03</span>Toolkit</a>
+    <a href="#work" data-section="work"><span class="num">04</span>Projects</a>
+    <a href="#offclock" data-section="offclock"><span class="num">05</span>Off-clock</a>
+  </nav>
+  <a class="tn-cta" href="#contact">Get in touch</a>
+</header>
+
+<!-- ============================================================
+     DESKTOP SHELL
+     ============================================================ -->
+<div class="desk">
+  <canvas id="particles" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2"></canvas>
+  <!-- Menu bar -->
+  <div class="menubar" role="navigation" aria-label="Desktop menu bar">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
+    </span>
+    <span class="menu app">Activities</span>
+    <span class="menu">Workspace</span>
+    <span class="menu">View</span>
+    <span class="menu">Help</span>
+    <span class="spacer"></span>
+    <span class="status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13a7 7 0 0 1 14 0"/><path d="M8.5 16a4 4 0 0 1 7 0"/><circle cx="12" cy="18.5" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="10" rx="2"/><path d="M22 11v4"/></svg>
+      <span>luiz@workstation</span>
+      <span class="clk" id="clock">00:00</span>
+    </span>
+  </div>
+
+  <!-- Desktop wallpaper area -->
+  <div class="deskarea">
+    <!-- Desktop icons (top-right) -->
+    <div class="icons">
+      <a class="icon" data-kind="file" href="#about">
+        <span class="glyph"><span class="ext">MD</span></span>
+        <span class="name">about.md</span>
+      </a>
+      <a class="icon" data-kind="file" href="#experience">
+        <span class="glyph"><span class="ext">LOG</span></span>
+        <span class="name">experience.log</span>
+      </a>
+      <a class="icon" data-kind="file" href="#toolkit">
+        <span class="glyph"><span class="ext">JSON</span></span>
+        <span class="name">toolkit.json</span>
+      </a>
+      <a class="icon" data-kind="dir" href="#work">
+        <span class="glyph"></span>
+        <span class="name">projects/</span>
+      </a>
+      <a class="icon" data-kind="file" href="#offclock">
+        <span class="glyph"><span class="ext">TXT</span></span>
+        <span class="name">hobbies.txt</span>
+      </a>
+      <a class="icon" data-kind="file" href="#contact">
+        <span class="glyph"><span class="ext">VCF</span></span>
+        <span class="name">contact.vcf</span>
+      </a>
+    </div>
+
+    <!-- Welcome window -->
+    <div class="window" role="region" aria-label="About this machine">
+      <div class="titlebar">
+        <span class="title">~/luiz — readme.md</span>
+        <span class="wctrls" aria-hidden="true">
+          <button type="button" aria-label="Minimize"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 7h6"/></svg></button>
+          <button type="button" aria-label="Maximize"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="2" width="6" height="6"/></svg></button>
+          <button type="button" class="close" aria-label="Close"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2.5 2.5l5 5M7.5 2.5l-5 5"/></svg></button>
+        </span>
+      </div>
+      <div class="path"><span>home</span><span class="sep">/</span><span>luiz</span><span class="sep">/</span><span>readme.md</span></div>
+      <div class="content">
+        <div class="welcome">
+          <div class="avatar"><img src="assets/luiz-photo.jpg" alt="Luiz Carlos"></div>
+          <div>
+            <h1>Hi — I'm <em>Luiz Carlos.</em></h1>
+            <div class="sub">
+              <span class="k">role</span> : <span class="s">Backend Software Engineer</span><br>
+              <span class="k">focus</span> : agentic AI · data architecture · Python<br>
+              <span class="k">now</span>&nbsp; : shipping at <span class="s">Auria AI</span>, São Paulo<br>
+              <span class="k">edu</span>&nbsp; : B.Sc. Computer Science, <span class="s">USP</span>
+            </div>
+          </div>
+          <div class="hint">
+            <span>Double-click an icon to open a section</span>
+            <span>or scroll <kbd>↓</kbd> to browse the rest</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="deskcue">scroll down to see more</div>
+  </div>
+</div>
+
+<!-- Launcher sidebar (fixed to viewport) -->
+<nav class="launcher" role="navigation" aria-label="Quick links">
+  <span class="brand" aria-hidden="true">L</span>
+  <a href="mailto:luizcarloszdk@gmail.com" aria-label="Email">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 7 8.5-7"/></svg>
+    <span class="tip">Mail — luizcarloszdk@gmail.com</span>
+  </a>
+  <a href="https://github.com/luizcarlosdk" target="_blank" rel="noopener" aria-label="GitHub">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.1.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.86v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+    <span class="tip">GitHub — @luizcarlosdk</span>
+  </a>
+  <a href="https://linkedin.com/in/luizcarlosdk" target="_blank" rel="noopener" aria-label="LinkedIn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.64h.05c.53-.94 1.83-1.94 3.77-1.94 4.03 0 4.78 2.5 4.78 5.74V21H17.6v-5.86c0-1.4-.03-3.2-2-3.2-2 0-2.31 1.5-2.31 3.1V21H10V9z"/></svg>
+    <span class="tip">LinkedIn — in/luizcarlosdk</span>
+  </a>
+  <span class="sep" aria-hidden="true"></span>
+  <a href="#" onclick="window.print();return false;" aria-label="Resume">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>
+    <span class="tip">Resume — print / save as PDF</span>
+  </a>
+  <span class="spacer"></span>
+  <span class="power" aria-hidden="true" title="System">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v8"/><path d="M18 6a8 8 0 1 1-12 0"/></svg>
+  </span>
+</nav>
+
+<!-- ============================================================
+     01 · ABOUT
+     ============================================================ -->
+<section id="about">
+  <div class="wrap">
+    <div class="filehead reveal">
+      <div class="fileno">01</div>
+      <h2><em>About.</em></h2>
+      <div class="meta">Bio · background<br>· current focus</div>
+    </div>
+
+    <div class="bio">
+      <div class="margin reveal">
+        <div class="row">
+          <span class="k">Name</span>
+          <b>Luiz Carlos Costa da Silva</b><br>
+          Software Engineer
+        </div>
+        <div class="row">
+          <span class="k">Based</span>
+          Guarulhos — São Paulo, BR
+        </div>
+        <div class="row">
+          <span class="k">Degree</span>
+          B.Sc. Computer Science,<br>
+          <b>Universidade de São Paulo</b>
+        </div>
+        <div class="row">
+          <span class="k">Currently</span>
+          Backend engineer at<br>
+          <b>Auria AI</b> — agentic AI,<br>
+          B2B security triage.
+        </div>
+        <div class="row">
+          <span class="k">Open to</span>
+          Interesting problems,<br>
+          considered collaborations.
+        </div>
+      </div>
+
+      <div class="body reveal">
+        <p>Software engineer with a <b>B.Sc. in Computer Science from USP</b> and roughly a year of hands-on work taking AI products from zero to one. I tend to be most useful at the boundary between data, models, and production.</p>
+        <p>At <b>Auria AI</b>, an early-stage startup, I architect the database layer, data pipelines, and BI analytics behind agentic systems for B2B security incident triage.</p>
+        <p>My USP capstone was on <b>LLMs and Retrieval-Augmented Generation</b> with LangChain — a background that now shapes how I design prompts, evaluation pipelines, and agent orchestration in production.</p>
+
+        <div class="ledger">
+          <div><div class="n">0→1</div><div class="l">Data layer shipped<br>from scratch</div></div>
+          <div><div class="n" data-count="4" data-suffix="yrs">4yrs</div><div class="l">Research at USP's<br>innovation hub</div></div>
+          <div><div class="n" data-count="20">20</div><div class="l">Students led at<br>USPCodeLab</div></div>
+          <div><div class="n">Py</div><div class="l">Primary language<br>· production stack</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     02 · DOSSIER / EXPERIENCE
+     ============================================================ -->
+<section id="experience" class="shade">
+  <div class="wrap">
+    <div class="filehead reveal">
+      <div class="fileno">02</div>
+      <h2><em>Experience.</em></h2>
+      <div class="meta">3 roles<br>2021 — present</div>
+    </div>
+
+    <div class="dossier">
+      <article class="entry reveal">
+        <div class="when">Aug 2025 —<br>Present<span class="dur">≈ ongoing</span></div>
+        <div>
+          <h3>Backend Software Engineer</h3>
+          <div class="where">Auria AI · early-stage AI startup · São Paulo</div>
+          <ul>
+            <li>Architected and shipped the data layer from zero-to-one using PostgreSQL and SQLAlchemy.</li>
+            <li>Developed Python-based agentic AI systems for B2B security incident triage at production scale.</li>
+            <li>Built an observability layer for AI agents using Slack alerts and Metabase dashboards — surfacing real-time performance insights that drive data-centric decisions.</li>
+            <li>Designed Metabase dashboards visualizing key metrics and generating actionable insights.</li>
+            <li>Created automated testing and evaluation pipelines covering unit/integration tests and AI-agent output quality.</li>
+          </ul>
+          <div class="stack">
+            <span>Python</span><span>PostgreSQL</span><span>SQLAlchemy</span><span>Metabase</span><span>Docker</span><span>Claude Code</span>
+          </div>
+        </div>
+        <div class="stampmark">Active</div>
+      </article>
+
+      <article class="entry reveal">
+        <div class="when">Jan 2021 —<br>Aug 2023<span class="dur">2 yrs · 8 mos</span></div>
+        <div>
+          <h3>Software Engineer — Research Fellowship</h3>
+          <div class="where">Hub USP Inovação · IME-USP · São Paulo</div>
+          <ul>
+            <li>Scholarship holder under the supervision of Prof. Dr. Alfredo Goldman.</li>
+            <li>Redesigned and rewrote a large legacy Ruby on Rails system into a modern, scalable Kotlin backend.</li>
+            <li>Developed backend features from scratch: domain models, APIs, and automated tests.</li>
+            <li>Contributed to AUSPIN's innovation platform — a Latin American reference for transparent university-innovation data (~1,000 patents, 3,000 companies, 3,000 professors).</li>
+          </ul>
+          <div class="stack">
+            <span>Kotlin</span><span>Vue.js</span><span>JavaScript</span><span>Docker</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry reveal">
+        <div class="when">Jan 2021 —<br>Mar 2024<span class="dur">3 yrs · 2 mos</span></div>
+        <div>
+          <h3>Member &amp; President — USPCodeLab</h3>
+          <div class="where">IME-USP · São Paulo</div>
+          <ul>
+            <li>President from Jan 2022 — Aug 2023; led ~20 members focused on web-development education.</li>
+            <li>Organized two hackathons for incoming students: secured sponsorships, mentored participants, managed budgets.</li>
+            <li>Led the development of university-focused applications using a JavaScript stack and Agile methodology.</li>
+          </ul>
+          <div class="stack">
+            <span>Leadership</span><span>JavaScript</span><span>Agile</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     03 · TOOLKIT
+     ============================================================ -->
+<section id="toolkit">
+  <div class="wrap">
+    <div class="filehead reveal">
+      <div class="fileno">03</div>
+      <h2><em>Skills.</em></h2>
+      <div class="meta">Grouped by<br>where it lives</div>
+    </div>
+
+    <div class="toolkit">
+      <div class="card reveal">
+        <h4>Languages<span>01 / 03</span></h4>
+        <ul>
+          <li>Python <span class="lvl">primary</span></li>
+          <li>Kotlin <span class="lvl">prod</span></li>
+          <li>JavaScript / TS <span class="lvl">daily</span></li>
+          <li>SQL <span class="lvl">fluent</span></li>
+          <li>Vue.js · React <span class="lvl">working</span></li>
+          <li>LangChain <span class="lvl">research</span></li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <h4>Systems<span>02 / 03</span></h4>
+        <ul>
+          <li>PostgreSQL <span class="lvl">prod</span></li>
+          <li>SQLAlchemy <span class="lvl">daily</span></li>
+          <li>Docker <span class="lvl">daily</span></li>
+          <li>Git <span class="lvl">daily</span></li>
+          <li>Metabase <span class="lvl">BI</span></li>
+          <li>Claude Code <span class="lvl">daily</span></li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <h4>Concepts<span>03 / 03</span></h4>
+        <ul>
+          <li>Software architecture</li>
+          <li>System design</li>
+          <li>REST APIs</li>
+          <li>Large Language Models</li>
+          <li>Retrieval-Augmented Gen.</li>
+          <li>Prompt engineering</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     04 · SELECTED WORK
+     ============================================================ -->
+<section id="work" class="shade">
+  <div class="wrap">
+    <div class="filehead reveal">
+      <div class="fileno">04</div>
+      <h2>Selected <em>Projects.</em></h2>
+      <div class="meta">2 entries<br>selected work</div>
+    </div>
+
+    <div class="works">
+      <article class="work reveal">
+        <div class="no">01</div>
+        <div>
+          <div class="role">Personal · Front-end · 2026</div>
+          <h3>This <em>portfolio.</em></h3>
+          <p class="desc">A handcrafted, single-page portfolio in the warm-paper aesthetic — desktop-shell hero, Ubuntu-style fixed sidebar, sticky section nav, ambient particles, and two coverflow carousels (books + movies). Built as a long-form scroll with editorial typography and accessible reveal animations.</p>
+          <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Canvas</span></div>
+        </div>
+        <div class="thumb-col">
+          <div class="thumb t1">
+            <span class="sticker">Exhibit 01</span>
+            <div class="glyph">port-<br>folio</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="work reveal">
+        <div class="no">02</div>
+        <div>
+          <div class="role">Research · LLMs · USP Capstone</div>
+          <h3>Retrieval-Augmented <em>Generation capstone.</em></h3>
+          <p class="desc">USP B.Sc. capstone exploring LLMs through a RAG pipeline built with LangChain. Investigated retrieval strategies, evaluation metrics, and failure modes of question-answering over private corpora.</p>
+          <div class="stack"><span>Python</span><span>LangChain</span><span>RAG</span><span>LLMs</span></div>
+        </div>
+        <div class="thumb-col">
+          <div class="thumb t3">
+            <span class="sticker">Exhibit 02</span>
+            <div class="glyph">RAG<br>+ LLM</div>
+          </div>
+        </div>
+      </article>
+        </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     05 · HOBBIES
+     ============================================================ -->
+<section id="offclock">
+  <div class="wrap">
+    <div class="filehead reveal">
+      <div class="fileno">05</div>
+      <h2><em>Hobbies.</em></h2>
+      <div class="meta">Logs, shelves,<br>and ongoing study</div>
+    </div>
+
+    <div class="hobbies-grid">
+      <!-- BOOKS CAROUSEL -->
+      <div class="reel-block reveal">
+        <div class="reel-head">
+          <div>
+            <div class="sec-num">Books</div>
+            <h3 class="reel-title">What I'm <em>reading.</em></h3>
+          </div>
+          <a class="reel-cta" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener">
+            <span>@luizcarlosdk on Skoob</span>
+            <span class="arr">→</span>
+          </a>
+        </div>
+
+        <div class="reel" data-coverflow="books">
+          <button class="reel-nav prev" type="button" aria-label="Previous book">‹</button>
+          <button class="reel-nav next" type="button" aria-label="Next book">›</button>
+          <div class="reel-track" id="booksTrack">
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#2a1a14;--p2:#4a2b1a">
+              <span class="poster-rating">Currently reading</span>
+              <span class="poster-title">The Adventures of <em>Sherlock Holmes</em></span>
+              <span class="poster-meta">Arthur Conan Doyle</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#3a2418;--p2:#5a3a28">
+              <span class="poster-rating">★★★★★</span>
+              <span class="poster-title">Wuthering <em>Heights</em></span>
+              <span class="poster-meta">Emily Brontë</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#5a1f1f;--p2:#8a3030">
+              <span class="poster-rating">★★★★★</span>
+              <span class="poster-title"><em>Inferno</em></span>
+              <span class="poster-meta">Dante Alighieri</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#1e2d1f;--p2:#3a4f3a">
+              <span class="poster-rating">★★★★½</span>
+              <span class="poster-title">The Name of <em>the Wind</em></span>
+              <span class="poster-meta">Patrick Rothfuss</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#4a2b1a;--p2:#7a5230">
+              <span class="poster-rating">★★★★</span>
+              <span class="poster-title">The Hound of <em>the Baskervilles</em></span>
+              <span class="poster-meta">Arthur Conan Doyle</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#1f3448;--p2:#355a7a">
+              <span class="poster-rating">★★★★★</span>
+              <span class="poster-title">The Lord of <em>the Rings</em></span>
+              <span class="poster-meta">J. R. R. Tolkien</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#3a2c4a;--p2:#604a80">
+              <span class="poster-rating">Up next</span>
+              <span class="poster-title">Crime and <em>Punishment</em></span>
+              <span class="poster-meta">Fyodor Dostoevsky</span>
+            </a>
+            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#2d2a1f;--p2:#4a4530">
+              <span class="poster-rating">Up next</span>
+              <span class="poster-title">The Way <em>of Kings</em></span>
+              <span class="poster-meta">Brandon Sanderson</span>
+            </a>
+          </div>
+        </div>
+
+        <p class="shelf-footnote">Reviews, ratings, and shelves live on my <a href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Skoob profile</a>.</p>
+      </div>
+
+      <!-- MOVIES CAROUSEL -->
+      <div class="reel-block reveal">
+        <div class="reel-head">
+          <div>
+            <div class="sec-num">Movies</div>
+            <h3 class="reel-title">What I've <em>watched.</em></h3>
+          </div>
+          <a class="reel-cta" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener">
+            <span>@luizcarlosdk</span>
+            <span class="arr">→</span>
+          </a>
+        </div>
+
+        <div class="reel" data-coverflow="movies">
+          <button class="reel-nav prev" type="button" aria-label="Previous movie">‹</button>
+          <button class="reel-nav next" type="button" aria-label="Next movie">›</button>
+          <div class="reel-track" id="moviesTrack">
+            <a class="poster" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="--p1:#1c2a3a;--p2:#3b5a7a">
+              <span class="poster-rating">★★★★★</span>
+              <span class="poster-title">Recently <em>watched</em></span>
+              <span class="poster-meta">Letterboxd</span>
+            </a>
+            <a class="poster" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="--p1:#5a2a2a;--p2:#8c3c3c">
+              <span class="poster-rating">★★★★</span>
+              <span class="poster-title">A slow <em>burn.</em></span>
+              <span class="poster-meta">Drama · 2024</span>
+            </a>
+            <a class="poster" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="--p1:#2d3a2b;--p2:#4f6a4a">
+              <span class="poster-rating">★★★★½</span>
+              <span class="poster-title">Quiet <em>masterpiece.</em></span>
+              <span class="poster-meta">Foreign</span>
+            </a>
+            <a class="poster" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="--p1:#3a2c4a;--p2:#604a80">
+              <span class="poster-rating">★★★★★</span>
+              <span class="poster-title">Worth a <em>rewatch.</em></span>
+              <span class="poster-meta">All-time</span>
+            </a>
+            <a class="poster" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="--p1:#4a3520;--p2:#7a5a3a">
+              <span class="poster-rating">★★★</span>
+              <span class="poster-title">Curious, <em>flawed.</em></span>
+              <span class="poster-meta">Indie</span>
+            </a>
+            <a class="poster" href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="--p1:#1a1a1a;--p2:#3a3a3a">
+              <span class="poster-rating">★★★★</span>
+              <span class="poster-title">Back to <em>basics.</em></span>
+              <span class="poster-meta">Classic · B&amp;W</span>
+            </a>
+          </div>
+        </div>
+
+        <p class="shelf-footnote">Logs, ratings, and the occasional essay live on my <a href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Letterboxd profile</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HIRE ME / CONTACT
+     ============================================================ -->
+<section class="hire" id="contact">
+  <div class="wrap">
+    <div class="eyebrow reveal">Currently open to new work</div>
+    <h2 class="reveal">Hire <em>me.</em></h2>
+    <p class="lede reveal">I'm a <b>backend software engineer</b> focused on agentic AI systems, data architecture, and the glue that makes them reliable in production. If you're shipping something ambitious and need a careful builder, let's talk.</p>
+
+    <div class="cta-row reveal">
+      <a class="cta primary" href="mailto:luizcarloszdk@gmail.com?subject=Let's%20build%20something">
+        <span>Email me</span><span class="arr">→</span>
+      </a>
+      <a class="cta ghost" href="https://linkedin.com/in/luizcarlosdk" target="_blank" rel="noopener">
+        <span>Message on LinkedIn</span><span class="arr">↗</span>
+      </a>
+    </div>
+
+    <div class="channels">
+      <a class="reveal" href="mailto:luizcarloszdk@gmail.com">
+        <span class="k">Email</span>
+        <span class="v">luizcarloszdk@gmail.com</span>
+      </a>
+      <a class="reveal" href="https://linkedin.com/in/luizcarlosdk" target="_blank" rel="noopener">
+        <span class="k">LinkedIn</span>
+        <span class="v">in/luizcarlosdk</span>
+      </a>
+      <a class="reveal" href="https://github.com/luizcarlosdk" target="_blank" rel="noopener">
+        <span class="k">GitHub</span>
+        <span class="v">@luizcarlosdk</span>
+      </a>
+    </div>
+
+    <div class="signoff">
+      <span>2026 · Luiz Carlos</span>
+      <span class="sig">— L.</span>
+      <span>Guarulhos · SP · BR</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  // desktop clock
+  (function(){
+    const el = document.getElementById('clock');
+    const tick = () => {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      el.textContent = hh + ':' + mm;
+    };
+    tick(); setInterval(tick, 30000);
+  })();
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // stagger reveals within each container
+  document.querySelectorAll('.archives .folder, .ledger div, .toolkit .card, .dossier .entry, .works .work, .offclock .feed, .links a').forEach((el,i) => {
+    el.style.transitionDelay = (i*0.06)+'s';
+  });
+
+  // animated counter
+  const numIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target; numIO.unobserve(el);
+      const end = parseFloat(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const start = performance.now(); const dur = 1400;
+      function tick(now){
+        const t = Math.min(1,(now-start)/dur);
+        const eased = 1 - Math.pow(1-t,3);
+        const v = end * eased;
+        el.textContent = (end >= 1000 ? (v>=1000? (Math.round(v/100)/10)+'k' : Math.round(v)) : Math.round(v)) + suffix;
+        if (t<1) requestAnimationFrame(tick);
+        else el.textContent = (end>=1000 ? (end/1000)+'k' : end) + suffix;
+      }
+      requestAnimationFrame(tick);
+    });
+  }, {threshold:.5});
+  document.querySelectorAll('.n[data-count]').forEach(el => numIO.observe(el));
+
+  // smooth scroll for folder links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      const el = document.querySelector(id);
+      if (el){ e.preventDefault(); window.scrollTo({top: el.offsetTop - 20, behavior:'smooth'}); }
+    });
+  });
+
+  /* draggable readme window with elastic snapback */
+  (() => {
+    const win = document.querySelector('.window');
+    if (!win) return;
+    const bar = win.querySelector('.titlebar');
+    const handle = bar || win;
+    let dragging = false, sx = 0, sy = 0, dx = 0, dy = 0, pid = null;
+
+    const setPos = (x, y) => {
+      win.style.setProperty('--wx', x + 'px');
+      win.style.setProperty('--wy', y + 'px');
+      win.style.setProperty('--wr', '0deg');
+    };
+
+    const onDown = (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      dragging = true;
+      pid = e.pointerId;
+      handle.setPointerCapture?.(pid);
+      sx = e.clientX; sy = e.clientY;
+      win.classList.add('is-dragging');
+      win.classList.remove('just-released');
+      e.preventDefault();
+    };
+    const onMove = (e) => {
+      if (!dragging) return;
+      dx = e.clientX - sx;
+      dy = e.clientY - sy;
+      setPos(dx, dy);
+    };
+    const onUp = () => {
+      if (!dragging) return;
+      dragging = false;
+      win.classList.remove('is-dragging');
+      // smooth snap back — no bouncy jiggle
+      win.classList.add('snapping');
+      setPos(0, 0);
+      setTimeout(() => win.classList.remove('snapping'), 500);
+      try { handle.releasePointerCapture?.(pid); } catch(_) {}
+    };
+
+    handle.addEventListener('pointerdown', onDown);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+  })();
+
+  /* coverflow carousels (books + movies) */
+  (() => {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.reel[data-coverflow]').forEach(reel => {
+      const track = reel.querySelector('.reel-track');
+      const items = Array.from(track.querySelectorAll('.poster'));
+      if (!items.length) return;
+      let idx = 0;
+      track.style.transformStyle = 'preserve-3d';
+      const layout = () => {
+        const n = items.length;
+        items.forEach((el, i) => {
+          let off = i - idx;
+          if (off > n/2) off -= n;
+          if (off < -n/2) off += n;
+          const abs = Math.abs(off);
+          const tx = off * 72;
+          const rotY = off * -14;
+          const scale = abs === 0 ? 1 : Math.max(0.58, 0.9 - abs * 0.14);
+          const opacity = abs > 2 ? 0 : (abs === 0 ? 1 : 0.78 - abs * 0.18);
+          const z = 10 - abs;
+          const blur = abs === 0 ? 0 : Math.min(2, abs * 0.6);
+          el.style.transform = `translate(-50%, -50%) translateX(${tx}%) rotateY(${rotY}deg) scale(${scale})`;
+          el.style.opacity = String(opacity);
+          el.style.zIndex = String(z);
+          el.style.filter = blur ? `blur(${blur}px)` : 'none';
+          el.style.pointerEvents = abs > 2 ? 'none' : 'auto';
+          el.classList.toggle('is-center', abs === 0);
+        });
+      };
+      const go = (dir) => { idx = (idx + dir + items.length) % items.length; layout(); };
+      reel.querySelector('.reel-nav.prev').addEventListener('click', (e) => { e.preventDefault(); go(-1); });
+      reel.querySelector('.reel-nav.next').addEventListener('click', (e) => { e.preventDefault(); go(1); });
+      items.forEach((el, i) => {
+        el.addEventListener('click', (e) => { if (i !== idx) { e.preventDefault(); idx = i; layout(); } });
+      });
+      reel.tabIndex = 0;
+      reel.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      });
+      layout();
+      if (!reduced) {
+        let timer = setInterval(() => go(1), 4500);
+        reel.addEventListener('mouseenter', () => { clearInterval(timer); timer = null; });
+        reel.addEventListener('mouseleave', () => { if (!timer) timer = setInterval(() => go(1), 4500); });
+      }
+    });
+  })();
+
+  /* Sticky top nav — show/hide on scroll + active section highlight */
+  (() => {
+    const nav = document.getElementById('topnav');
+    if (!nav) return;
+    const about = document.getElementById('about');
+    const sections = ['about','experience','toolkit','work','offclock','contact']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+    const links = nav.querySelectorAll('.tn-links a');
+
+    const onScroll = () => {
+      // reveal after user has scrolled past the about section's top
+      const threshold = about ? about.getBoundingClientRect().top + window.scrollY + 120 : 600;
+      if (window.scrollY > threshold) nav.classList.add('show');
+      else nav.classList.remove('show');
+
+      // active link — whichever section's midpoint crosses 40% of viewport first
+      const mark = window.scrollY + window.innerHeight * 0.35;
+      let active = null;
+      for (const s of sections){
+        if (s.offsetTop <= mark) active = s.id;
+      }
+      links.forEach(a => a.classList.toggle('active', a.dataset.section === active));
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+
+    // smooth scroll with offset for the nav height
+    links.forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        const el = document.querySelector(href);
+        if (!el) return;
+        e.preventDefault();
+        const top = el.getBoundingClientRect().top + window.scrollY - 60;
+        window.scrollTo({top, behavior:'smooth'});
+      });
+    });
+  })();
+
+  /* ambient dust & sparks over the desktop wallpaper */
+  (() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const canvas = document.getElementById('particles');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+    let W = 0, H = 0;
+    const resize = () => {
+      const r = canvas.getBoundingClientRect();
+      W = Math.max(1, Math.round(r.width));
+      H = Math.max(1, Math.round(r.height));
+      canvas.width = W * DPR; canvas.height = H * DPR;
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    if ('ResizeObserver' in window){ new ResizeObserver(resize).observe(canvas); }
+
+    const palette = [
+      '160,102,74',   // accent terracotta
+      '184,158,125',  // caramel
+      '168,57,46',    // red stamp
+      '106,90,72',    // cocoa
+      '255,248,230',  // cream highlight
+    ];
+    const N = 110;
+    const parts = Array.from({length:N}, () => {
+      const r = 0.8 + Math.random()*2.6;
+      return {
+        x: Math.random()*W, y: Math.random()*H,
+        r,
+        vx: (Math.random()-.5)*0.35,
+        vy: -0.08 - Math.random()*0.45,
+        a: 0.18 + Math.random()*0.45,
+        tw: Math.random()*Math.PI*2,       // twinkle phase
+        tws: 0.01 + Math.random()*0.03,    // twinkle speed
+        hue: palette[(Math.random()*palette.length)|0],
+        glow: Math.random() < 0.25,
+      };
+    });
+    const loop = () => {
+      ctx.clearRect(0,0,W,H);
+      for (const p of parts) {
+        p.x += p.vx; p.y += p.vy;
+        p.tw += p.tws;
+        if (p.y < -6) { p.y = H + 6; p.x = Math.random()*W; }
+        if (p.y > H + 10) { p.y = -6; p.x = Math.random()*W; }
+        if (p.x < -6) p.x = W + 6; else if (p.x > W + 6) p.x = -6;
+        const alpha = p.a * (0.55 + 0.45*Math.sin(p.tw));
+        if (p.glow){
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*6);
+          g.addColorStop(0, `rgba(${p.hue},${alpha})`);
+          g.addColorStop(1, `rgba(${p.hue},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r*6, 0, Math.PI*2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(${p.hue},${Math.min(1, alpha*1.5)})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    };
+    loop();
+  })();
+
+</script>
+</body>
+</html>
