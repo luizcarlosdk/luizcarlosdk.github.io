@@ -961,9 +961,41 @@
 
   /* mobile adjustments for desk */
   @media (max-width:720px){
-    .deskarea{min-height:auto}
-    .icons{justify-content:center;margin-bottom:24px}
-    .dock{position:static;transform:none;margin:20px auto 0}
+    .deskarea{min-height:auto; padding:20px 16px 28px}
+    .icons{justify-content:center; margin-bottom:20px; grid-template-columns:repeat(3, 1fr); gap:10px 6px; max-width:340px; margin-left:auto; margin-right:auto}
+    .icon{padding:8px 4px}
+    .icon .name{font-size:11px}
+    .dock{position:static; transform:none; margin:20px auto 0}
+
+    /* Menubar: drop the workstation status to free up space */
+    .menubar{height:32px; padding:6px 12px; gap:10px; font-size:12px}
+    .menubar .status{gap:8px; font-size:11px}
+    .menubar .status > span:not(.clk){display:none}
+    .menubar .status svg{display:none}
+
+    /* Readme window: full-width, smaller padding, no drag affordance */
+    .window{margin:0 auto; max-width:100%}
+    .window .titlebar{padding:8px 10px}
+    .window .path{padding:6px 12px; font-size:11px}
+    .window .content{padding:20px 18px 22px}
+    .welcome h1{font-size:28px; line-height:1.05}
+    .welcome .sub{font-size:13px}
+    .welcome .hint{display:none}
+
+    /* Touch-target bumps for the launcher dock */
+    .launcher a{min-height:44px}
+
+    /* Contact section: smaller heading on phones, tighter spacing */
+    .hire h2{font-size:clamp(40px, 12vw, 64px); margin-bottom:24px}
+    .hire .lede{font-size:18px; margin-bottom:36px}
+    .hire .cta-row{margin-bottom:40px}
+    .hire .channels{margin-bottom:36px}
+    .hire .channels a{padding:18px 20px}
+  }
+  @media (max-width:480px){
+    .icons{grid-template-columns:repeat(3, 1fr); max-width:300px}
+    .welcome h1{font-size:24px}
+    .hire h2{font-size:clamp(36px, 11vw, 52px)}
   }
 </style>
 </head>
