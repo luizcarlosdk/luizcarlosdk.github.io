@@ -677,6 +677,18 @@
     font-family:"JetBrains Mono",monospace; font-size:10px;
     padding:2px 8px; border:1px solid var(--line); color:var(--ink-soft);
   }
+  .work .link{
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:14px;
+    font-family:"JetBrains Mono",monospace; font-size:11px;
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent); border-bottom:1px solid currentColor;
+    padding-bottom:2px;
+    transition:color .15s, gap .2s;
+  }
+  .work .link:hover{color:var(--ink); gap:10px}
+  .work .link .arr{transition:transform .2s}
+  .work .link:hover .arr{transform:translateX(2px)}
   .work .thumb{
     aspect-ratio:5/3; position:relative; overflow:hidden;
     background:var(--ink); border:1px solid var(--line);
@@ -1373,6 +1385,9 @@
           <h3>Retrieval-Augmented <em>Generation capstone.</em></h3>
           <p class="desc">B.Sc. capstone in Artificial Intelligence at IME-USP, focused on Large Language Models using Retrieval-Augmented Generation with LangChain.</p>
           <div class="stack"><span>Python</span><span>LangChain</span><span>RAG</span><span>LLMs</span></div>
+          <a class="link" href="https://luizcarlosdk.github.io/capstone-project/" target="_blank" rel="noopener">
+            <span>View project</span><span class="arr">↗</span>
+          </a>
         </div>
         <div class="thumb-col">
           <div class="thumb t3">
