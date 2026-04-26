@@ -15,6 +15,6 @@ Then open http://localhost:8000.
 ## Assets to drop in
 
 - `assets/luiz-photo.jpg` — profile photo (in place)
-- `assets/resume.pdf` — linked from the launcher resume icon
+- `assets/luiz_carlos_resume.pdf` — linked from the launcher resume icon (in place)
 - `assets/og-image.png` — 1200×630 link-preview image
 - `assets/favicon.ico` — browser tab icon
