@@ -1446,19 +1446,19 @@
             <div class="sec-num">Books</div>
             <h3 class="reel-title">What I'm <em>reading.</em></h3>
           </div>
-          <a class="reel-cta" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener">
-            <span>@luizcarlosdk on Skoob</span>
+          <a class="reel-cta" href="https://www.goodreads.com/user/show/156980457-luizcarlos" target="_blank" rel="noopener">
+            <span>luizcarlos on Goodreads</span>
             <span class="arr">→</span>
           </a>
         </div>
 
-        <div class="reel" data-coverflow="books" data-books-src="assets/books.json">
+        <div class="reel" data-coverflow="books" data-goodreads="156980457">
           <button class="reel-nav prev" type="button" aria-label="Previous book">‹</button>
           <button class="reel-nav next" type="button" aria-label="Next book">›</button>
-          <div class="reel-track" id="booksTrack" aria-busy="true" data-loading-label="Loading books…" data-empty-label="See my Skoob shelf ↗"></div>
+          <div class="reel-track" id="booksTrack" aria-busy="true" data-loading-label="Loading books…" data-empty-label="My shelf on Goodreads ↗"></div>
         </div>
 
-        <p class="shelf-footnote">Reviews, ratings, and shelves live on my <a href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Skoob profile</a>.</p>
+        <p class="shelf-footnote">Shelves and reviews live on my <a href="https://www.goodreads.com/user/show/156980457-luizcarlos" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Goodreads profile</a>.</p>
       </div>
 
       <!-- MOVIES CAROUSEL -->
@@ -1681,37 +1681,89 @@
       reel.addEventListener('mouseleave', () => { if (!timer) timer = setInterval(() => go(1), 4500); });
     }
   };
-  document.querySelectorAll('.reel[data-coverflow]:not([data-letterboxd]):not([data-books-src])').forEach(initCoverflow);
+  document.querySelectorAll('.reel[data-coverflow]:not([data-letterboxd]):not([data-goodreads])').forEach(initCoverflow);
 
-  /* Books — render from a local JSON file; cover URLs are scraped from
-     each book's Skoob page (og:image) via a CORS proxy, with localStorage
-     caching keyed by Skoob URL. */
+  /* Books — fetch Goodreads RSS via CORS proxy with localStorage cache + multi-proxy fallback */
   (async () => {
-    const reel = document.querySelector('.reel[data-books-src]');
+    const reel = document.querySelector('.reel[data-goodreads]');
     if (!reel) return;
     const track = reel.querySelector('.reel-track');
-    const src = reel.dataset.booksSrc;
-
+    const userId = reel.dataset.goodreads;
+    const rssUrl = `https://www.goodreads.com/review/list_rss/${userId}`;
+    const cacheKey = `lb-books-${userId}-v1`;
+    const cacheTTL = 60 * 60 * 1000; // 1 hour
+    const proxies = [
+      (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+      (u) => `https://cors.eu.org/${u}`,
+    ];
     const palette = [
       ['#2a1a14', '#4a2b1a'], ['#3a2418', '#5a3a28'], ['#5a1f1f', '#8a3030'],
       ['#1e2d1f', '#3a4f3a'], ['#1f3448', '#355a7a'], ['#3a2c4a', '#604a80'],
       ['#2d2a1f', '#4a4530'], ['#1a1a1a', '#3a3a3a'],
     ];
-    const proxies = [
-      (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-      (u) => `https://cors.eu.org/${u}`,
-    ];
-    const COVER_CACHE_PREFIX = 'lb-skoob-cover-v1:';
-    const COVER_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+    const BOOK_LIMIT = 12;
 
     const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    const statusLabel = (book) => {
-      const s = (book.status || '').toLowerCase();
-      if (s.includes('lendo')) return 'Currently reading';
-      if (s.includes('a ler') || s.includes('próximo') || s.includes('proximo')) return 'Up next';
-      if (s.includes('concluí') || s.includes('conclui') || s === 'lido') return 'Read';
-      return book.status || '';
+    const statusLabel = (shelves, readAt) => {
+      const s = (shelves || '').toLowerCase();
+      if (s.includes('currently-reading')) return 'Currently reading';
+      if (s.includes('to-read')) return 'Up next';
+      // Default shelf is 'read'; trust user_read_at as a tiebreaker.
+      if (readAt) return 'Read';
+      return s ? s.replace(/-/g, ' ') : '';
+    };
+
+    const upgradeImageUrl = (url) => {
+      // Goodreads serves _SX50_, _SX98_, _SX318_ variants by width.
+      // Default RSS gives small/medium/large; large is ~318px which is fine.
+      // Strip ._SX{n}_ to fall back to original size if we ever want full-res.
+      return (url || '').trim();
+    };
+
+    const parseRSS = (xml) => {
+      const doc = new DOMParser().parseFromString(xml, 'application/xml');
+      if (doc.querySelector('parsererror')) throw new Error('invalid xml');
+      const items = Array.from(doc.querySelectorAll('item')).slice(0, BOOK_LIMIT);
+      return items.map(item => {
+        const title = item.querySelector('title')?.textContent?.trim() || '';
+        const author = item.getElementsByTagName('author_name')[0]?.textContent?.trim() || '';
+        const link = item.querySelector('link')?.textContent?.trim() || '';
+        const cover = upgradeImageUrl(item.getElementsByTagName('book_large_image_url')[0]?.textContent
+                  || item.getElementsByTagName('book_medium_image_url')[0]?.textContent
+                  || item.getElementsByTagName('book_image_url')[0]?.textContent);
+        const shelves = item.getElementsByTagName('user_shelves')[0]?.textContent?.trim() || '';
+        const readAt = item.getElementsByTagName('user_read_at')[0]?.textContent?.trim() || '';
+        const yearText = item.getElementsByTagName('book_published')[0]?.textContent?.trim() || '';
+        return {
+          title,
+          author,
+          year: yearText ? parseInt(yearText, 10) : null,
+          shelves,
+          readAt,
+          coverUrl: cover,
+          url: link,
+        };
+      }).filter(b => b.title);
+    };
+
+    const render = (books) => {
+      track.removeAttribute('aria-busy');
+      track.classList.remove('is-empty');
+      track.innerHTML = books.map((b, i) => {
+        const [p1, p2] = palette[i % palette.length];
+        const cover = b.coverUrl || '';
+        const href = b.url || `https://www.goodreads.com/user/show/${userId}`;
+        return `
+          <a class="poster is-book${cover ? ' has-cover' : ''}" href="${escape(href)}" target="_blank" rel="noopener" style="--p1:${p1};--p2:${p2}">
+            ${cover ? `<img class="poster-img" src="${escape(cover)}" alt="" loading="lazy" decoding="async">` : ''}
+            <span class="poster-rating">${escape(statusLabel(b.shelves, b.readAt))}</span>
+            <span class="poster-title">${escape(b.title)}</span>
+            <span class="poster-meta">${escape(b.author)}</span>
+          </a>
+        `;
+      }).join('');
+      initCoverflow(reel);
     };
 
     const showFallback = () => {
@@ -1721,83 +1773,39 @@
       reel.querySelectorAll('.reel-nav').forEach(b => b.style.display = 'none');
     };
 
-    const getCachedCover = (skoobUrl) => {
-      try {
-        const raw = localStorage.getItem(COVER_CACHE_PREFIX + skoobUrl);
-        if (!raw) return null;
-        const {t, url} = JSON.parse(raw);
-        if (Date.now() - t > COVER_TTL) return null;
-        return url || null;
-      } catch (_) { return null; }
-    };
-    const setCachedCover = (skoobUrl, url) => {
-      try { localStorage.setItem(COVER_CACHE_PREFIX + skoobUrl, JSON.stringify({t: Date.now(), url})); } catch (_) {}
-    };
-
-    const scrapeCover = async (skoobUrl) => {
-      for (const buildUrl of proxies) {
-        try {
-          const resp = await fetch(buildUrl(skoobUrl), {cache: 'no-store'});
-          if (!resp.ok) continue;
-          const html = await resp.text();
-          const m = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i);
-          if (m && m[1]) return m[1];
-        } catch (_) { /* try next */ }
-      }
-      return null;
-    };
-
-    const upgradeCard = (cardEl, coverUrl) => {
-      if (!coverUrl) return;
-      cardEl.classList.add('has-cover');
-      const img = document.createElement('img');
-      img.className = 'poster-img';
-      img.src = coverUrl;
-      img.alt = '';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      cardEl.insertBefore(img, cardEl.firstChild);
-    };
-
+    // 1) Try cache first.
+    let cached = null;
     try {
-      const resp = await fetch(src, {cache: 'default'});
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      const data = await resp.json();
-      const books = (data && Array.isArray(data.books)) ? data.books : [];
-      if (!books.length) { showFallback(); return; }
-
-      track.removeAttribute('aria-busy');
-      track.innerHTML = books.map((b, i) => {
-        const [p1, p2] = palette[i % palette.length];
-        const inlineCover = (b.coverUrl || '').trim();
-        const cachedCover = !inlineCover && b.skoobUrl ? getCachedCover(b.skoobUrl) : null;
-        const cover = inlineCover || cachedCover || '';
-        const href = b.skoobUrl || 'https://www.skoob.com.br/usuario/6459553-luiz-carlos';
-        return `
-          <a class="poster is-book${cover ? ' has-cover' : ''}" data-skoob-url="${escape(b.skoobUrl || '')}" href="${escape(href)}" target="_blank" rel="noopener" style="--p1:${p1};--p2:${p2}">
-            ${cover ? `<img class="poster-img" src="${escape(cover)}" alt="" loading="lazy" decoding="async">` : ''}
-            <span class="poster-rating">${escape(statusLabel(b))}</span>
-            <span class="poster-title">${escape(b.title || '')}</span>
-            <span class="poster-meta">${escape(b.author || '')}</span>
-          </a>
-        `;
-      }).join('');
-      initCoverflow(reel);
-
-      // Upgrade cards that don't have a cover yet by scraping the Skoob page.
-      track.querySelectorAll('.poster.is-book:not(.has-cover)').forEach(async (cardEl) => {
-        const skoobUrl = cardEl.dataset.skoobUrl;
-        if (!skoobUrl) return;
-        const url = await scrapeCover(skoobUrl);
-        if (url) {
-          setCachedCover(skoobUrl, url);
-          upgradeCard(cardEl, url);
-        }
-      });
-    } catch (err) {
-      console.warn('books: failed to load', err);
-      showFallback();
+      cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+    } catch (_) { /* ignore */ }
+    if (cached && cached.books?.length && Date.now() - cached.t < cacheTTL) {
+      render(cached.books);
+      return;
     }
+
+    // 2) Try each proxy in order; first success wins.
+    for (const buildUrl of proxies) {
+      try {
+        const resp = await fetch(buildUrl(rssUrl), {cache: 'no-store'});
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const xml = await resp.text();
+        const books = parseRSS(xml);
+        if (!books.length) throw new Error('no items parsed');
+        try { localStorage.setItem(cacheKey, JSON.stringify({t: Date.now(), books})); } catch (_) {}
+        render(books);
+        return;
+      } catch (err) {
+        console.warn('goodreads: proxy failed', err);
+        continue;
+      }
+    }
+
+    // 3) All proxies failed — render stale cache if present, else fallback.
+    if (cached && cached.books?.length) {
+      render(cached.books);
+      return;
+    }
+    showFallback();
   })();
 
   /* Letterboxd films — fetch RSS via CORS proxy with localStorage cache + multi-proxy fallback */
