@@ -1,0 +1,41 @@
+{
+  "source": "https://luizcarlosbooks.notion.site/",
+  "books": [
+    {
+      "title": "O Senhor dos Anéis: A Sociedade do Anel",
+      "author": "J.R.R. Tolkien",
+      "status": "Concluído",
+      "rating": 5,
+      "genres": ["Fantasia", "Ficção"],
+      "startedDate": "2026-04-15",
+      "finishedDate": "2026-04-25",
+      "notes": "Uma obra-prima da fantasia épica.",
+      "coverUrl": "",
+      "skoobUrl": "https://www.skoob.com.br/livro/12-o-senhor-dos-aneis-a-sociedade-do-anel"
+    },
+    {
+      "title": "Sapiens: Uma Breve História da Humanidade",
+      "author": "Yuval Noah Harari",
+      "status": "Lendo",
+      "rating": 4,
+      "genres": ["Não-ficção", "História"],
+      "startedDate": "2026-04-22",
+      "finishedDate": null,
+      "notes": "Perspectiva fascinante sobre a humanidade.",
+      "coverUrl": "",
+      "skoobUrl": "https://www.skoob.com.br/sapiens-uma-breve-historia-da-humanidade-456398ed492193.html"
+    },
+    {
+      "title": "A Paciente Silenciosa",
+      "author": "Alex Michaelides",
+      "status": "A ler",
+      "rating": 3,
+      "genres": ["Mistério", "Thriller"],
+      "startedDate": "2026-04-28",
+      "finishedDate": "2026-05-05",
+      "notes": "Recomendado por amigos.",
+      "coverUrl": "",
+      "skoobUrl": "https://www.skoob.com.br/a-paciente-silenciosa-786148ed793049.html"
+    }
+  ]
+}

@@ -758,6 +758,14 @@
   .poster.is-book::before{border-color:rgba(247,242,232,.28)}
   .poster.is-book .poster-rating{color:rgba(247,242,232,.85);letter-spacing:.18em;font-size:9px;text-transform:uppercase}
   .poster.is-book .poster-meta{color:rgba(247,242,232,.7)}
+  /* Book with a real cover image */
+  .poster.is-book.has-cover{padding:0;background:#1a1612}
+  .poster.is-book.has-cover .poster-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;border-radius:6px}
+  .poster.is-book.has-cover::before{z-index:2;border-color:rgba(247,242,232,.18)}
+  .poster.is-book.has-cover::after{background:linear-gradient(180deg, transparent 45%, rgba(0,0,0,.78) 100%);mix-blend-mode:normal;z-index:1}
+  .poster.is-book.has-cover .poster-rating{position:absolute;top:10px;left:10px;z-index:3;background:rgba(0,0,0,.55);padding:3px 7px;border-radius:3px}
+  .poster.is-book.has-cover .poster-title{position:absolute;left:10px;right:10px;bottom:22px;z-index:3;font-size:13px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+  .poster.is-book.has-cover .poster-meta{position:absolute;left:10px;right:10px;bottom:8px;z-index:3;font-size:9px;color:rgba(255,255,255,.78);margin-top:0}
 
   /* Film posters — real images from Letterboxd CDN */
   .poster.is-film{padding:0;background:#1a1612}
@@ -767,10 +775,11 @@
   .poster.is-film .poster-rating{position:absolute;top:12px;left:12px;z-index:3;background:rgba(0,0,0,.55);padding:3px 7px;border-radius:3px;font-size:10px}
   .poster.is-film .poster-title{position:absolute;left:12px;right:12px;bottom:24px;z-index:3;font-size:14px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
   .poster.is-film .poster-meta{position:absolute;left:12px;right:12px;bottom:10px;z-index:3;font-size:9px;color:rgba(255,255,255,.75);margin-top:0}
-  /* Loading + empty state */
-  .reel-track[aria-busy="true"]{display:flex;justify-content:center;align-items:center}
-  .reel-track[aria-busy="true"]::after{content:"Loading films…";font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
-  .reel-track.is-empty::after{content:"Latest films on Letterboxd ↗";font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;color:var(--ink-soft)}
+  /* Loading + empty states */
+  .reel-track[aria-busy="true"], .reel-track.is-empty{display:flex;justify-content:center;align-items:center}
+  .reel-track[aria-busy="true"]::after, .reel-track.is-empty::after{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  .reel-track[aria-busy="true"]::after{content:attr(data-loading-label)}
+  .reel-track.is-empty::after{content:attr(data-empty-label)}
 
   .shelf-footnote{margin-top:18px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft)}
 
@@ -1443,51 +1452,10 @@
           </a>
         </div>
 
-        <div class="reel" data-coverflow="books">
+        <div class="reel" data-coverflow="books" data-books-src="assets/books.json">
           <button class="reel-nav prev" type="button" aria-label="Previous book">‹</button>
           <button class="reel-nav next" type="button" aria-label="Next book">›</button>
-          <div class="reel-track" id="booksTrack">
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#2a1a14;--p2:#4a2b1a">
-              <span class="poster-rating">Currently reading</span>
-              <span class="poster-title">The Adventures of <em>Sherlock Holmes</em></span>
-              <span class="poster-meta">Arthur Conan Doyle</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#3a2418;--p2:#5a3a28">
-              <span class="poster-rating">★★★★★</span>
-              <span class="poster-title">Wuthering <em>Heights</em></span>
-              <span class="poster-meta">Emily Brontë</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#5a1f1f;--p2:#8a3030">
-              <span class="poster-rating">★★★★★</span>
-              <span class="poster-title"><em>Inferno</em></span>
-              <span class="poster-meta">Dante Alighieri</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#1e2d1f;--p2:#3a4f3a">
-              <span class="poster-rating">★★★★½</span>
-              <span class="poster-title">The Name of <em>the Wind</em></span>
-              <span class="poster-meta">Patrick Rothfuss</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#4a2b1a;--p2:#7a5230">
-              <span class="poster-rating">★★★★</span>
-              <span class="poster-title">The Hound of <em>the Baskervilles</em></span>
-              <span class="poster-meta">Arthur Conan Doyle</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#1f3448;--p2:#355a7a">
-              <span class="poster-rating">★★★★★</span>
-              <span class="poster-title">The Lord of <em>the Rings</em></span>
-              <span class="poster-meta">J. R. R. Tolkien</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#3a2c4a;--p2:#604a80">
-              <span class="poster-rating">Up next</span>
-              <span class="poster-title">Crime and <em>Punishment</em></span>
-              <span class="poster-meta">Fyodor Dostoevsky</span>
-            </a>
-            <a class="poster is-book" href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="--p1:#2d2a1f;--p2:#4a4530">
-              <span class="poster-rating">Up next</span>
-              <span class="poster-title">The Way <em>of Kings</em></span>
-              <span class="poster-meta">Brandon Sanderson</span>
-            </a>
-          </div>
+          <div class="reel-track" id="booksTrack" aria-busy="true" data-loading-label="Loading books…" data-empty-label="See my Skoob shelf ↗"></div>
         </div>
 
         <p class="shelf-footnote">Reviews, ratings, and shelves live on my <a href="https://www.skoob.com.br/usuario/6459553-luiz-carlos" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Skoob profile</a>.</p>
@@ -1509,7 +1477,7 @@
         <div class="reel" data-coverflow="movies" data-letterboxd="luizcarlosdk">
           <button class="reel-nav prev" type="button" aria-label="Previous movie">‹</button>
           <button class="reel-nav next" type="button" aria-label="Next movie">›</button>
-          <div class="reel-track" id="moviesTrack" aria-busy="true"></div>
+          <div class="reel-track" id="moviesTrack" aria-busy="true" data-loading-label="Loading films…" data-empty-label="Latest films on Letterboxd ↗"></div>
         </div>
 
         <p class="shelf-footnote">Logs, ratings, and the occasional essay live on my <a href="https://letterboxd.com/luizcarlosdk/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Letterboxd profile</a>.</p>
@@ -1713,7 +1681,71 @@
       reel.addEventListener('mouseleave', () => { if (!timer) timer = setInterval(() => go(1), 4500); });
     }
   };
-  document.querySelectorAll('.reel[data-coverflow]:not([data-letterboxd])').forEach(initCoverflow);
+  document.querySelectorAll('.reel[data-coverflow]:not([data-letterboxd]):not([data-books-src])').forEach(initCoverflow);
+
+  /* Books — render from a local JSON file */
+  (async () => {
+    const reel = document.querySelector('.reel[data-books-src]');
+    if (!reel) return;
+    const track = reel.querySelector('.reel-track');
+    const src = reel.dataset.booksSrc;
+
+    const palette = [
+      ['#2a1a14', '#4a2b1a'], ['#3a2418', '#5a3a28'], ['#5a1f1f', '#8a3030'],
+      ['#1e2d1f', '#3a4f3a'], ['#1f3448', '#355a7a'], ['#3a2c4a', '#604a80'],
+      ['#2d2a1f', '#4a4530'], ['#1a1a1a', '#3a3a3a'],
+    ];
+
+    const stars = (rating) => {
+      if (rating == null || isNaN(rating)) return '';
+      const full = Math.floor(rating);
+      const half = rating - full >= 0.5;
+      return '★'.repeat(full) + (half ? '½' : '');
+    };
+    const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    const statusLabel = (book) => {
+      const s = (book.status || '').toLowerCase();
+      if (s.includes('lendo')) return 'Currently reading';
+      if (s.includes('a ler') || s.includes('próximo') || s.includes('proximo')) return 'Up next';
+      if (s.includes('concluí') || s.includes('conclui') || s === 'lido') return stars(book.rating) || '★';
+      return stars(book.rating) || '';
+    };
+
+    const showFallback = () => {
+      track.removeAttribute('aria-busy');
+      track.classList.add('is-empty');
+      track.innerHTML = '';
+      reel.querySelectorAll('.reel-nav').forEach(b => b.style.display = 'none');
+    };
+
+    try {
+      const resp = await fetch(src, {cache: 'default'});
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const data = await resp.json();
+      const books = (data && Array.isArray(data.books)) ? data.books : [];
+      if (!books.length) { showFallback(); return; }
+
+      track.removeAttribute('aria-busy');
+      track.innerHTML = books.map((b, i) => {
+        const [p1, p2] = palette[i % palette.length];
+        const cover = (b.coverUrl || '').trim();
+        const href = b.skoobUrl || 'https://www.skoob.com.br/usuario/6459553-luiz-carlos';
+        return `
+          <a class="poster is-book${cover ? ' has-cover' : ''}" href="${escape(href)}" target="_blank" rel="noopener" style="--p1:${p1};--p2:${p2}">
+            ${cover ? `<img class="poster-img" src="${escape(cover)}" alt="" loading="lazy" decoding="async">` : ''}
+            <span class="poster-rating">${escape(statusLabel(b))}</span>
+            <span class="poster-title">${escape(b.title || '')}</span>
+            <span class="poster-meta">${escape(b.author || '')}</span>
+          </a>
+        `;
+      }).join('');
+      initCoverflow(reel);
+    } catch (err) {
+      console.warn('books: failed to load', err);
+      showFallback();
+    }
+  })();
 
   /* Letterboxd films — fetch RSS via CORS proxy with localStorage cache + multi-proxy fallback */
   (async () => {
