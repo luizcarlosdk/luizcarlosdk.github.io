@@ -1704,20 +1704,14 @@
     const COVER_CACHE_PREFIX = 'lb-skoob-cover-v1:';
     const COVER_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
-    const stars = (rating) => {
-      if (rating == null || isNaN(rating)) return '';
-      const full = Math.floor(rating);
-      const half = rating - full >= 0.5;
-      return '★'.repeat(full) + (half ? '½' : '');
-    };
     const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
     const statusLabel = (book) => {
       const s = (book.status || '').toLowerCase();
       if (s.includes('lendo')) return 'Currently reading';
       if (s.includes('a ler') || s.includes('próximo') || s.includes('proximo')) return 'Up next';
-      if (s.includes('concluí') || s.includes('conclui') || s === 'lido') return stars(book.rating) || '★';
-      return stars(book.rating) || '';
+      if (s.includes('concluí') || s.includes('conclui') || s === 'lido') return 'Read';
+      return book.status || '';
     };
 
     const showFallback = () => {
