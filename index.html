@@ -722,7 +722,14 @@
   .work .thumb.t3{background:linear-gradient(180deg,#5a4330 0%, #2b1f17 100%)}
   .work .thumb.t4{background:linear-gradient(45deg,#ede0c9 0%, #b08968 100%)}
   .work .thumb.t5{background:linear-gradient(135deg,#8c5a3c 0%, #2b1f17 100%)}
-  /* HOBBIES — coverflow carousels for books + movies */
+  /* HOBBIES — coverflow carousels for books + films */
+  .hobbies-intro{
+    font-family:"Fraunces",serif; font-weight:300;
+    font-size:clamp(16px,1.7vw,19px); line-height:1.65;
+    color:var(--ink-soft); max-width:62ch;
+    margin:-8px 0 44px;
+  }
+  .hobbies-intro em{font-style:italic;color:var(--accent)}
   .hobbies-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}
   @media (max-width:900px){.hobbies-grid{grid-template-columns:1fr;gap:64px}}
   .reel-block{position:relative;margin:0;min-width:0}
@@ -1437,6 +1444,8 @@
       <h2><em>Hobbies.</em></h2>
       <div class="meta">Books<br>and films</div>
     </div>
+
+    <p class="hobbies-intro reveal">This is what I do when the editor is closed, for anyone curious. Currently focused on reading classics and watching <em>Wong Kar-wai</em> and <em>Park Chan-wook</em> — I love a deeper <em>roteiro</em>.</p>
 
     <div class="hobbies-grid">
       <!-- BOOKS CAROUSEL -->
