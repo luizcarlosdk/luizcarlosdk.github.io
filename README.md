@@ -1,6 +1,6 @@
 # luizcarlosdk.github.io
 
-Personal portfolio for [Luiz Carlos](https://luizcarlosdk.github.io/) — backend software engineer working on agentic AI systems and data architecture.
+Personal portfolio for [Luiz Carlos](https://luizcarlosdk.github.io/) — AI Backend Engineer working on agentic AI systems and data architecture.
 
 Live at **https://luizcarlosdk.github.io/**.
 
