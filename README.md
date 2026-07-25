@@ -11,6 +11,7 @@ Live at **https://luizcarlosdk.github.io/**.
 - Desktop-inspired opening screen with a Material 3-inspired design system for the portfolio sections.
 - Responsive top app bar and mobile navigation bar.
 - Scroll-triggered entrances, staggered content, timeline drawing, and reduced-motion support.
+- Ambient Material color fields, a technical grid, and scroll-reactive background depth.
 - Hosted on GitHub Pages directly from `main`.
 
 ## Content

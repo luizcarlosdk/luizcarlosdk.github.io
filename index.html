@@ -88,6 +88,73 @@
         radial-gradient(circle at 94% 35%, rgba(244, 226, 167, .46), transparent 25rem),
         var(--md-surface);
     }
+    .ambient-effects {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      contain: strict;
+    }
+    .ambient-effects__grid {
+      position: absolute;
+      inset: -100px;
+      opacity: .3;
+      background-image:
+        linear-gradient(rgb(140 79 52 / .065) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(140 79 52 / .065) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 12%, transparent 74%);
+      mask-image: radial-gradient(ellipse at center, #000 12%, transparent 74%);
+      transform: translate3d(0, var(--ambient-grid-shift, 0px), 0) rotate(-2deg);
+    }
+    .ambient-effects__orb {
+      position: absolute;
+      width: min(72vw, 860px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      opacity: .42;
+      will-change: transform, translate;
+    }
+    .ambient-effects__orb--primary {
+      top: 5%;
+      left: -28%;
+      background: radial-gradient(circle at 42% 42%, rgb(255 188 158 / .48), rgb(255 219 204 / .2) 38%, transparent 70%);
+      translate: 0 var(--ambient-shift-primary, 0px);
+      animation: ambient-float-primary 18s ease-in-out infinite alternate;
+    }
+    .ambient-effects__orb--tertiary {
+      top: 38%;
+      right: -32%;
+      background: radial-gradient(circle at 48% 48%, rgb(232 205 113 / .42), rgb(244 226 167 / .18) 40%, transparent 72%);
+      translate: 0 var(--ambient-shift-tertiary, 0px);
+      animation: ambient-float-tertiary 23s ease-in-out -6s infinite alternate;
+    }
+    .ambient-effects__orb--rose {
+      bottom: -28%;
+      left: 18%;
+      width: min(62vw, 720px);
+      background: radial-gradient(circle at 50% 45%, rgb(216 160 145 / .32), rgb(255 219 204 / .14) 44%, transparent 72%);
+      translate: 0 var(--ambient-shift-rose, 0px);
+      animation: ambient-float-rose 20s ease-in-out -11s infinite alternate;
+    }
+    .ambient-effects__veil {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgb(255 248 245 / .12), rgb(255 248 245 / .42) 48%, rgb(255 248 245 / .18));
+    }
+    @keyframes ambient-float-primary {
+      from { transform: translate3d(-4%, 2%, 0) scale(.94); }
+      to { transform: translate3d(13%, -7%, 0) scale(1.1); }
+    }
+    @keyframes ambient-float-tertiary {
+      from { transform: translate3d(5%, -5%, 0) scale(1.04); }
+      to { transform: translate3d(-12%, 8%, 0) scale(.92); }
+    }
+    @keyframes ambient-float-rose {
+      from { transform: translate3d(-8%, 4%, 0) scale(.96); }
+      to { transform: translate3d(10%, -8%, 0) scale(1.08); }
+    }
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     button, a { -webkit-tap-highlight-color: transparent; }
@@ -236,7 +303,7 @@
     /* Material mobile navigation bar */
     .mobile-nav { display: none; }
 
-    main { overflow: hidden; }
+    main { position: relative; z-index: 1; overflow: hidden; }
     section { scroll-margin-top: calc(var(--app-bar-height) + 22px); }
 
     /* Shared Material buttons */
@@ -280,11 +347,30 @@
       content: "";
       position: absolute;
       inset: 34px 0 0;
+      z-index: 1;
       pointer-events: none;
       opacity: .2;
       background-image: radial-gradient(rgb(83 67 62 / .35) .7px, transparent .7px);
       background-size: 18px 18px;
       mask-image: linear-gradient(to bottom, #000, transparent 85%);
+    }
+    .desktop-hero::after {
+      content: "";
+      position: absolute;
+      inset: -28%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .5;
+      background:
+        radial-gradient(circle at 32% 38%, rgb(255 255 255 / .72), transparent 24%),
+        radial-gradient(circle at 68% 62%, rgb(244 226 167 / .52), transparent 28%),
+        conic-gradient(from 125deg at 52% 48%, transparent, rgb(140 79 52 / .12), transparent 32%, rgb(255 219 204 / .3), transparent 68%);
+      animation: desktop-wallpaper-breathe 15s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+    @keyframes desktop-wallpaper-breathe {
+      from { transform: translate3d(-2%, 1%, 0) rotate(-2deg) scale(.96); }
+      to { transform: translate3d(3%, -2%, 0) rotate(3deg) scale(1.05); }
     }
     .system-bar {
       position: relative;
@@ -365,6 +451,7 @@
 
     .desktop-workspace {
       position: relative;
+      z-index: 2;
       min-height: calc(max(720px, 100svh) - 34px);
       margin-left: 96px;
       padding: 38px 34px 54px 20px;
@@ -506,8 +593,8 @@
     }
 
     /* Shared section styles */
-    .section { padding: 112px 0; }
-    .section--container { background: var(--md-surface-container-low); }
+    .section { position: relative; padding: 112px 0; }
+    .section--container { background: color-mix(in srgb, var(--md-surface-container-low) 91%, transparent); }
     .section-heading {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(240px, 420px);
@@ -840,6 +927,12 @@
     @media (max-width: 760px) {
       :root { --app-bar-height: 64px; }
       body { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
+      .ambient-effects__grid { opacity: .2; background-size: 48px 48px; }
+      .ambient-effects__orb { width: 120vw; opacity: .28; animation: none; will-change: auto; }
+      .ambient-effects__orb--primary { left: -64%; }
+      .ambient-effects__orb--tertiary { right: -68%; }
+      .ambient-effects__orb--rose { width: 105vw; left: -8%; }
+      .desktop-hero::after { animation: none; }
       .container { width: min(100% - 32px, var(--page-width)); }
       .app-bar__content { width: min(100% - 28px, var(--page-width)); }
       .brand__mark { width: 40px; height: 40px; border-radius: 13px; }
@@ -962,14 +1055,30 @@
       .motion-ready .experience-card::before { scale: 1; }
       .motion-ready .contact-card.reveal::before,
       .motion-ready .contact-card.reveal::after { transform: none; }
+      .ambient-effects__grid { transform: none; }
+      .ambient-effects__orb { animation: none; translate: 0 0; transform: none; will-change: auto; }
+      .desktop-hero::after { animation: none; transform: none; }
       .desktop-workspace { opacity: 1; transform: none; }
       .project-image { translate: 0 0; }
+    }
+
+    @media (forced-colors: active) {
+      .ambient-effects,
+      .desktop-hero::after { display: none; }
     }
   </style>
 </head>
 
 <body>
   <a class="skip-link" href="#about">Skip to portfolio content</a>
+
+  <div class="ambient-effects" aria-hidden="true">
+    <div class="ambient-effects__grid"></div>
+    <span class="ambient-effects__orb ambient-effects__orb--primary"></span>
+    <span class="ambient-effects__orb ambient-effects__orb--tertiary"></span>
+    <span class="ambient-effects__orb ambient-effects__orb--rose"></span>
+    <div class="ambient-effects__veil"></div>
+  </div>
 
   <header class="app-bar" id="app-bar">
     <div class="app-bar__content">
@@ -1307,6 +1416,7 @@
 
   <script>
     (() => {
+      const root = document.documentElement;
       const appBar = document.getElementById('app-bar');
       const desktopHero = document.querySelector('.desktop-hero');
       const navLinks = Array.from(document.querySelectorAll('[data-section]'));
@@ -1336,7 +1446,19 @@
 
         const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const pageProgress = Math.min(1, Math.max(0, window.scrollY / scrollable));
-        document.documentElement.style.setProperty('--page-progress', pageProgress.toFixed(4));
+        root.style.setProperty('--page-progress', pageProgress.toFixed(4));
+
+        if (!reducedMotion.matches) {
+          root.style.setProperty('--ambient-shift-primary', `${(-78 * pageProgress).toFixed(2)}px`);
+          root.style.setProperty('--ambient-shift-tertiary', `${(96 * pageProgress).toFixed(2)}px`);
+          root.style.setProperty('--ambient-shift-rose', `${(-56 * pageProgress).toFixed(2)}px`);
+          root.style.setProperty('--ambient-grid-shift', `${(38 * pageProgress).toFixed(2)}px`);
+        } else {
+          root.style.setProperty('--ambient-shift-primary', '0px');
+          root.style.setProperty('--ambient-shift-tertiary', '0px');
+          root.style.setProperty('--ambient-shift-rose', '0px');
+          root.style.setProperty('--ambient-grid-shift', '0px');
+        }
 
         if (!reducedMotion.matches && desktopHero && window.innerWidth > 760) {
           const heroProgress = Math.min(1, window.scrollY / (desktopHero.offsetHeight * 0.78));
@@ -1469,7 +1591,7 @@
         });
       }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
 
-      document.documentElement.classList.add('motion-ready');
+      root.classList.add('motion-ready');
       motionItems.forEach((item) => observer.observe(item));
     })();
   </script>
