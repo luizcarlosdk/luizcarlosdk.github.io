@@ -1,24 +1,24 @@
 # luizcarlosdk.github.io
 
-Personal portfolio for [Luiz Carlos](https://luizcarlosdk.github.io/) — AI Backend Engineer working on agentic AI systems and data architecture.
+Personal portfolio for [Luiz Carlos](https://luizcarlosdk.github.io/) — an AI Backend Engineer building production agents, Python backends, and data systems.
 
 Live at **https://luizcarlosdk.github.io/**.
 
 ## Stack
 
-- Single-file static site: one `index.html` with embedded CSS and JavaScript.
-- No framework, no build step, no package manager.
+- Single-file static site with embedded CSS and JavaScript.
+- No framework, build step, package manager, or runtime API dependency.
+- Desktop-inspired opening screen with a Material 3-inspired design system for the portfolio sections.
+- Responsive top app bar and mobile navigation bar.
+- Scroll-triggered entrances, staggered content, timeline drawing, and reduced-motion support.
 - Hosted on GitHub Pages directly from `main`.
-- Originally drafted with [Claude Design](https://claude.com/), then iterated by hand.
 
-## Live data sources
+## Content
 
-The off-clock section pulls real data at runtime instead of hardcoding it:
+The site includes résumé-backed information about experience, education, skills, and production impact. Selected projects currently feature:
 
-- **Films** — fetched from the [Letterboxd RSS](https://letterboxd.com/luizcarlosdk/rss/) feed.
-- **Books** — fetched from the [Goodreads RSS](https://www.goodreads.com/review/list_rss/156980457) feed.
-
-Both feeds are reached through public CORS proxies (`api.allorigins.win`, `cors.eu.org`) since neither service sends CORS headers. Results are cached in `localStorage` for 1 hour, with a stale-cache fallback if every proxy fails. No backend, no scheduled jobs, no JSON committed to the repo.
+- **Memoir** — an open-source AI meeting knowledge workspace.
+- **Divination** — a RAG assistant for D&D Dungeon Masters and IME-USP capstone project.
 
 ## Local preview
 
@@ -28,19 +28,17 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000.
 
-A real HTTP server is required — opening `index.html` over `file://` will leave the live-data carousels empty because browsers block `fetch()` to local resources.
-
 ## Repo layout
 
-```
+```text
 .
-├── index.html              # the entire site
+├── index.html
 ├── assets/
-│   ├── luiz-photo.jpg      # profile photo (readme window)
+│   ├── capstone.png
+│   ├── luiz-photo.jpg
 │   ├── luiz_carlos_resume.pdf
-│   ├── portfolio.png       # screenshot used in the projects section
-│   └── capstone.png
-├── .github/                # (none yet)
+│   ├── memoir-mainpage.png
+│   └── portfolio.png          # legacy screenshot, no longer rendered
 └── README.md
 ```
 
@@ -48,6 +46,12 @@ A real HTTP server is required — opening `index.html` over `file://` will leav
 
 Commit messages follow [Conventional Commits 1.0](https://www.conventionalcommits.org/en/v1.0.0/). Allowed types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
 
+Suggested commit for this refresh:
+
+```text
+feat(portfolio): refresh content and adopt Material Design
+```
+
 ## License
 
-The code in this repository is personal portfolio source — not licensed for reuse without permission. Asset files (photos, resume, screenshots) are not licensed for reuse.
+The code in this repository is personal portfolio source — not licensed for reuse without permission. Asset files (photos, résumé, and screenshots) are not licensed for reuse.
