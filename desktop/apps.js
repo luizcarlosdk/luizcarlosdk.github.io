@@ -1,5 +1,6 @@
 // App registry for desktop mode. Window content is always cloned from the Simple page.
 import { icon } from './ui.js';
+import { buildSettings } from './settings.js';
 
 export const APPS = {
   about: { title: 'about.md', icon: 'file', size: [760, 620], section: 'about', dock: true },
@@ -84,5 +85,6 @@ export function buildApp(id, ctx) {
   if (app.folder) return buildFolder(app.folder, ctx);
   if (app.project !== undefined) return cloneProject(app.project, ctx);
   if (app.game) return buildGame(app, ctx);
+  if (id === 'settings') return buildSettings(ctx);
   throw new Error(`No builder for app "${id}"`);
 }

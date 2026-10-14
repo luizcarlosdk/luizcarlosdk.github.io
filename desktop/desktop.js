@@ -3,6 +3,9 @@ import { createWM } from './wm.js';
 import { APPS, buildApp } from './apps.js';
 import { runLogin, runIntro } from './intro.js';
 import { reducedMotion, storage } from './ui.js';
+import { applyPreferences } from './settings.js';
+
+applyPreferences();
 
 const shell = createShell();
 document.body.append(shell.el);
@@ -12,7 +15,7 @@ function open(id, opener = null) {
   const app = APPS[id];
   if (!app) return;
   if (app.href) { window.open(app.href, '_blank', 'noopener'); return; }
-  wm.open(id, { title: app.title, iconName: app.icon, size: app.size, opener, from: opener?.getBoundingClientRect() ?? null, build: () => buildApp(id, { open }) });
+  wm.open(id, { title: app.title, iconName: app.icon, size: app.size, opener, from: opener?.getBoundingClientRect() ?? null, build: () => buildApp(id, { open, replayIntro: playIntro }) });
 }
 
 shell.bind({ open, wm, logout: () => { storage.set('localStorage', 'lc.mode', null); location.href = location.pathname; } });
