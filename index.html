@@ -392,7 +392,8 @@
       text-transform: uppercase;
     }
     .section-heading__label .icon { font-size: 19px; }
-    .section-heading__num { opacity: .6; }
+    .section-heading__num { color: var(--md-on-surface-variant); }
+    .contact-card .section-heading__num { color: color-mix(in srgb, var(--md-inverse-on-surface) 75%, transparent); }
     .section-heading h2 {
       margin-bottom: 0;
       font-family: var(--display);
@@ -700,7 +701,7 @@
     .chooser__footer a { color: var(--md-on-surface-variant); text-decoration: underline; text-underline-offset: 3px; }
     .chooser__footer a:hover { color: var(--md-on-surface); }
     .toast { position: fixed; left: 50%; bottom: 24px; z-index: 450; max-width: min(92vw, 460px); padding: 14px 18px; border-radius: 16px; background: var(--md-inverse-surface); color: var(--md-inverse-on-surface); box-shadow: 0 10px 28px rgb(var(--shadow-color) / .25); font-size: 14px; transform: translateX(-50%); }
-    .toast[hidden] { display: none; }
+    .toast:empty { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); box-shadow: none; }
     @media (max-width: 760px) {
       .chooser__options { grid-template-columns: 1fr; }
       .chooser__option { padding: 22px; }
@@ -927,7 +928,7 @@
       </p>
     </div>
   </div>
-  <div class="toast" role="status" aria-live="polite" hidden></div>
+  <div class="toast" role="status" aria-live="polite"></div>
   <a class="skip-link" href="#about">Skip to portfolio content</a>
 
   <div class="ambient-effects" aria-hidden="true">
@@ -1228,11 +1229,11 @@
       const simpleSurfaces = () => [document.querySelector('.skip-link'), document.getElementById('app-bar'), document.getElementById('main-content'), document.querySelector('.mobile-nav')];
       const store = (mode) => { try { localStorage.setItem('lc.mode', mode); } catch (_) { /* storage blocked */ } };
       let toastTimer = 0;
-      const notify = (text) => {
-        toast.textContent = text;
-        toast.hidden = false;
+      const clearNotice = () => { clearTimeout(toastTimer); toast.textContent = ''; };
+      const notify = (text, { persist = false } = {}) => {
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => { toast.hidden = true; }, 6000);
+        toast.textContent = text;
+        if (!persist) toastTimer = setTimeout(clearNotice, 6000);
       };
       const syncSurfaces = () => {
         const mode = root.dataset.mode;
@@ -1241,22 +1242,40 @@
         chooser.hidden = mode !== 'chooser';
         if (mode === 'chooser') chooser.querySelector('[data-choose]').focus();
       };
-      let desktopFailed = false;
+      // Desktop boot: desktop.js must call window.lcMode.ready() once mounted. Until then a
+      // pending notice shows; a load error, a runtime error in desktop.js, or 8 s without
+      // ready() falls back to Simple. Each attempt gets its own token so late events from an
+      // abandoned attempt are ignored.
+      let bootSeq = 0;
+      let markReady = () => {};
       const bootDesktop = () => {
         if (document.getElementById('desktop-js')) return;
-        desktopFailed = false;
+        const attempt = ++bootSeq;
         const css = Object.assign(document.createElement('link'), { id: 'desktop-css', rel: 'stylesheet', href: 'desktop/desktop.css' });
         const js = Object.assign(document.createElement('script'), { id: 'desktop-js', type: 'module', src: 'desktop/desktop.js' });
+        const onRuntimeError = (e) => { if ((e.filename || '').includes('desktop/desktop.js')) fail(); };
+        const settle = () => { clearTimeout(timer); window.removeEventListener('error', onRuntimeError); };
         const fail = () => {
-          if (desktopFailed) return;
-          desktopFailed = true;
+          if (attempt !== bootSeq) return;
+          bootSeq++;
+          settle();
           css.remove();
           js.remove();
           setMode('simple', { remember: false });
+          document.getElementById('hero-title')?.focus({ preventScroll: true });
           notify('Desktop mode couldn’t load, so here’s the simple page instead.');
+        };
+        const timer = setTimeout(fail, 8000);
+        markReady = () => {
+          if (attempt !== bootSeq) return;
+          bootSeq++;
+          settle();
+          clearNotice();
         };
         css.addEventListener('error', fail);
         js.addEventListener('error', fail);
+        window.addEventListener('error', onRuntimeError);
+        notify('Opening desktop…', { persist: true });
         document.head.append(css, js);
       };
       const setMode = (mode, { remember = true } = {}) => {
@@ -1267,7 +1286,7 @@
         if (mode === 'desktop') bootDesktop();
         if (mode === 'simple' && from === 'chooser') document.getElementById('hero-title')?.focus({ preventScroll: true });
       };
-      window.lcMode = { set: setMode, notify };
+      window.lcMode = { set: setMode, notify, ready: () => markReady() };
 
       chooser.addEventListener('click', (e) => {
         const option = e.target.closest('[data-choose]');
