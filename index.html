@@ -22,7 +22,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&amp;family=JetBrains+Mono:wght@500;600&amp;family=Roboto+Flex:opsz,wght@8..144,400..700&amp;display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/Sprat-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: light;
@@ -67,9 +68,9 @@
       --md-success: #315f42;
       --md-success-container: #c2f0cf;
       --shadow-color: 38 20 32;
-      --display: "Fraunces", Georgia, serif;
-      --body: "Roboto Flex", Roboto, Arial, sans-serif;
-      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --display: "Sprat", Georgia, serif;
+      --body: "Host Grotesk", system-ui, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
       --page-width: 1180px;
       --app-bar-height: 72px;
       --shape-small: 10px;
@@ -78,6 +79,9 @@
       --shape-extra-large: 40px;
       --ease-standard: cubic-bezier(.2, 0, 0, 1);
     }
+
+    @font-face { font-family: "Sprat"; src: url("assets/fonts/Sprat-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Sprat"; src: url("assets/fonts/Sprat-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
 
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: calc(var(--app-bar-height) + 24px); }
@@ -260,7 +264,7 @@
       box-shadow: 0 4px 10px rgb(var(--shadow-color) / .18);
     }
     .brand__text { display: grid; line-height: 1.15; }
-    .brand__text strong { font-family: var(--display); font-size: 18px; font-weight: 560; }
+    .brand__text strong { font-family: var(--display); font-size: 18px; font-weight: 500; }
     .brand__text small { color: var(--md-on-surface-variant); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
     .desktop-nav {
       display: flex;
@@ -368,22 +372,23 @@
       gap: 8px;
       margin-bottom: 16px;
       color: var(--md-primary);
-      font-family: var(--mono);
+      font-family: var(--body);
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 650;
       letter-spacing: .14em;
       text-transform: uppercase;
     }
     .section-heading__label .icon { font-size: 19px; }
+    .section-heading__num { opacity: .6; }
     .section-heading h2 {
       margin-bottom: 0;
       font-family: var(--display);
       font-size: clamp(46px, 5.5vw, 72px);
-      font-weight: 430;
+      font-weight: 400;
       letter-spacing: -.035em;
       line-height: 1;
     }
-    .section-heading h2 em { color: var(--md-primary); font-weight: 370; }
+    .section-heading h2 em { color: var(--md-primary); font-weight: 400; font-style: normal; }
     .section-heading > p { margin-bottom: 2px; color: var(--md-on-surface-variant); font-size: 17px; }
 
     /* About */
@@ -469,15 +474,15 @@
       min-height: 32px;
       padding: 0 12px;
       border-radius: 999px;
-      font-family: var(--mono);
+      font-family: var(--body);
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 650;
       letter-spacing: .06em;
       text-transform: uppercase;
     }
     .date-chip { background: var(--md-primary-container); color: var(--md-on-primary-container); }
     .type-chip { border: 1px solid var(--md-outline-variant); color: var(--md-on-surface-variant); }
-    .experience-card h3 { margin-bottom: 4px; font-family: var(--display); font-size: 31px; font-weight: 520; letter-spacing: -.02em; line-height: 1.15; }
+    .experience-card h3 { margin-bottom: 4px; font-family: var(--display); font-size: 31px; font-weight: 500; letter-spacing: -.02em; line-height: 1.15; }
     .experience-card__org { margin-bottom: 20px; color: var(--md-primary); font-size: 15px; font-weight: 650; }
     .experience-card ul { display: grid; gap: 11px; margin: 0 0 22px; padding: 0; list-style: none; }
     .experience-card li { position: relative; padding-left: 28px; color: var(--md-on-surface-variant); font-size: 15px; }
@@ -523,7 +528,7 @@
     .skill-card:nth-child(2) .skill-card__icon { background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
     .skill-card:nth-child(3) .skill-card__icon { background: var(--skill-3-container); color: var(--skill-3-on); }
     .skill-card:nth-child(4) .skill-card__icon { background: var(--skill-4-container); color: var(--skill-4-on); }
-    .skill-card h3 { margin-bottom: 1px; font-family: var(--display); font-size: 25px; font-weight: 560; }
+    .skill-card h3 { margin-bottom: 1px; font-family: var(--display); font-size: 25px; font-weight: 500; }
     .skill-card__head small { color: var(--md-on-surface-variant); font-size: 12px; }
     .skill-card .chip-row { gap: 9px; }
     .skill-card .chip { min-height: 36px; border: 0; background: var(--md-surface-container); color: var(--md-on-surface); font-size: 13px; }
@@ -539,10 +544,10 @@
     }
     .project-card__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, .95fr); align-items: stretch; }
     .project-card__content { display: flex; flex-direction: column; align-items: flex-start; padding: clamp(32px, 5vw, 56px); }
-    .project-card__number { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; color: var(--md-primary); font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+    .project-card__number { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--md-primary); font-family: var(--body); font-size: 11px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
     .project-card__number::before { content: ""; width: 24px; height: 2px; background: currentColor; }
-    .project-card h3 { max-width: 16ch; margin-bottom: 18px; font-family: var(--display); font-size: clamp(36px, 4.3vw, 56px); font-weight: 480; letter-spacing: -.035em; line-height: 1.05; }
-    .project-card h3 em { color: var(--md-primary); font-weight: 370; }
+    .project-card h3 { max-width: 16ch; margin-bottom: 18px; font-family: var(--display); font-size: clamp(36px, 4.3vw, 56px); font-weight: 400; letter-spacing: -.035em; line-height: 1.05; }
+    .project-card h3 em { color: var(--md-primary); font-weight: 400; font-style: normal; }
     .project-card__description { max-width: 62ch; margin-bottom: 22px; color: var(--md-on-surface-variant); font-size: 16px; }
     .project-card .chip-row { margin-bottom: 28px; }
     .project-link {
@@ -600,8 +605,8 @@
     .motion-ready .contact-card.is-visible::after { transform: translate(0, 0) scale(1); }
     .contact-card__content { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .65fr); gap: 64px; align-items: end; }
     .contact-card .section-heading__label { color: var(--md-inverse-primary); }
-    .contact-card h2 { max-width: 10ch; margin-bottom: 24px; font-family: var(--display); font-size: clamp(50px, 7vw, 86px); font-weight: 420; letter-spacing: -.04em; line-height: .98; }
-    .contact-card h2 em { color: var(--md-inverse-primary); font-weight: 360; }
+    .contact-card h2 { max-width: 10ch; margin-bottom: 24px; font-family: var(--display); font-size: clamp(50px, 7vw, 86px); font-weight: 400; letter-spacing: -.04em; line-height: .98; }
+    .contact-card h2 em { color: var(--md-inverse-primary); font-weight: 400; font-style: normal; }
     .contact-card p { max-width: 55ch; margin-bottom: 32px; color: color-mix(in srgb, var(--md-inverse-on-surface) 75%, transparent); font-size: 18px; }
     .contact-links { display: grid; gap: 10px; }
     .contact-link {
@@ -622,7 +627,7 @@
     .contact-link strong { overflow-wrap: anywhere; font-size: 14px; font-weight: 580; }
     .contact-link > .arrow { margin-left: auto; color: color-mix(in srgb, var(--md-inverse-on-surface) 50%, transparent); font-size: 19px; }
     .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px 4px 0; color: var(--md-on-surface-variant); font-size: 13px; }
-    .site-footer strong { font-family: var(--display); color: var(--md-on-surface); font-size: 18px; font-style: italic; font-weight: 500; }
+    .site-footer strong { font-family: var(--display); color: var(--md-on-surface); font-size: 18px; font-weight: 500; }
 
     /* Scroll motion: composited properties, one-shot observers, and staggered children. */
     .motion-ready .reveal {
@@ -885,7 +890,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"/></svg>01 · About</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"/></svg><span class="section-heading__num">01</span>About</div>
             <h2>Engineering at the edge of <em>data and AI.</em></h2>
           </div>
           <p>I’m most useful where models, backend systems, and real business processes meet.</p>
@@ -922,7 +927,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg>02 · Experience</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg><span class="section-heading__num">02</span>Experience</div>
             <h2>Building, migrating, and <em>leading.</em></h2>
           </div>
           <p>Applied AI and production engineering, built on a foundation in research and technical leadership.</p>
@@ -1004,7 +1009,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>03 · Skills</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg><span class="section-heading__num">03</span>Skills</div>
             <h2>A production-minded <em>toolkit.</em></h2>
           </div>
           <p>Backend-first, with the AI, data, and frontend range needed to take a product from an idea to production.</p>
@@ -1035,7 +1040,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg>04 · Projects</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg><span class="section-heading__num">04</span>Projects</div>
             <h2>Ideas made <em>useful.</em></h2>
           </div>
           <p>Selected work across meeting intelligence and retrieval-augmented generation.</p>
@@ -1045,7 +1050,7 @@
           <article class="project-card reveal" data-reveal="scale">
             <div class="project-card__grid">
               <div class="project-card__content">
-                <div class="project-card__number">01 · Open source · 2026—Present</div>
+                <div class="project-card__number"><span>01</span><span>Open source</span><span>Since 2026</span></div>
                 <h3>Memoir — AI meeting knowledge <em>workspace.</em></h3>
                 <p class="project-card__description">An open-source full-stack app that turns meeting transcripts into searchable summaries, decisions, action items, participant profiles, and structured transcript segments. It detects Zoom and Google Meet formats automatically, with a Gemini fallback for messy or unsupported ones, and Pytest coverage protects parsing and core workflows.</p>
                 <div class="chip-row"><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">SQLAlchemy</span><span class="chip">SQLite</span><span class="chip">Gemini</span><span class="chip">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Pytest</span></div>
@@ -1061,7 +1066,7 @@
           <article class="project-card project-card--divination reveal" data-reveal="scale">
             <div class="project-card__grid">
               <div class="project-card__content">
-                <div class="project-card__number">02 · Capstone · AI / RAG · 2024</div>
+                <div class="project-card__number"><span>02</span><span>Capstone</span><span>2024</span></div>
                 <h3>Divination — RAG assistant for <em>Dungeon Masters.</em></h3>
                 <p class="project-card__description">A RAG assistant grounded in the official 2024 D&amp;D Free Rules using LangChain, vector search, and GPT-4o. Built with a FastAPI backend and Vue 3 frontend as my B.Sc. capstone project at IME-USP.</p>
                 <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Vue 3</span><span class="chip">LangChain</span><span class="chip">GPT-4o</span><span class="chip">Vector Search</span></div>
@@ -1081,7 +1086,7 @@
         <div class="contact-card reveal" data-reveal="scale">
           <div class="contact-card__content">
             <div>
-              <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wave"/></svg>05 · Contact</div>
+              <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wave"/></svg><span class="section-heading__num">05</span>Contact</div>
               <h2>Let’s build something <em>solid.</em></h2>
               <p>Happy to talk about LLM systems, process automation, or something you’re building. Based in São Paulo, reachable from anywhere.</p>
               <div class="button-row">
