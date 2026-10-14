@@ -11,6 +11,11 @@ export function createWM({ layer, desk, dock, onChange }) {
   const deskRect = () => desk.getBoundingClientRect();
   const rectOf = (el) => ({ left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight });
   const place = (el, r) => Object.assign(el.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+  const saved = (() => { try { return JSON.parse(sessionStorage.getItem('lc.windows') || '{}'); } catch (_) { return {}; } })();
+  const remember = (id, el) => {
+    saved[id] = rectOf(el);
+    try { sessionStorage.setItem('lc.windows', JSON.stringify(saved)); } catch (_) { /* storage blocked */ }
+  };
   const clamp = (r) => {
     const d = deskRect();
     return { ...r, left: Math.min(Math.max(r.left, MIN_VISIBLE - r.width), d.width - MIN_VISIBLE), top: Math.min(Math.max(r.top, 0), d.height - 44) };
@@ -81,7 +86,7 @@ export function createWM({ layer, desk, dock, onChange }) {
       <div class="dt-window__body"></div>`;
     el.querySelector('.dt-window__body').append(build());
     layer.append(el);
-    if (!PHONE.matches) place(el, defaultRect(size));
+    if (!PHONE.matches) place(el, saved[id] ? clamp(saved[id]) : defaultRect(size));
     wins.set(id, { el, opener });
     wire(id, el);
     focus(id);
@@ -95,6 +100,28 @@ export function createWM({ layer, desk, dock, onChange }) {
     el.addEventListener('click', (e) => {
       const ctl = e.target.closest('[data-ctl]')?.dataset.ctl;
       if (ctl === 'close') close(id);
+      if (ctl === 'min') minimize(id);
+      if (ctl === 'max') toggleMaximize(id);
+    });
+    const bar = el.querySelector('.dt-window__bar');
+    bar.addEventListener('dblclick', (e) => { if (!e.target.closest('button')) toggleMaximize(id); });
+    bar.addEventListener('pointerdown', (e) => {
+      if (PHONE.matches || e.button !== 0 || e.target.closest('button') || el.classList.contains('is-maximized')) return;
+      const start = { x: e.clientX, y: e.clientY, ...rectOf(el) };
+      el.classList.add('is-dragging');
+      bar.setPointerCapture(e.pointerId);
+      const move = (ev) => place(el, clamp({ ...start, left: start.left + ev.clientX - start.x, top: start.top + ev.clientY - start.y }));
+      const up = (ev) => {
+        move(ev); // pointerup can arrive before the last coalesced pointermove
+        el.classList.remove('is-dragging');
+        bar.removeEventListener('pointermove', move);
+        bar.removeEventListener('pointerup', up);
+        bar.removeEventListener('pointercancel', up);
+        remember(id, el);
+      };
+      bar.addEventListener('pointermove', move);
+      bar.addEventListener('pointerup', up);
+      bar.addEventListener('pointercancel', up);
     });
   }
 
@@ -108,15 +135,53 @@ export function createWM({ layer, desk, dock, onChange }) {
     if (restoreFocus && w.opener?.isConnected) w.opener.focus({ preventScroll: true });
   }
 
+  function genie(el, id, reverse) {
+    const target = dock.querySelector(`[data-open="${id}"]`);
+    if (!target || reducedMotion() || PHONE.matches) return null;
+    const a = el.getBoundingClientRect();
+    const b = target.getBoundingClientRect();
+    const small = { transformOrigin: 'top left', opacity: 0, transform: `translate(${b.left - a.left}px, ${b.top - a.top}px) scale(${b.width / a.width}, ${b.height / a.height})` };
+    const full = { transformOrigin: 'top left', opacity: 1, transform: 'none' };
+    return el.animate(reverse ? [small, full] : [full, small], { duration: 260, easing: 'cubic-bezier(.3, 0, .2, 1)' });
+  }
+
+  function minimize(id) {
+    const w = wins.get(id);
+    if (!w || w.el.hidden || PHONE.matches) return;
+    const hide = () => {
+      w.el.hidden = true;
+      w.el.classList.remove('is-focused');
+      const next = topmost();
+      if (next) focus(next); else onChange();
+    };
+    const anim = genie(w.el, id, false);
+    if (anim) anim.finished.then(hide, hide); else hide();
+  }
+
   function restore(id) {
     const w = wins.get(id);
     if (!w) return;
     w.el.hidden = false;
     focus(id);
+    genie(w.el, id, true);
+  }
+
+  function toggleMaximize(id) {
+    const w = wins.get(id);
+    if (!w || PHONE.matches) return;
+    if (w.el.classList.toggle('is-maximized')) {
+      w.prevRect = rectOf(w.el);
+      const d = deskRect();
+      const left = Math.round(dock.getBoundingClientRect().right - d.left + 12);
+      place(w.el, { left, top: 0, width: d.width - left, height: d.height });
+    } else {
+      place(w.el, w.prevRect);
+    }
+    focus(id);
   }
 
   return {
-    open, close, focus, focusedId, restore,
+    open, close, focus, focusedId, restore, minimize, toggleMaximize,
     isOpen: (id) => wins.has(id),
     isMinimized: (id) => Boolean(wins.get(id)?.el.hidden),
     openIds: () => [...wins.keys()],
