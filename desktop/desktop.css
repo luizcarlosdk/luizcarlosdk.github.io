@@ -29,3 +29,45 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
   background-image: radial-gradient(color-mix(in srgb, var(--md-on-surface-variant) 40%, transparent) .7px, transparent .7px);
   background-size: 18px 18px;
 }
+
+/* System bar */
+.dt-bar { position: relative; z-index: 50; display: flex; align-items: center; gap: 12px; padding: 0 8px; background: var(--md-inverse-surface); color: var(--md-inverse-on-surface); font-family: var(--dt-mono); font-size: 12px; }
+.dt-bar__menu { position: relative; }
+.dt-bar__btn { height: 26px; display: inline-flex; align-items: center; gap: 7px; padding: 0 8px; border: 0; border-radius: 7px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.dt-bar__btn:hover, .dt-bar__btn[aria-expanded="true"] { background: rgb(255 255 255 / .14); }
+.dt-bar__btn:focus-visible { outline: 2px solid var(--md-inverse-primary); outline-offset: 1px; }
+.dt-bar__mark { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 6px; background: var(--md-inverse-primary); color: var(--md-inverse-surface); font-family: var(--display); font-size: 13px; }
+.dt-bar__title { font-weight: 600; }
+.dt-bar__spacer { flex: 1; }
+.dt-bar__status { display: inline-flex; align-items: center; gap: 8px; color: color-mix(in srgb, var(--md-inverse-on-surface) 80%, transparent); }
+.dt-bar .icon { font-size: 16px; }
+.dt-bar__clock { min-width: 38px; font-variant-numeric: tabular-nums; }
+.dt-menu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 60; min-width: 220px; margin: 0; padding: 6px; list-style: none; border: 1px solid var(--md-outline-variant); border-radius: 14px; background: var(--md-surface-container-lowest); color: var(--md-on-surface); box-shadow: 0 18px 40px rgb(var(--shadow-color) / .22); font-family: var(--body); font-size: 14px; }
+.dt-menu--end { right: 0; left: auto; }
+.dt-menu[hidden] { display: none; }
+.dt-menu button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 0; border-radius: 9px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.dt-menu button:hover, .dt-menu button:focus-visible { background: var(--md-primary-container); color: var(--md-on-primary-container); outline: none; }
+.dt-menu .icon { font-size: 18px; color: var(--md-primary); }
+
+/* Desk, icons, dock */
+.dt-desk { position: relative; min-height: 0; }
+.dt-icons { position: absolute; z-index: 1; top: 16px; right: 16px; bottom: 16px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 100px); gap: 4px; margin: 0; padding: 0; list-style: none; direction: rtl; }
+.dt-icons > li { direction: ltr; }
+.dt-icon { width: 96px; height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 6px 4px; border: 1px solid transparent; border-radius: 14px; background: transparent; color: var(--md-on-surface); font: inherit; cursor: default; }
+.dt-icon__glyph { width: 52px; height: 52px; display: grid; place-items: center; border: 1px solid var(--md-outline-variant); border-radius: 14px; background: var(--md-surface-container-lowest); color: var(--md-primary); box-shadow: 0 4px 10px rgb(var(--shadow-color) / .12); }
+.dt-icon__glyph .icon { font-size: 28px; }
+.dt-icon--folder .dt-icon__glyph { border-color: var(--folder-border); background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
+.dt-icon__name { max-width: 92px; padding: 1px 6px; border-radius: 6px; font-family: var(--dt-mono); font-size: 11px; line-height: 1.3; text-align: center; overflow-wrap: anywhere; }
+.dt-icon:hover .dt-icon__name { background: color-mix(in srgb, var(--md-surface-container-lowest) 70%, transparent); }
+.dt-icon.is-selected { border-color: color-mix(in srgb, var(--md-primary) 35%, transparent); background: color-mix(in srgb, var(--md-primary-container) 55%, transparent); }
+.dt-icon.is-selected .dt-icon__name { background: var(--md-primary); color: var(--md-on-primary); }
+.dt-icon:focus-visible { outline: 3px solid var(--md-primary); outline-offset: 2px; }
+.dt-dock { position: absolute; z-index: 40; top: 16px; bottom: 16px; left: 14px; width: 64px; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 10px 0; border: 1px solid rgb(255 255 255 / .16); border-radius: 22px; background: color-mix(in srgb, var(--md-inverse-surface) 94%, transparent); box-shadow: 0 12px 30px rgb(var(--shadow-color) / .25); }
+.dt-dock__running { display: contents; }
+.dt-dock__item { position: relative; width: 46px; height: 46px; display: grid; place-items: center; border: 0; border-radius: 14px; background: rgb(255 255 255 / .08); color: var(--md-inverse-on-surface); cursor: pointer; }
+.dt-dock__item:hover { background: rgb(255 255 255 / .16); }
+.dt-dock__item:focus-visible { outline: 2px solid var(--md-inverse-primary); outline-offset: 2px; }
+.dt-dock__item .icon { font-size: 22px; }
+.dt-dock__item.is-running::after { content: ""; position: absolute; top: 50%; left: -8px; width: 5px; height: 5px; border-radius: 50%; background: var(--md-inverse-primary); transform: translateY(-50%); }
+.dt-dock__divider { width: 28px; height: 1px; margin: auto 0 4px; background: rgb(255 255 255 / .18); }
+.dt-dock__phone-only { display: none; }

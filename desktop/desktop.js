@@ -1,8 +1,7 @@
-import { icon } from './ui.js';
+import { createShell } from './shell.js';
+import { storage } from './ui.js';
 
-const root = document.createElement('div');
-root.className = 'dt';
-root.id = 'desktop';
-root.innerHTML = `<p>${icon('desktop')} luiz@workstation</p>`;
-document.body.append(root);
+const shell = createShell();
+document.body.append(shell.el);
+shell.bind({ open: () => {}, wm: null, logout: () => { storage.set('localStorage', 'lc.mode', null); location.href = location.pathname; } });
 window.lcMode.ready();
