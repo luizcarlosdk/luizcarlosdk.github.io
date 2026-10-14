@@ -22,7 +22,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&amp;family=JetBrains+Mono:wght@500;600&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;family=Roboto+Flex:opsz,wght@8..144,400..700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&amp;family=JetBrains+Mono:wght@500;600&amp;family=Roboto+Flex:opsz,wght@8..144,400..700&amp;display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: light;
@@ -62,6 +62,8 @@
       --skill-3-on: #001b3e;
       --skill-4-container: #dfeaa0;
       --skill-4-on: #181e00;
+      --duo-fill: var(--md-tertiary);
+      --duo-opacity: .38;
       --md-success: #315f42;
       --md-success-container: #c2f0cf;
       --shadow-color: 38 20 32;
@@ -193,22 +195,8 @@
       transition: transform 180ms var(--ease-standard);
     }
     .skip-link:focus { transform: translateY(0); }
-    .material-symbols-rounded {
-      font-family: "Material Symbols Rounded";
-      font-weight: normal;
-      font-style: normal;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-feature-settings: "liga";
-      -webkit-font-smoothing: antialiased;
-      font-feature-settings: "liga";
-    }
+    .icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .icon { width: 1em; height: 1em; flex: none; display: inline-block; fill: currentColor; font-size: 24px; vertical-align: -.125em; }
     .container {
       width: min(100% - 48px, var(--page-width));
       margin-inline: auto;
@@ -336,7 +324,7 @@
       cursor: pointer;
       transition: transform 180ms var(--ease-standard), box-shadow 180ms var(--ease-standard), background 180ms var(--ease-standard);
     }
-    .button .material-symbols-rounded { font-size: 21px; }
+    .button .icon { font-size: 21px; }
     .button--filled { background: var(--md-primary); color: var(--md-on-primary); box-shadow: 0 2px 5px rgb(var(--shadow-color) / .18); }
     .button--filled:hover { background: var(--md-primary-hover); box-shadow: 0 6px 14px rgb(var(--shadow-color) / .2); transform: translateY(-2px); }
     .button--tonal { background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
@@ -362,7 +350,7 @@
     .hero__stat span { color: var(--md-on-surface-variant); font-size: 14px; }
     .mode-switch { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--md-outline-variant); border-radius: 999px; color: var(--md-on-surface); font-size: 14px; font-weight: 620; transition: background 180ms var(--ease-standard), border-color 180ms var(--ease-standard); }
     .mode-switch:hover { background: var(--md-surface-container-high); border-color: var(--md-outline); }
-    .mode-switch .material-symbols-rounded { color: var(--md-primary); font-size: 19px; }
+    .mode-switch .icon { color: var(--md-primary); font-size: 19px; }
 
     /* Shared section styles */
     .section { position: relative; padding: 112px 0; }
@@ -386,7 +374,7 @@
       letter-spacing: .14em;
       text-transform: uppercase;
     }
-    .section-heading__label .material-symbols-rounded { font-size: 19px; }
+    .section-heading__label .icon { font-size: 19px; }
     .section-heading h2 {
       margin-bottom: 0;
       font-family: var(--display);
@@ -494,15 +482,15 @@
     .experience-card ul { display: grid; gap: 11px; margin: 0 0 22px; padding: 0; list-style: none; }
     .experience-card li { position: relative; padding-left: 28px; color: var(--md-on-surface-variant); font-size: 15px; }
     .experience-card li::before {
-      content: "check_circle";
+      content: "";
       position: absolute;
-      top: 3px;
+      top: 4px;
       left: 0;
-      color: var(--md-primary);
-      font-family: "Material Symbols Rounded";
-      font-size: 18px;
-      line-height: 1;
-      font-variation-settings: "FILL" 1;
+      width: 18px;
+      height: 18px;
+      background: var(--md-primary);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='currentColor' d='M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m45.66 85.66l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32'/%3E%3C/svg%3E") center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='currentColor' d='M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m45.66 85.66l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32'/%3E%3C/svg%3E") center / contain no-repeat;
     }
     .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip {
@@ -572,7 +560,7 @@
       transition: gap 180ms var(--ease-standard), background 180ms var(--ease-standard);
     }
     .project-link:hover { gap: 12px; background: var(--md-container-hover); }
-    .project-link .material-symbols-rounded { font-size: 20px; }
+    .project-link .icon { font-size: 20px; }
     .project-card__visual { --parallax-y: 0px; min-height: 500px; overflow: hidden; padding: clamp(24px, 4vw, 48px); display: grid; place-items: center; background: var(--md-primary-container); }
     .project-card--divination .project-card__grid { grid-template-columns: minmax(380px, .95fr) minmax(0, 1fr); }
     .project-card--divination .project-card__visual { grid-column: 1; grid-row: 1; background: var(--md-tertiary-container); }
@@ -628,7 +616,7 @@
       transition: background 180ms var(--ease-standard), border-color 180ms var(--ease-standard), transform 180ms var(--ease-standard);
     }
     .contact-link:hover { background: rgb(255 255 255 / .1); border-color: rgb(255 255 255 / .35); transform: translateX(4px); }
-    .contact-link .material-symbols-rounded { color: var(--md-inverse-primary); }
+    .contact-link .icon { color: var(--md-inverse-primary); }
     .contact-link div { min-width: 0; display: grid; line-height: 1.3; }
     .contact-link small { color: color-mix(in srgb, var(--md-inverse-on-surface) 58%, transparent); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
     .contact-link strong { overflow-wrap: anywhere; font-size: 14px; font-weight: 580; }
@@ -739,10 +727,10 @@
         font-weight: 620;
       }
       .mobile-nav .icon-state { min-width: 50px; height: 30px; display: grid; place-items: center; border-radius: 999px; transition: background 180ms var(--ease-standard); }
-      .mobile-nav .material-symbols-rounded { font-size: 22px; }
+      .mobile-nav .icon { font-size: 22px; }
       .mobile-nav a.active { color: var(--md-on-surface); }
       .mobile-nav a.active .icon-state { background: var(--md-primary-container); color: var(--md-on-primary-container); }
-      .mobile-nav a.active .material-symbols-rounded { font-variation-settings: "FILL" 1; }
+      .mobile-nav a.active .icon { --duo-opacity: .55; }
       .timeline { padding-left: 18px; }
       .timeline::before { left: 2px; }
       .experience-card::before { top: 34px; left: -22px; }
@@ -803,6 +791,30 @@
 </head>
 
 <body>
+  <!-- icon-sprite:start -->
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <symbol id="i-user" viewBox="0 0 256 256"><g fill="currentColor"><path d="M192 96a64 64 0 1 1-64-64a64 64 0 0 1 64 64" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8M72 96a56 56 0 1 1 56 56a56.06 56.06 0 0 1-56-56"/></g></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 256 256"><g fill="currentColor"><path d="M224 118.31V200a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-81.69A191.14 191.14 0 0 0 128 144a191.1 191.1 0 0 0 96-25.69" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M104 112a8 8 0 0 1 8-8h32a8 8 0 0 1 0 16h-32a8 8 0 0 1-8-8m128-40v128a16 16 0 0 1-16 16H40a16 16 0 0 1-16-16V72a16 16 0 0 1 16-16h40v-8a24 24 0 0 1 24-24h48a24 24 0 0 1 24 24v8h40a16 16 0 0 1 16 16M96 56h64v-8a8 8 0 0 0-8-8h-48a8 8 0 0 0-8 8ZM40 72v41.62A184.1 184.1 0 0 0 128 136a184 184 0 0 0 88-22.39V72Zm176 128v-68.37A200.25 200.25 0 0 1 128 152a200.2 200.2 0 0 1-88-20.36V200z"/></g></symbol>
+    <symbol id="i-code" viewBox="0 0 256 256"><g fill="currentColor"><path d="m240 128l-48 40H64l-48-40l48-40h128Z" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M69.12 94.15L28.5 128l40.62 33.85a8 8 0 1 1-10.24 12.29l-48-40a8 8 0 0 1 0-12.29l48-40a8 8 0 0 1 10.24 12.3m176 27.7l-48-40a8 8 0 1 0-10.24 12.3L227.5 128l-40.62 33.85a8 8 0 1 0 10.24 12.29l48-40a8 8 0 0 0 0-12.29m-82.39-89.37a8 8 0 0 0-10.25 4.79l-64 176a8 8 0 0 0 4.79 10.26A8.1 8.1 0 0 0 96 224a8 8 0 0 0 7.52-5.27l64-176a8 8 0 0 0-4.79-10.25"/></g></symbol>
+    <symbol id="i-rocket" viewBox="0 0 256 256"><g fill="currentColor"><path d="M184 120v61.65a8 8 0 0 1-2.34 5.65l-34.35 34.35a8 8 0 0 1-13.57-4.53L128 176Zm-48-48H74.35a8 8 0 0 0-5.65 2.34l-34.35 34.35a8 8 0 0 0 4.53 13.57L80 128ZM40 216c37.65 0 50.69-19.69 54.56-28.18l-26.38-26.38C59.69 165.31 40 178.35 40 216" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M223.85 47.12a16 16 0 0 0-15-15c-12.58-.75-44.73.4-71.41 27.07L132.69 64H74.36A15.9 15.9 0 0 0 63 68.68L28.7 103a16 16 0 0 0 9.07 27.16l38.47 5.37l44.21 44.21l5.37 38.49a15.94 15.94 0 0 0 10.78 12.92a16.1 16.1 0 0 0 5.1.83a15.9 15.9 0 0 0 11.3-4.68l34.32-34.3a15.9 15.9 0 0 0 4.68-11.36v-58.33l4.77-4.77c26.68-26.68 27.83-58.83 27.08-71.42M74.36 80h42.33l-39.53 39.52L40 114.34Zm74.41-9.45a76.65 76.65 0 0 1 59.11-22.47a76.46 76.46 0 0 1-22.42 59.16L128 164.68L91.32 128ZM176 181.64L141.67 216l-5.19-37.17L176 139.31Zm-74.16 9.5C97.34 201 82.29 224 40 224a8 8 0 0 1-8-8c0-42.29 23-57.34 32.86-61.85a8 8 0 0 1 6.64 14.56c-6.43 2.93-20.62 12.36-23.12 38.91c26.55-2.5 36-16.69 38.91-23.12a8 8 0 1 1 14.56 6.64Z"/></g></symbol>
+    <symbol id="i-mail" viewBox="0 0 256 256"><g fill="currentColor"><path d="m224 56l-96 88l-96-88Z" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M224 48H32a8 8 0 0 0-8 8v136a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a8 8 0 0 0-8-8m-20.57 16L128 133.15L52.57 64ZM216 192H40V74.19l82.59 75.71a8 8 0 0 0 10.82 0L216 74.19z"/></g></symbol>
+    <symbol id="i-download" viewBox="0 0 256 256"><g fill="currentColor"><path d="M216 48v160H40V48a16 16 0 0 1 16-16h144a16 16 0 0 1 16 16" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M224 144v64a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8v-64a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0m-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 124.69V32a8 8 0 0 0-16 0v92.69L93.66 98.34a8 8 0 0 0-11.32 11.32Z"/></g></symbol>
+    <symbol id="i-external" viewBox="0 0 256 256"><g fill="currentColor"><path d="M184 80v128a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8V80a8 8 0 0 1 8-8h128a8 8 0 0 1 8 8" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M224 104a8 8 0 0 1-16 0V59.32l-66.33 66.34a8 8 0 0 1-11.32-11.32L196.68 48H152a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8Zm-40 24a8 8 0 0 0-8 8v72H48V80h72a8 8 0 0 0 0-16H48a16 16 0 0 0-16 16v128a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-72a8 8 0 0 0-8-8"/></g></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 256 256"><g fill="currentColor"><path d="m216 128l-72 72V56Z" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="m221.66 122.34l-72-72A8 8 0 0 0 136 56v64H40a8 8 0 0 0 0 16h96v64a8 8 0 0 0 13.66 5.66l72-72a8 8 0 0 0 0-11.32M152 180.69V75.31L204.69 128Z"/></g></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 256 256"><g fill="currentColor"><path d="m200 144l-72 72l-72-72Z" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M207.39 140.94A8 8 0 0 0 200 136h-64V40a8 8 0 0 0-16 0v96H56a8 8 0 0 0-5.66 13.66l72 72a8 8 0 0 0 11.32 0l72-72a8 8 0 0 0 1.73-8.72M128 204.69L75.31 152h105.38Z"/></g></symbol>
+    <symbol id="i-graduation" viewBox="0 0 256 256"><g fill="currentColor"><path d="M216 113.07v53.22a8 8 0 0 1-2 5.31c-11.3 12.59-38.9 36.4-86 36.4s-74.68-23.81-86-36.4a8 8 0 0 1-2-5.31v-53.22L128 160Z" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="m251.76 88.94l-120-64a8 8 0 0 0-7.52 0l-120 64a8 8 0 0 0 0 14.12L32 117.87v48.42a15.9 15.9 0 0 0 4.06 10.65C49.16 191.53 78.51 216 128 216a130 130 0 0 0 48-8.76V240a8 8 0 0 0 16 0v-40.49a115.6 115.6 0 0 0 27.94-22.57a15.9 15.9 0 0 0 4.06-10.65v-48.42l27.76-14.81a8 8 0 0 0 0-14.12M128 200c-43.27 0-68.72-21.14-80-33.71V126.4l76.24 40.66a8 8 0 0 0 7.52 0L176 143.47v46.34c-12.6 5.88-28.48 10.19-48 10.19m80-33.75a97.8 97.8 0 0 1-16 14.25v-45.57l16-8.53Zm-20-47.31l-.22-.13l-56-29.87a8 8 0 0 0-7.52 14.12L171 128l-43 22.93L25 96l103-54.93L231 96Z"/></g></symbol>
+    <symbol id="i-translate" viewBox="0 0 256 256"><g fill="currentColor"><path d="M224 184h-80l40-80ZM96 127.56A95.78 95.78 0 0 0 128 56H64a95.78 95.78 0 0 0 32 71.56" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="m247.15 212.42l-56-112a8 8 0 0 0-14.31 0l-21.71 43.43A88 88 0 0 1 108 126.93A103.65 103.65 0 0 0 135.69 64H160a8 8 0 0 0 0-16h-56V32a8 8 0 0 0-16 0v16H32a8 8 0 0 0 0 16h87.63A87.7 87.7 0 0 1 96 116.35a87.7 87.7 0 0 1-19-31a8 8 0 1 0-15.08 5.34A103.6 103.6 0 0 0 84 127a87.55 87.55 0 0 1-52 17a8 8 0 0 0 0 16a103.46 103.46 0 0 0 64-22.08a104.2 104.2 0 0 0 51.44 21.31l-26.6 53.19a8 8 0 0 0 14.31 7.16L148.94 192h70.11l13.79 27.58A8 8 0 0 0 240 224a8 8 0 0 0 7.15-11.58M156.94 176L184 121.89L211.05 176Z"/></g></symbol>
+    <symbol id="i-server" viewBox="0 0 256 256"><g fill="currentColor"><path d="M216 152v48a8 8 0 0 1-8 8H48a8 8 0 0 1-8-8v-48a8 8 0 0 1 8-8h160a8 8 0 0 1 8 8m-8-104H48a8 8 0 0 0-8 8v48a8 8 0 0 0 8 8h160a8 8 0 0 0 8-8V56a8 8 0 0 0-8-8" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M208 136H48a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16v-48a16 16 0 0 0-16-16m0 64H48v-48h160zm0-160H48a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 64H48V56h160zm-16-24a12 12 0 1 1-12-12a12 12 0 0 1 12 12m0 96a12 12 0 1 1-12-12a12 12 0 0 1 12 12"/></g></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 256 256"><g fill="currentColor"><path d="m194.82 151.43l-55.09 20.3l-20.3 55.09a7.92 7.92 0 0 1-14.86 0l-20.3-55.09l-55.09-20.3a7.92 7.92 0 0 1 0-14.86l55.09-20.3l20.3-55.09a7.92 7.92 0 0 1 14.86 0l20.3 55.09l55.09 20.3a7.92 7.92 0 0 1 0 14.86" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M197.58 129.06L146 110l-19-51.62a15.92 15.92 0 0 0-29.88 0L78 110l-51.62 19a15.92 15.92 0 0 0 0 29.88L78 178l19 51.62a15.92 15.92 0 0 0 29.88 0L146 178l51.62-19a15.92 15.92 0 0 0 0-29.88ZM137 164.22a8 8 0 0 0-4.74 4.74L112 223.85L91.78 169a8 8 0 0 0-4.78-4.78L32.15 144L87 123.78a8 8 0 0 0 4.78-4.78L112 64.15L132.22 119a8 8 0 0 0 4.74 4.74L191.85 144ZM144 40a8 8 0 0 1 8-8h16V16a8 8 0 0 1 16 0v16h16a8 8 0 0 1 0 16h-16v16a8 8 0 0 1-16 0V48h-16a8 8 0 0 1-8-8m104 48a8 8 0 0 1-8 8h-8v8a8 8 0 0 1-16 0v-8h-8a8 8 0 0 1 0-16h8v-8a8 8 0 0 1 16 0v8h8a8 8 0 0 1 8 8"/></g></symbol>
+    <symbol id="i-database" viewBox="0 0 256 256"><g fill="currentColor"><path d="M216 80c0 26.51-39.4 48-88 48s-88-21.49-88-48s39.4-48 88-48s88 21.49 88 48" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M128 24c-53.83 0-96 24.6-96 56v96c0 31.4 42.17 56 96 56s96-24.6 96-56V80c0-31.4-42.17-56-96-56m80 104c0 9.62-7.88 19.43-21.61 26.92C170.93 163.35 150.19 168 128 168s-42.93-4.65-58.39-13.08C55.88 147.43 48 137.62 48 128v-16.64c17.06 15 46.23 24.64 80 24.64s62.94-9.68 80-24.64ZM69.61 53.08C85.07 44.65 105.81 40 128 40s42.93 4.65 58.39 13.08C200.12 60.57 208 70.38 208 80s-7.88 19.43-21.61 26.92C170.93 115.35 150.19 120 128 120s-42.93-4.65-58.39-13.08C55.88 99.43 48 89.62 48 80s7.88-19.43 21.61-26.92m116.78 149.84C170.93 211.35 150.19 216 128 216s-42.93-4.65-58.39-13.08C55.88 195.43 48 185.62 48 176v-16.64c17.06 15 46.23 24.64 80 24.64s62.94-9.68 80-24.64V176c0 9.62-7.88 19.43-21.61 26.92"/></g></symbol>
+    <symbol id="i-browser" viewBox="0 0 256 256"><g fill="currentColor"><path d="M224 56v40H32V56a8 8 0 0 1 8-8h176a8 8 0 0 1 8 8" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 16v32H40V56Zm0 144H40v-96h176z"/></g></symbol>
+    <symbol id="i-wave" viewBox="0 0 256 256"><g fill="currentColor"><path d="M184 213.27A80 80 0 0 1 74.7 184l-40-69.32a20 20 0 0 1 34.64-20L55.08 70a20 20 0 0 1 34.65-20l6.92 12a20 20 0 0 1 34.64-20l30 52A20 20 0 0 1 196 74l17.31 30A80 80 0 0 1 184 213.27" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="m220.17 100l-17.31-30a28 28 0 0 0-38.24-10.25a27.7 27.7 0 0 0-9 8.34L138.2 38a28 28 0 0 0-48.48 0a28 28 0 0 0-41.57 36l1.59 2.76A27.7 27.7 0 0 0 38 80.41a28 28 0 0 0-10.24 38.25l40 69.32a87.47 87.47 0 0 0 53.43 41a88.6 88.6 0 0 0 22.92 3a88 88 0 0 0 76.06-132Zm-6.66 62.64A72 72 0 0 1 81.62 180l-40-69.32a12 12 0 0 1 20.78-12L81.63 132a8 8 0 1 0 13.85-8L62 66a12 12 0 1 1 20.78-12L114 108a8 8 0 1 0 13.85-8l-24.28-42a12 12 0 1 1 20.78-12l33.42 57.9a48 48 0 0 0-5.54 60.6a8 8 0 0 0 13.24-9a32 32 0 0 1 7.31-43.5a8 8 0 0 0 2.13-10.4L168.23 90A12 12 0 1 1 189 78l17.31 30a71.56 71.56 0 0 1 7.2 54.62ZM184.25 31.71A8 8 0 0 1 194 26a59.62 59.62 0 0 1 36.53 28l.33.57a8 8 0 1 1-13.85 8l-.33-.57a43.67 43.67 0 0 0-26.8-20.5a8 8 0 0 1-5.63-9.79M80.89 237a8 8 0 0 1-11.23 1.33A119.6 119.6 0 0 1 40.06 204a8 8 0 0 1 13.86-8a103.7 103.7 0 0 0 25.64 29.72A8 8 0 0 1 80.89 237"/></g></symbol>
+    <symbol id="i-file" viewBox="0 0 256 256"><g fill="currentColor"><path d="M208 88h-56V32Z" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="m213.66 82.34l-56-56A8 8 0 0 0 152 24H56a16 16 0 0 0-16 16v176a16 16 0 0 0 16 16h144a16 16 0 0 0 16-16V88a8 8 0 0 0-2.34-5.66M160 51.31L188.69 80H160ZM200 216H56V40h88v48a8 8 0 0 0 8 8h48zm-32-80a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8m0 32a8 8 0 0 1-8 8H96a8 8 0 0 1 0-16h64a8 8 0 0 1 8 8"/></g></symbol>
+    <symbol id="i-desktop" viewBox="0 0 256 256"><g fill="currentColor"><path d="M224 64v88H32V64a16 16 0 0 1 16-16h160a16 16 0 0 1 16 16" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M208 40H48a24 24 0 0 0-24 24v112a24 24 0 0 0 24 24h72v16H96a8 8 0 0 0 0 16h64a8 8 0 0 0 0-16h-24v-16h72a24 24 0 0 0 24-24V64a24 24 0 0 0-24-24M48 56h160a8 8 0 0 1 8 8v80H40V64a8 8 0 0 1 8-8m160 128H48a8 8 0 0 1-8-8v-16h176v16a8 8 0 0 1-8 8"/></g></symbol>
+    <symbol id="i-github" viewBox="0 0 256 256"><g fill="currentColor"><path d="M208 104v8a48 48 0 0 1-48 48h-24a32 32 0 0 1 32 32v40h-64v-40a32 32 0 0 1 32-32h-24a48 48 0 0 1-48-48v-8a49.3 49.3 0 0 1 8.51-27.3A51.92 51.92 0 0 1 76 32a52 52 0 0 1 43.83 24h32.34A52 52 0 0 1 196 32a51.92 51.92 0 0 1 3.49 44.7A49.3 49.3 0 0 1 208 104" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M208.3 75.68A59.74 59.74 0 0 0 202.93 28a8 8 0 0 0-6.93-4a59.75 59.75 0 0 0-48 24h-24a59.75 59.75 0 0 0-48-24a8 8 0 0 0-6.93 4a59.78 59.78 0 0 0-5.38 47.68A58.14 58.14 0 0 0 56 104v8a56.06 56.06 0 0 0 48.44 55.47A39.8 39.8 0 0 0 96 192v8H72a24 24 0 0 1-24-24a40 40 0 0 0-40-40a8 8 0 0 0 0 16a24 24 0 0 1 24 24a40 40 0 0 0 40 40h24v16a8 8 0 0 0 16 0v-40a24 24 0 0 1 48 0v40a8 8 0 0 0 16 0v-40a39.8 39.8 0 0 0-8.44-24.53A56.06 56.06 0 0 0 216 112v-8a58 58 0 0 0-7.7-28.32M200 112a40 40 0 0 1-40 40h-48a40 40 0 0 1-40-40v-8a41.74 41.74 0 0 1 6.9-22.48a8 8 0 0 0 1.1-7.69a43.8 43.8 0 0 1 .79-33.58a43.88 43.88 0 0 1 32.32 20.06a8 8 0 0 0 6.71 3.69h32.35a8 8 0 0 0 6.74-3.69a43.87 43.87 0 0 1 32.32-20.06a43.8 43.8 0 0 1 .77 33.58a8.09 8.09 0 0 0 1 7.65a41.76 41.76 0 0 1 7 22.52Z"/></g></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 256 256"><g fill="currentColor"><path d="M224 40v176a8 8 0 0 1-8 8H40a8 8 0 0 1-8-8V40a8 8 0 0 1 8-8h176a8 8 0 0 1 8 8" style="fill:var(--duo-fill,currentColor);opacity:var(--duo-opacity,.2)"/><path d="M216 24H40a16 16 0 0 0-16 16v176a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V40a16 16 0 0 0-16-16m0 192H40V40h176zM96 112v64a8 8 0 0 1-16 0v-64a8 8 0 0 1 16 0m88 28v36a8 8 0 0 1-16 0v-36a20 20 0 0 0-40 0v36a8 8 0 0 1-16 0v-64a8 8 0 0 1 15.79-1.78A36 36 0 0 1 184 140m-84-56a12 12 0 1 1-12-12a12 12 0 0 1 12 12"/></g></symbol>
+  </svg>
+  <!-- icon-sprite:end -->
   <a class="skip-link" href="#about">Skip to portfolio content</a>
 
   <div class="ambient-effects" aria-hidden="true">
@@ -831,20 +843,20 @@
         <a href="#contact" data-section="contact">Contact</a>
       </nav>
 
-      <a class="mode-switch" href="?mode=desktop" data-mode-link="desktop" aria-label="Open desktop mode"><span class="material-symbols-rounded" aria-hidden="true">computer</span><span>Open desktop</span></a>
+      <a class="mode-switch" href="?mode=desktop" data-mode-link="desktop" aria-label="Open desktop mode"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-desktop"/></svg><span>Open desktop</span></a>
       <a class="resume-action" href="assets/luiz_carlos_resume.pdf" download="luiz-carlos-resume.pdf" target="_blank" rel="noopener" aria-label="Download Luiz Carlos's résumé as a PDF">
-        <span class="material-symbols-rounded" aria-hidden="true">download</span>
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-download"/></svg>
         <span>Résumé</span>
       </a>
     </div>
   </header>
 
   <nav class="mobile-nav" aria-label="Mobile navigation">
-    <a href="#about" data-section="about"><span class="icon-state"><span class="material-symbols-rounded" aria-hidden="true">person</span></span><span>About</span></a>
-    <a href="#experience" data-section="experience"><span class="icon-state"><span class="material-symbols-rounded" aria-hidden="true">work</span></span><span>Experience</span></a>
-    <a href="#skills" data-section="skills"><span class="icon-state"><span class="material-symbols-rounded" aria-hidden="true">code</span></span><span>Skills</span></a>
-    <a href="#projects" data-section="projects"><span class="icon-state"><span class="material-symbols-rounded" aria-hidden="true">rocket_launch</span></span><span>Projects</span></a>
-    <a href="#contact" data-section="contact"><span class="icon-state"><span class="material-symbols-rounded" aria-hidden="true">mail</span></span><span>Contact</span></a>
+    <a href="#about" data-section="about"><span class="icon-state"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"/></svg></span><span>About</span></a>
+    <a href="#experience" data-section="experience"><span class="icon-state"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg></span><span>Experience</span></a>
+    <a href="#skills" data-section="skills"><span class="icon-state"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg></span><span>Skills</span></a>
+    <a href="#projects" data-section="projects"><span class="icon-state"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg></span><span>Projects</span></a>
+    <a href="#contact" data-section="contact"><span class="icon-state"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg></span><span>Contact</span></a>
   </nav>
 
   <main id="main-content">
@@ -857,8 +869,8 @@
           <p class="hero__role">LLM systems, backend and automation.</p>
           <p class="hero__summary">I build production LLM systems, backend services, and the automation around them. I lead AI and automation at BWG; before that, I built agent pipelines at Auria AI that processed 3,000+ security incidents a day.</p>
           <div class="button-row">
-            <a class="button button--filled" href="mailto:luizcarloszdk@gmail.com"><span class="material-symbols-rounded" aria-hidden="true">mail</span><span>Get in touch</span></a>
-            <a class="button button--tonal" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><span class="material-symbols-rounded" aria-hidden="true">description</span><span>Résumé</span></a>
+            <a class="button button--filled" href="mailto:luizcarloszdk@gmail.com"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>Get in touch</span></a>
+            <a class="button button--tonal" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-file"/></svg><span>Résumé</span></a>
           </div>
         </div>
         <div class="hero__stats reveal" data-reveal="up" aria-label="Career highlights">
@@ -873,7 +885,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><span class="material-symbols-rounded" aria-hidden="true">person</span>01 · About</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"/></svg>01 · About</div>
             <h2>Engineering at the edge of <em>data and AI.</em></h2>
           </div>
           <p>I’m most useful where models, backend systems, and real business processes meet.</p>
@@ -888,12 +900,12 @@
 
           <div class="details-stack">
             <article class="info-card reveal" data-reveal="right">
-              <div class="info-card__icon"><span class="material-symbols-rounded" aria-hidden="true">school</span></div>
+              <div class="info-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-graduation"/></svg></div>
               <h3>Education</h3>
               <p>B.Sc. in Computer Science<br>University of São Paulo (IME-USP)<br>2020–2024</p>
             </article>
             <article class="info-card reveal" data-reveal="right">
-              <div class="info-card__icon"><span class="material-symbols-rounded" aria-hidden="true">translate</span></div>
+              <div class="info-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-translate"/></svg></div>
               <h3>Languages</h3>
               <div class="language-list">
                 <div class="language-item"><span>Portuguese</span><span>Native</span></div>
@@ -910,7 +922,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><span class="material-symbols-rounded" aria-hidden="true">work</span>02 · Experience</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg>02 · Experience</div>
             <h2>Building, migrating, and <em>leading.</em></h2>
           </div>
           <p>Applied AI and production engineering, built on a foundation in research and technical leadership.</p>
@@ -992,7 +1004,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><span class="material-symbols-rounded" aria-hidden="true">code</span>03 · Skills</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>03 · Skills</div>
             <h2>A production-minded <em>toolkit.</em></h2>
           </div>
           <p>Backend-first, with the AI, data, and frontend range needed to take a product from an idea to production.</p>
@@ -1000,19 +1012,19 @@
 
         <div class="skill-grid">
           <article class="skill-card reveal" data-reveal="scale">
-            <div class="skill-card__head"><div class="skill-card__icon"><span class="material-symbols-rounded" aria-hidden="true">dns</span></div><div><h3>Backend</h3><small>Core engineering</small></div></div>
+            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-server"/></svg></div><div><h3>Backend</h3><small>Core engineering</small></div></div>
             <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">asyncio</span><span class="chip">Pydantic</span><span class="chip">SQLAlchemy</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">REST APIs</span><span class="chip">Microservices</span><span class="chip">Pytest</span></div>
           </article>
           <article class="skill-card reveal" data-reveal="scale">
-            <div class="skill-card__head"><div class="skill-card__icon"><span class="material-symbols-rounded" aria-hidden="true">auto_awesome</span></div><div><h3>AI &amp; LLMs</h3><small>Applied intelligence</small></div></div>
+            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkle"/></svg></div><div><h3>AI &amp; LLMs</h3><small>Applied intelligence</small></div></div>
             <div class="chip-row"><span class="chip">AI Agents</span><span class="chip">RAG</span><span class="chip">Embeddings</span><span class="chip">Prompt Engineering</span><span class="chip">Structured Outputs</span><span class="chip">LangChain</span><span class="chip">Pydantic-AI</span><span class="chip">Gemini</span><span class="chip">OpenAI</span><span class="chip">Claude</span></div>
           </article>
           <article class="skill-card reveal" data-reveal="scale">
-            <div class="skill-card__head"><div class="skill-card__icon"><span class="material-symbols-rounded" aria-hidden="true">database</span></div><div><h3>Data &amp; Tools</h3><small>Production infrastructure</small></div></div>
+            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-database"/></svg></div><div><h3>Data &amp; Tools</h3><small>Production infrastructure</small></div></div>
             <div class="chip-row"><span class="chip">PostgreSQL</span><span class="chip">SQLite</span><span class="chip">Redis</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Git</span><span class="chip">Metabase</span><span class="chip">Twilio API</span><span class="chip">Vector Search</span><span class="chip">CI/CD</span></div>
           </article>
           <article class="skill-card reveal" data-reveal="scale">
-            <div class="skill-card__head"><div class="skill-card__icon"><span class="material-symbols-rounded" aria-hidden="true">web</span></div><div><h3>Frontend</h3><small>Product interfaces</small></div></div>
+            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-browser"/></svg></div><div><h3>Frontend</h3><small>Product interfaces</small></div></div>
             <div class="chip-row"><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Vue.js</span><span class="chip">React</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
           </article>
         </div>
@@ -1023,7 +1035,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><span class="material-symbols-rounded" aria-hidden="true">rocket_launch</span>04 · Projects</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg>04 · Projects</div>
             <h2>Ideas made <em>useful.</em></h2>
           </div>
           <p>Selected work across meeting intelligence and retrieval-augmented generation.</p>
@@ -1037,7 +1049,7 @@
                 <h3>Memoir — AI meeting knowledge <em>workspace.</em></h3>
                 <p class="project-card__description">An open-source full-stack app that turns meeting transcripts into searchable summaries, decisions, action items, participant profiles, and structured transcript segments. It detects Zoom and Google Meet formats automatically, with a Gemini fallback for messy or unsupported ones, and Pytest coverage protects parsing and core workflows.</p>
                 <div class="chip-row"><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">SQLAlchemy</span><span class="chip">SQLite</span><span class="chip">Gemini</span><span class="chip">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Pytest</span></div>
-                <a class="project-link" href="https://github.com/luizcarlosdk/memoir" target="_blank" rel="noopener"><span>View on GitHub</span><span class="material-symbols-rounded" aria-hidden="true">open_in_new</span></a>
+                <a class="project-link" href="https://github.com/luizcarlosdk/memoir" target="_blank" rel="noopener"><span>View on GitHub</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a>
               </div>
 
               <div class="project-card__visual">
@@ -1053,7 +1065,7 @@
                 <h3>Divination — RAG assistant for <em>Dungeon Masters.</em></h3>
                 <p class="project-card__description">A RAG assistant grounded in the official 2024 D&amp;D Free Rules using LangChain, vector search, and GPT-4o. Built with a FastAPI backend and Vue 3 frontend as my B.Sc. capstone project at IME-USP.</p>
                 <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Vue 3</span><span class="chip">LangChain</span><span class="chip">GPT-4o</span><span class="chip">Vector Search</span></div>
-                <a class="project-link" href="https://luizcarlosdk.github.io/capstone-project/" target="_blank" rel="noopener"><span>View project</span><span class="material-symbols-rounded" aria-hidden="true">open_in_new</span></a>
+                <a class="project-link" href="https://luizcarlosdk.github.io/capstone-project/" target="_blank" rel="noopener"><span>View project</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a>
               </div>
               <div class="project-card__visual">
                 <div class="project-image"><img src="assets/capstone.png" alt="Divination RAG assistant interface" loading="lazy" decoding="async"></div>
@@ -1069,19 +1081,19 @@
         <div class="contact-card reveal" data-reveal="scale">
           <div class="contact-card__content">
             <div>
-              <div class="section-heading__label"><span class="material-symbols-rounded" aria-hidden="true">waving_hand</span>05 · Contact</div>
+              <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wave"/></svg>05 · Contact</div>
               <h2>Let’s build something <em>solid.</em></h2>
               <p>Happy to talk about LLM systems, process automation, or something you’re building. Based in São Paulo, reachable from anywhere.</p>
               <div class="button-row">
-                <a class="button button--inverse" href="mailto:luizcarloszdk@gmail.com"><span class="material-symbols-rounded" aria-hidden="true">mail</span><span>Send an email</span></a>
-                <a class="button button--outline" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><span class="material-symbols-rounded" aria-hidden="true">description</span><span>View résumé</span></a>
+                <a class="button button--inverse" href="mailto:luizcarloszdk@gmail.com"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>Send an email</span></a>
+                <a class="button button--outline" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-file"/></svg><span>View résumé</span></a>
               </div>
             </div>
 
             <div class="contact-links">
-              <a class="contact-link" href="mailto:luizcarloszdk@gmail.com"><span class="material-symbols-rounded" aria-hidden="true">mail</span><div><small>Email</small><strong>luizcarloszdk@gmail.com</strong></div><span class="material-symbols-rounded arrow" aria-hidden="true">arrow_forward</span></a>
-              <a class="contact-link" href="https://linkedin.com/in/luizcarlosdk" target="_blank" rel="noopener"><span class="material-symbols-rounded" aria-hidden="true">work</span><div><small>LinkedIn</small><strong>in/luizcarlosdk</strong></div><span class="material-symbols-rounded arrow" aria-hidden="true">open_in_new</span></a>
-              <a class="contact-link" href="https://github.com/luizcarlosdk" target="_blank" rel="noopener"><span class="material-symbols-rounded" aria-hidden="true">code</span><div><small>GitHub</small><strong>@luizcarlosdk</strong></div><span class="material-symbols-rounded arrow" aria-hidden="true">open_in_new</span></a>
+              <a class="contact-link" href="mailto:luizcarloszdk@gmail.com"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><div><small>Email</small><strong>luizcarloszdk@gmail.com</strong></div><svg class="icon arrow" aria-hidden="true" focusable="false"><use href="#i-arrow-right"/></svg></a>
+              <a class="contact-link" href="https://linkedin.com/in/luizcarlosdk" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-linkedin"/></svg><div><small>LinkedIn</small><strong>in/luizcarlosdk</strong></div><svg class="icon arrow" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a>
+              <a class="contact-link" href="https://github.com/luizcarlosdk" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-github"/></svg><div><small>GitHub</small><strong>@luizcarlosdk</strong></div><svg class="icon arrow" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a>
             </div>
           </div>
         </div>
