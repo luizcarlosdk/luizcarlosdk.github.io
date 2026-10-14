@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Intel+One+Mono:wght@400;500;600&display=swap");
+
+/* Desktop mode replaces the Simple surfaces entirely. */
+html[data-mode="desktop"] body { overflow: hidden; padding-bottom: 0; }
+html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, .ambient-effects) { display: none !important; }
+
+.dt {
+  --dt-bar: 34px;
+  --dt-mono: "Intel One Mono", var(--mono);
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  grid-template-rows: var(--dt-bar) minmax(0, 1fr);
+  overflow: hidden;
+  color: var(--md-on-surface);
+  font-family: var(--body);
+  background:
+    radial-gradient(circle at 26% 18%, rgb(255 255 255 / .7), transparent 34rem),
+    radial-gradient(circle at 80% 76%, color-mix(in srgb, var(--md-tertiary-container) 55%, transparent), transparent 30rem),
+    linear-gradient(145deg, var(--wallpaper-a) 0%, var(--wallpaper-b) 52%, var(--wallpaper-c) 100%);
+}
+.dt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image: radial-gradient(color-mix(in srgb, var(--md-on-surface-variant) 40%, transparent) .7px, transparent .7px);
+  background-size: 18px 18px;
+}
