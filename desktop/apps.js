@@ -16,6 +16,34 @@ export const APPS = {
 
 export const DESKTOP_ICONS = ['about', 'experience', 'skills', 'projects', 'contact', 'games', 'settings', 'resume'];
 
-export function buildApp(id) {
+// Clones are prepared so they behave inside a window: no duplicate ids, reveals shown,
+// in-page links open the matching app.
+function prepare(node, ctx) {
+  node.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+  node.querySelectorAll('[aria-labelledby]').forEach((n) => n.removeAttribute('aria-labelledby'));
+  node.querySelectorAll('.reveal, [data-motion-track]').forEach((n) => n.classList.add('is-visible'));
+  node.querySelectorAll('a[href^="#"]').forEach((a) => {
+    const target = a.getAttribute('href').slice(1);
+    if (APPS[target]) a.addEventListener('click', (e) => { e.preventDefault(); ctx.open(target, a); });
+  });
+  return node;
+}
+
+function cloneSection(id, ctx) {
+  const doc = document.createElement('div');
+  doc.className = `dt-doc dt-doc--${id}`;
+  if (id === 'about') {
+    const hero = document.querySelector('#home .hero__inner').cloneNode(true);
+    hero.classList.remove('container');
+    hero.classList.add('dt-doc__hero');
+    doc.append(hero);
+  }
+  doc.append(...document.getElementById(id).querySelector('.container').cloneNode(true).childNodes);
+  return prepare(doc, ctx);
+}
+
+export function buildApp(id, ctx) {
+  const app = APPS[id];
+  if (app.section) return cloneSection(app.section, ctx);
   throw new Error(`No builder for app "${id}"`);
 }
