@@ -1,5 +1,5 @@
 // Desktop shell: system bar with menus and clock, desktop icons, dock.
-import { icon } from './ui.js';
+import { icon, PHONE } from './ui.js';
 import { APPS, DESKTOP_ICONS } from './apps.js';
 
 const iconItem = (id) => {
@@ -72,7 +72,9 @@ export function createShell() {
   function bind({ open, wm, logout }) {
     icons.addEventListener('click', (e) => {
       const b = e.target.closest('.dt-icon');
-      if (b) select(b);
+      if (!b) return;
+      if (PHONE.matches) { open(b.dataset.icon, b); return; }
+      select(b);
     });
     icons.addEventListener('dblclick', (e) => {
       const b = e.target.closest('.dt-icon');
