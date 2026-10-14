@@ -1,4 +1,6 @@
 // App registry for desktop mode. Window content is always cloned from the Simple page.
+import { icon } from './ui.js';
+
 export const APPS = {
   about: { title: 'about.md', icon: 'file', size: [760, 620], section: 'about', dock: true },
   experience: { title: 'experience.log', icon: 'scroll', size: [880, 660], section: 'experience', dock: true },
@@ -39,11 +41,48 @@ function cloneSection(id, ctx) {
     doc.append(hero);
   }
   doc.append(...document.getElementById(id).querySelector('.container').cloneNode(true).childNodes);
+  doc.querySelectorAll('.site-footer').forEach((n) => n.remove());
   return prepare(doc, ctx);
+}
+
+function cloneProject(index, ctx) {
+  const doc = document.createElement('div');
+  doc.className = 'dt-doc dt-doc--project';
+  doc.append(document.querySelectorAll('#projects .project-card')[index].cloneNode(true));
+  return prepare(doc, ctx);
+}
+
+function buildFolder(ids, ctx) {
+  const el = document.createElement('div');
+  el.className = 'dt-folder';
+  for (const id of ids) {
+    const app = APPS[id];
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'dt-folder__item';
+    item.dataset.open = id;
+    item.innerHTML = (app.thumb
+      ? `<img class="dt-folder__thumb" src="${app.thumb}" alt="" loading="lazy">`
+      : `<span class="dt-folder__glyph">${icon(app.icon)}</span>`)
+      + `<span class="dt-folder__name">${app.title}</span>`;
+    item.addEventListener('click', () => ctx.open(id, item));
+    el.append(item);
+  }
+  return el;
+}
+
+function buildGame(app) {
+  const el = document.createElement('div');
+  el.className = 'dt-game';
+  el.innerHTML = `<p class="dt-placeholder">${app.title} arrives in the next update.</p>`;
+  return el;
 }
 
 export function buildApp(id, ctx) {
   const app = APPS[id];
   if (app.section) return cloneSection(app.section, ctx);
+  if (app.folder) return buildFolder(app.folder, ctx);
+  if (app.project !== undefined) return cloneProject(app.project, ctx);
+  if (app.game) return buildGame(app, ctx);
   throw new Error(`No builder for app "${id}"`);
 }

@@ -123,3 +123,37 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-window__bar { cursor: grab; touch-action: none; }
 .dt-window.is-dragging .dt-window__bar { cursor: grabbing; }
 .dt-window.is-maximized { border-radius: 0; }
+
+/* Folder views */
+.dt-folder { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.dt-folder__item { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 10px; border: 1px solid transparent; border-radius: 14px; background: transparent; color: var(--md-on-surface); font: inherit; text-align: center; cursor: pointer; }
+.dt-folder__item:hover, .dt-folder__item:focus-visible { border-color: color-mix(in srgb, var(--md-primary) 30%, transparent); background: var(--md-primary-container); color: var(--md-on-primary-container); outline: none; }
+.dt-folder__thumb { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--md-outline-variant); border-radius: 10px; background: var(--md-surface-container); }
+.dt-folder__glyph { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 20px; background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
+.dt-folder__glyph .icon { font-size: 36px; }
+.dt-folder__name { font-family: var(--dt-mono); font-size: 12px; }
+
+/* Project windows */
+.dt-doc--project .project-card { border: 0; border-radius: 0; box-shadow: none; }
+.dt-doc--project .project-card__grid,
+.dt-doc--project .project-card--divination .project-card__grid { grid-template-columns: 1fr; }
+.dt-doc--project .project-card__visual,
+.dt-doc--project .project-card--divination .project-card__visual { grid-row: 1; grid-column: 1; min-height: 0; padding: 24px; }
+.dt-doc--project .project-card__content,
+.dt-doc--project .project-card--divination .project-card__content { grid-column: 1; padding: 28px 4px 8px; }
+.dt-doc--project .project-card h3 { font-size: clamp(30px, 6cqi, 44px); }
+.dt-window[data-app="memoir"] .dt-window__body,
+.dt-window[data-app="divination"] .dt-window__body { padding: 0 24px 28px; }
+
+/* Contact window */
+.dt-window[data-app="contact"] .dt-window__body { padding: 0; background: var(--md-inverse-surface); }
+.dt-doc--contact .contact-card { min-height: 100%; border-radius: 0; box-shadow: none; }
+.dt-doc--contact .contact-card__content { grid-template-columns: 1fr; gap: 32px; }
+.dt-doc--contact .contact-card h2 { font-size: clamp(40px, 8cqi, 64px); }
+@container (min-width: 760px) {
+  .dt-doc--contact .contact-card__content { grid-template-columns: minmax(0, 1fr) minmax(260px, .7fr); }
+}
+
+/* Games (filled in by milestone 3) */
+.dt-game { min-height: 100%; display: grid; place-items: center; }
+.dt-placeholder { margin: 0; color: var(--md-on-surface-variant); text-align: center; }
