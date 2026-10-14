@@ -275,3 +275,26 @@ html[data-mode="desktop"][data-palette="petrol"] {
   --skill-4-on: #1b1660;
   --shadow-color: 12 28 38;
 }
+
+/* Phones: home screen with an app grid, bottom dock, full-screen sheets */
+@keyframes dt-sheet { from { opacity: 0; transform: translateY(24px); } }
+@media (max-width: 760px) {
+  .dt { --dt-bar: 30px; }
+  .dt-bar__host, .dt-bar__title, .dt-bar__settings { display: none; }
+  .dt-icons { position: absolute; inset: 0 0 96px; display: grid; grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: max-content; align-content: start; gap: 18px 4px; padding: 24px 12px; overflow-y: auto; direction: ltr; }
+  .dt-icon { width: 100%; height: auto; padding: 4px 2px; }
+  .dt-icon__glyph { width: 60px; height: 60px; border-radius: 18px; }
+  .dt-icon__name { max-width: 100%; }
+  .dt-dock { top: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); left: 12px; width: auto; height: 72px; flex-direction: row; justify-content: space-evenly; padding: 0 12px; border-radius: 26px; }
+  .dt-dock__app, .dt-dock__running, .dt-dock__divider { display: none; }
+  .dt-dock__phone-only { display: grid; }
+  .dt-dock__item { width: 52px; height: 52px; }
+  .dt-layer { z-index: 45; }
+  .dt-window { inset: 0 !important; width: auto !important; height: auto !important; min-width: 0; border: 0; border-radius: 0; animation: dt-sheet 240ms var(--ease-standard); }
+  .dt-window__controls, .dt-window__spacer { display: none; }
+  .dt-window__bar { cursor: default; }
+  .dt-window__back { display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 12px 0 6px; border: 0; border-radius: 999px; background: var(--md-surface-container-high); color: var(--md-on-surface); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .dt-window__back .icon { font-size: 18px; }
+  .dt-window__title { justify-content: flex-start; }
+  .dt-window__body { padding: 22px 18px 32px; }
+}

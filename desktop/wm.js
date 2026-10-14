@@ -66,6 +66,7 @@ export function createWM({ layer, desk, dock, onChange }) {
       if (existing.el.hidden) restore(id); else focus(id);
       return existing.el;
     }
+    if (PHONE.matches) [...wins.keys()].forEach((wid) => close(wid, { restoreFocus: false }));
     const el = document.createElement('section');
     el.className = 'dt-window';
     el.dataset.app = id;
