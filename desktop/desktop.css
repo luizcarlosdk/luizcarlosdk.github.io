@@ -157,3 +157,21 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 /* Games (filled in by milestone 3) */
 .dt-game { min-height: 100%; display: grid; place-items: center; }
 .dt-placeholder { margin: 0; color: var(--md-on-surface-variant); text-align: center; }
+
+/* Login */
+.dt-login { position: absolute; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, var(--md-inverse-surface) 86%, transparent); color: var(--md-inverse-on-surface); text-align: center; backdrop-filter: blur(22px); transition: opacity 400ms var(--ease-standard); }
+.dt-login.is-leaving { opacity: 0; pointer-events: none; }
+.dt-login__photo { width: 112px; height: 112px; margin: 0 auto 18px; object-fit: cover; border: 4px solid color-mix(in srgb, var(--md-inverse-on-surface) 70%, transparent); border-radius: 50%; }
+.dt-login__name { margin: 0 0 4px; font-family: var(--display); font-size: 34px; }
+.dt-login__host { margin: 0 0 24px; font-family: var(--dt-mono); font-size: 12px; }
+.dt-login__bar { width: 220px; height: 4px; margin: 0 auto 12px; overflow: hidden; border-radius: 999px; background: rgb(255 255 255 / .18); }
+.dt-login__bar span { display: block; height: 100%; background: var(--md-inverse-primary); transform-origin: left; animation: dt-login-fill 2s var(--ease-standard) forwards; }
+.dt-login.is-fast .dt-login__bar { display: none; }
+@keyframes dt-login-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.dt-login__status, .dt-login__skip { margin: 0; font-size: 13px; }
+.dt-login__skip { margin-top: 16px; color: color-mix(in srgb, var(--md-inverse-on-surface) 85%, transparent); }
+
+/* Cursor intro */
+.dt-cursor { position: absolute; z-index: 150; top: 0; left: 0; width: 22px; height: 26px; pointer-events: none; filter: drop-shadow(0 2px 3px rgb(0 0 0 / .35)); }
+.dt-ripple { position: absolute; z-index: 149; width: 46px; height: 46px; margin: -23px 0 0 -23px; border: 2px solid var(--md-primary); border-radius: 50%; pointer-events: none; animation: dt-ripple 420ms ease-out forwards; }
+@keyframes dt-ripple { from { transform: scale(.3); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
