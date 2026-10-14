@@ -76,6 +76,9 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-layer { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
 .dt-window { position: absolute; display: flex; flex-direction: column; min-width: 300px; min-height: 200px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--md-outline-variant) 70%, white); border-radius: 18px; background: var(--md-surface-container-lowest); box-shadow: 0 24px 60px rgb(var(--shadow-color) / .22), 0 4px 12px rgb(var(--shadow-color) / .12); pointer-events: auto; }
 .dt-window[hidden] { display: none; }
+/* Geometry changes must apply immediately: the page's reduced-motion rule gives every property a tiny
+   transition, which would make offsets lag a frame behind inline styles. Window motion uses WAAPI. */
+.dt-window { transition-property: none; }
 .dt-window:focus { outline: none; }
 .dt-window__bar { flex: none; height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-bottom: 1px solid var(--md-outline-variant); background: var(--md-surface-container); user-select: none; }
 .dt-window__controls { display: flex; gap: 8px; }
@@ -117,3 +120,6 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 @container (max-width: 520px) {
   .dt-doc__hero { grid-template-columns: 1fr; }
 }
+.dt-window__bar { cursor: grab; touch-action: none; }
+.dt-window.is-dragging .dt-window__bar { cursor: grabbing; }
+.dt-window.is-maximized { border-radius: 0; }
