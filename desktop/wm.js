@@ -100,7 +100,8 @@ export function createWM({ layer, desk, dock, onChange }) {
       else { focus(id); existing.el.focus({ preventScroll: true }); }
       return existing.el;
     }
-    if (PHONE.matches) [...wins.keys()].forEach((wid) => close(wid, { restoreFocus: false }));
+    // One app at a time: opening another replaces whatever is open.
+    [...wins.keys()].forEach((wid) => close(wid, { restoreFocus: false }));
     const el = document.createElement('section');
     el.className = 'dt-window';
     el.dataset.app = id;
