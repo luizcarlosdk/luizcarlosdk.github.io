@@ -45,9 +45,10 @@ export function createWM({ layer, desk, dock, onChange }) {
     const right = Math.round(d.width - 16);
     return { left, right: Math.max(right, left + 320), height: d.height };
   };
-  // Each open window steps the next one down and right (wrapping after six), and the new
-  // window shrinks by the same step, so the title bars behind it stay visible.
-  const nextStep = () => (visible().length % 6) * CASCADE;
+  // Each open window steps the next one down and right, and the new window shrinks by the
+  // same step, so the title bars behind it stay visible. After six the steps start again,
+  // half a step in, so later windows never land exactly on earlier ones.
+  const nextStep = () => { const k = visible().length; return (k % 6) * CASCADE + (Math.floor(k / 6) % 2) * (CASCADE / 2); };
   // Documents ('fill') take the free area; small apps keep their registry size.
   const defaultRect = (size, n = nextStep()) => {
     const b = bounds();

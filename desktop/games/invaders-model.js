@@ -7,7 +7,7 @@ export const PLAYER_Y = H - 22;
 export const ROW_POINTS = [30, 20, 20, 10, 10];
 export const ZERO_DAY_POINTS = [50, 100, 150, 300];
 export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback'];
-const POWER_MS = 8000;
+export const POWER_MS = 8000;
 const DROP_CHANCE = 0.08;
 const MAX_LIVES = 5;
 const COLS = 8;
@@ -99,23 +99,30 @@ export function update(s, dt, input) {
   }
 
   const speed = s.power?.kind === 'hotfix' ? 440 : 220;
-  s.patches = s.patches.filter((patch) => {
-    patch.y -= speed * sec;
-    if (patch.y < 0) return false;
+  // True when the patch hit something (and is used up). Patches move in steps no taller than
+  // themselves, so a fast patch can't skip past a bug.
+  const hit = (patch) => {
     const target = alive(s).find((b) => overlaps(patch, bugBox(s, b)));
     if (target) {
       target.alive = false;
       s.score += ROW_POINTS[target.r];
       if (s.rand() < DROP_CHANCE) { const box = bugBox(s, target); drop(s, box.x + box.w / 2, box.y + box.h); }
-      return false;
+      return true;
     }
     if (s.zeroDay && overlaps(patch, s.zeroDay)) {
       s.score += s.zeroDay.points;
       drop(s, s.zeroDay.x + s.zeroDay.w / 2, s.zeroDay.y + s.zeroDay.h);
       s.zeroDay = null;
-      return false;
+      return true;
     }
-    return !hitsShield(s, patch);
+    return hitsShield(s, patch);
+  };
+  s.patches = s.patches.filter((patch) => {
+    for (let left = speed * sec; left > 0; left -= patch.h) {
+      patch.y -= Math.min(patch.h, left);
+      if (patch.y < 0 || hit(patch)) return false;
+    }
+    return true;
   });
 
   const f = s.formation;

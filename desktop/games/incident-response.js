@@ -1,6 +1,6 @@
 // Incident Response: canvas view and controls on top of the pure model.
 import { createGame } from './kit.js';
-import { W, H, PLAYER_Y, createInvaders, update, bugBox } from './invaders-model.js';
+import { W, H, PLAYER_Y, POWER_MS, createInvaders, update, bugBox } from './invaders-model.js';
 import { BUGS, SHIP, ZERO_DAY, POWER_UPS } from './invaders-sprites.js';
 
 const PICKUP = {
@@ -53,7 +53,7 @@ export function mount(host) {
     if (s.power) {
       sprite(POWER_UPS[s.power.kind], W - 52, H - 9, c.alt);
       ctx.fillStyle = c.alt;
-      ctx.fillRect(W - 42, H - 6, Math.ceil((36 * s.power.ms) / 8000), 2);
+      ctx.fillRect(W - 42, H - 6, Math.ceil((36 * s.power.ms) / POWER_MS), 2);
     }
   };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
