@@ -98,6 +98,8 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
     if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
     emit(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
   });
+  // A long press on a pad would open the browser's menu mid-game.
+  host.querySelector('.dt-game__pad').addEventListener('contextmenu', (e) => e.preventDefault());
   host.querySelectorAll('[data-action]').forEach((b) => {
     const a = b.dataset.action;
     const release = () => held.delete(a);

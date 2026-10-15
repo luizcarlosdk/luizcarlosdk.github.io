@@ -173,9 +173,10 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-game__status { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dt-game__title { margin: 0; font-family: var(--display); font-size: 30px; }
 .dt-game__msg { margin: 0; max-width: 30ch; font-size: 14px; }
-.dt-game__pad { display: none; }
+/* Pads are held down during play: no text selection, iOS callout or tap flash. */
+.dt-game__pad { display: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
 .dt-game__help { margin: 0; color: var(--md-on-surface-variant); font-size: 13px; text-align: center; }
-.dt-pad-btn { min-height: 52px; border: 1px solid var(--md-outline-variant); border-radius: 14px; background: var(--md-surface-container-high); color: var(--md-on-surface); font: inherit; font-size: 20px; font-weight: 600; touch-action: none; user-select: none; cursor: pointer; }
+.dt-pad-btn { min-height: 52px; border: 1px solid var(--md-outline-variant); border-radius: 14px; background: var(--md-surface-container-high); color: var(--md-on-surface); font: inherit; font-size: 20px; font-weight: 600; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; cursor: pointer; }
 .dt-pad-btn:active { background: var(--md-primary-container); color: var(--md-on-primary-container); }
 .dt-game__pad--dpad { grid-template-columns: repeat(3, 58px); grid-template-areas: ". up ." "left . right" ". down ."; gap: 6px; }
 .dt-game__pad--dpad [data-action="up"] { grid-area: up; }
