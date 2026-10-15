@@ -20,7 +20,12 @@ async function boot() {
     const app = APPS[id];
     if (!app) return;
     if (app.href) { window.open(app.href, '_blank', 'noopener'); return; }
-    wm.open(id, { title: app.title, iconName: app.icon, size: app.size, opener, from: opener?.getBoundingClientRect() ?? null, build: () => buildApp(id, { open, replayIntro: playIntro }) });
+    const from = opener?.getBoundingClientRect() ?? null;
+    // Opening replaces the current window, so an opener inside it (a folder item) is about to
+    // disappear; focus returns to that window's desktop icon instead.
+    const host = opener?.closest('.dt-window')?.dataset.app;
+    const focusBack = host && host !== id ? (shell.iconFor(host) ?? opener) : opener;
+    wm.open(id, { title: app.title, iconName: app.icon, size: app.size, opener: focusBack, from, build: () => buildApp(id, { open, replayIntro: playIntro }) });
   }
 
   const aboutIcon = () => shell.iconFor('about');
