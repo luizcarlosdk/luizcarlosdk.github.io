@@ -7,7 +7,9 @@ export const H = 260;
 export const PLAYER_Y = H - 22;
 export const ROW_POINTS = [30, 20, 20, 10, 10];
 export const ZERO_DAY_POINTS = [50, 100, 150, 300];
-export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback'];
+export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback', 'sandbox', 'gc', 'ratelimit', 'pierce'];
+// Timed powers run side by side, each on its own clock; the rest act once when caught.
+const TIMED = new Set(['hotfix', 'spread', 'ratelimit', 'pierce']);
 export const POWER_MS = 8000;
 const DROP_CHANCE = 0.08;
 const MAX_LIVES = 5;
@@ -49,7 +51,8 @@ function createBoss(level) {
 function newWave(s) {
   s.bugs = [];
   s.boss = null;
-  if (isBossWave(s.wave)) { s.boss = createBoss(Math.floor(s.wave / 3) + 1); s.event = 'boss'; }
+  s.event = isBossWave(s.wave) ? 'boss' : 'wave';
+  if (isBossWave(s.wave)) s.boss = createBoss(Math.floor(s.wave / 3) + 1);
   else for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) s.bugs.push({ r, c, alive: true });
   s.formation = { x: 24, y: 36 + 8 * Math.min(s.wave, 4), dir: 1, timer: 0, frame: 0 };
   s.shots = [];
@@ -58,7 +61,7 @@ function newWave(s) {
 }
 
 export function createInvaders(rand = Math.random) {
-  const s = { rand, score: 0, lives: 3, wave: 0, over: false, player: { x: W / 2, invulnerable: 0 }, patches: [], drops: [], power: null, collected: null, boss: null, event: null, breather: 0, shots: [], zeroDay: null, zeroDayTimer: 15000, shields: [], bugs: [], formation: null };
+  const s = { rand, score: 0, lives: 3, wave: 0, over: false, player: { x: W / 2, invulnerable: 0, sandbox: false }, patches: [], drops: [], powers: {}, collected: null, boss: null, event: null, breather: 0, shots: [], zeroDay: null, zeroDayTimer: 15000, shields: [], bugs: [], formation: null };
   s.shields = [0, 1, 2].map((i) => ({ x: Math.round((W * (i + 1)) / 4 - SHIELD_W / 2), y: PLAYER_Y - 34, bits: shieldBits() }));
   newWave(s);
   return s;
@@ -92,11 +95,15 @@ function hitsShield(s, shot) {
 
 const drop = (s, x, y) => s.drops.push({ kind: POWER_KINDS[Math.floor(s.rand() * POWER_KINDS.length)], x: x - 3, y, w: 7, h: 7 });
 
-// Rebuild and rollback act at once; hotfix (faster patches) and spread (three patches) last a while.
+// Timed: hotfix (faster patches), spread (three patches), ratelimit (enemies at half speed),
+// pierce (patches pass through bugs); catching one again adds time, up to twice the duration.
+// Instant: rebuild (firewalls), rollback (a life), sandbox (absorbs one hit), gc (clears enemy fire).
 function collect(s, kind) {
-  if (kind === 'rebuild') s.shields.forEach((sh) => { sh.bits = shieldBits(); });
+  if (TIMED.has(kind)) s.powers[kind] = Math.min((s.powers[kind] ?? 0) + POWER_MS, 2 * POWER_MS);
+  else if (kind === 'rebuild') s.shields.forEach((sh) => { sh.bits = shieldBits(); });
   else if (kind === 'rollback') s.lives = Math.min(MAX_LIVES, s.lives + 1);
-  else s.power = { kind, ms: POWER_MS };
+  else if (kind === 'sandbox') s.player.sandbox = true;
+  else if (kind === 'gc') s.shots = [];
   s.collected = kind;
 }
 
@@ -155,14 +162,17 @@ export function update(s, dt, input) {
   if (input.left) p.x = Math.max(8, p.x - 120 * sec);
   if (input.right) p.x = Math.min(W - 8, p.x + 120 * sec);
   p.invulnerable = Math.max(0, p.invulnerable - dt);
-  if (s.power && (s.power.ms -= dt) <= 0) s.power = null;
+  for (const kind of Object.keys(s.powers)) if ((s.powers[kind] -= dt) <= 0) delete s.powers[kind];
+  // Rate limit slows everything hostile: the formation, its shots and the boss.
+  const edt = s.powers.ratelimit ? dt / 2 : dt;
+  const esec = edt / 1000;
   if (input.fire && !s.patches.length) {
-    const xs = s.power?.kind === 'spread' ? [p.x - 5, p.x, p.x + 5] : [p.x];
+    const xs = s.powers.spread ? [p.x - 5, p.x, p.x + 5] : [p.x];
     s.patches = xs.map((x) => ({ x, y: PLAYER_Y - 6, w: 1, h: 4 }));
   }
 
   // Patches fly faster in boss fights, so a shot reaches the boss before it sweeps away.
-  const speed = (s.power?.kind === 'hotfix' ? 440 : 220) * (s.boss ? 1.6 : 1);
+  const speed = (s.powers.hotfix ? 440 : 220) * (s.boss ? 1.6 : 1);
   // True when the patch hit something (and is used up). Patches move in steps no taller than
   // themselves, so a fast patch can't skip past a bug.
   const hit = (patch) => {
@@ -171,7 +181,7 @@ export function update(s, dt, input) {
       target.alive = false;
       s.score += ROW_POINTS[target.r];
       if (s.rand() < DROP_CHANCE) { const box = bugBox(s, target); drop(s, box.x + box.w / 2, box.y + box.h); }
-      return true;
+      return !s.powers.pierce;
     }
     if (s.boss && overlaps(patch, s.boss)) {
       s.boss.hp -= 1;
@@ -196,7 +206,7 @@ export function update(s, dt, input) {
   });
 
   const f = s.formation;
-  f.timer += dt;
+  f.timer += edt;
   while (alive(s).length && f.timer >= stepMs(s)) {
     f.timer -= stepMs(s);
     f.frame ^= 1;
@@ -216,10 +226,10 @@ export function update(s, dt, input) {
 
   if (s.boss) {
     if (s.boss.hp <= 0) defeatBoss(s);
-    else updateBoss(s, dt);
+    else updateBoss(s, edt);
   }
 
-  for (const shot of s.shots) { shot.x += (shot.vx ?? 0) * sec; shot.y += (shot.vy ?? 90) * sec; }
+  for (const shot of s.shots) { shot.x += (shot.vx ?? 0) * esec; shot.y += (shot.vy ?? 90) * esec; }
   const ship = { x: p.x - 6, y: PLAYER_Y, w: 13, h: 7 };
   // Boss bullets only count on the ship's centre, as in bullet-hell games, so gaps can be threaded.
   const core = { x: p.x - 2, y: PLAYER_Y + 2, w: 5, h: 4 };
@@ -231,7 +241,8 @@ export function update(s, dt, input) {
   s.shots = s.shots.filter((shot) => {
     if (shot.y > H || shot.y < -4 || shot.x < -4 || shot.x > W + 4 || hitsShield(s, shot)) return false;
     if (overlaps(shot, shot.boss ? core : ship)) {
-      if (!p.invulnerable) {
+      if (p.sandbox && !p.invulnerable) { p.sandbox = false; p.invulnerable = 500; }
+      else if (!p.invulnerable) {
         s.lives -= 1;
         p.invulnerable = 1000;
         if (s.lives <= 0) s.over = true;

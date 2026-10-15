@@ -80,12 +80,17 @@ export const ZERO_DAY = [
   '...#..#..#..#...',
 ];
 
-// Power-ups, 7×7: a lightning bolt, three rising patches, a brick firewall and a heart.
+// Power-ups, 7×7: a lightning bolt, three rising patches, a brick firewall and a heart,
 export const POWER_UPS = {
   hotfix: ['....##.', '...##..', '..##...', '.#####.', '...##..', '..##...', '.##....'],
   spread: ['#..#..#', '#..#..#', '.......', '#..#..#', '#..#..#', '.......', '#######'],
   rebuild: ['#######', '..#...#', '#######', '#...#..', '#######', '..#...#', '#######'],
   rollback: ['.##.##.', '#######', '#######', '#######', '.#####.', '..###..', '...#...'],
+  // A bubble, a bin, an hourglass, and an arrow through a line.
+  sandbox: ['..###..', '.#...#.', '#.....#', '#..#..#', '#.....#', '.#...#.', '..###..'],
+  gc: ['..###..', '#######', '.#####.', '.#.#.#.', '.#.#.#.', '.#.#.#.', '.#####.'],
+  ratelimit: ['#######', '.#...#.', '..#.#..', '...#...', '..#.#..', '.#.#.#.', '#######'],
+  pierce: ['...#...', '..###..', '.#.#.#.', '...#...', '#######', '...#...', '...#...'],
 };
 
 // Kernel Panic, the boss: a giant top-down beetle, pincers toward the ship. Drawn as the left
