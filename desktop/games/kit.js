@@ -103,19 +103,27 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
   });
   // A long press on a pad would open the browser's menu mid-game.
   host.querySelector('.dt-game__pad').addEventListener('contextmenu', (e) => e.preventDefault());
-  host.querySelector('.dt-pad-swap')?.addEventListener('click', () => setFireLeft(!document.documentElement.hasAttribute('data-fire-left')));
+  const swap = host.querySelector('.dt-pad-swap');
+  if (swap) {
+    // Keep focus on the game, so Space and the arrows keep playing rather than pressing ⇄ again.
+    swap.addEventListener('pointerdown', (e) => e.preventDefault());
+    swap.addEventListener('click', () => { setFireLeft(!document.documentElement.hasAttribute('data-fire-left')); focus(); });
+  }
   // Move stick: the ship moves while the thumb is held left or right of where it touched down.
   const stick = host.querySelector('.dt-stick');
   if (stick) {
     const DEAD = 8;
     const REACH = 36;
     let origin = null;
+    let steering = null;
+    // Only the direction the stick itself set is released, so held arrow keys keep working.
     const steer = (dx) => {
       stick.style.setProperty('--stick-x', `${Math.max(-REACH, Math.min(REACH, dx))}px`);
-      held.delete('left');
-      held.delete('right');
-      if (dx < -DEAD) held.add('left');
-      if (dx > DEAD) held.add('right');
+      const dir = dx < -DEAD ? 'left' : dx > DEAD ? 'right' : null;
+      if (dir === steering) return;
+      if (steering) held.delete(steering);
+      if (dir) held.add(dir);
+      steering = dir;
     };
     const release = (e) => {
       if (!origin || e.pointerId !== origin.id) return;
@@ -124,6 +132,7 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
     };
     stick.addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      if (origin) return; // a second finger doesn't take the stick from the first
       origin = { id: e.pointerId, x: e.clientX };
       try { stick.setPointerCapture(e.pointerId); } catch (_) { /* synthetic pointer */ }
       steer(0);
@@ -131,7 +140,7 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
     stick.addEventListener('pointermove', (e) => { if (origin && e.pointerId === origin.id) steer(e.clientX - origin.x); });
     stick.addEventListener('pointerup', release);
     stick.addEventListener('pointercancel', release);
-    suspenders.add(() => { origin = null; stick.style.setProperty('--stick-x', '0px'); });
+    suspenders.add(() => { origin = null; steering = null; stick.style.setProperty('--stick-x', '0px'); });
   }
   host.querySelectorAll('[data-action]').forEach((b) => {
     const a = b.dataset.action;
