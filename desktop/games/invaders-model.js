@@ -11,6 +11,7 @@ export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback'];
 export const POWER_MS = 8000;
 const DROP_CHANCE = 0.08;
 const MAX_LIVES = 5;
+// Match the 32×14 BOSS art in invaders-sprites.js (m5-boss checks they agree).
 export const BOSS_W = 32;
 export const BOSS_H = 14;
 const BOSS_Y = 12;
@@ -41,7 +42,7 @@ function shieldBits() {
 }
 
 function createBoss(level) {
-  const hp = 40 + 25 * (level - 1);
+  const hp = 30 + 15 * (level - 1);
   return { level, x: (W - BOSS_W) / 2, y: BOSS_Y, w: BOSS_W, h: BOSS_H, hp, maxHp: hp, dir: 1, flash: 0, spin: 0, timers: { fan: 300, ring: 600, spiral: 0 } };
 }
 
@@ -109,7 +110,7 @@ function updateBoss(s, dt) {
   const sec = dt / 1000;
   const pace = 0.85 ** (b.level - 1);
   b.flash = Math.max(0, b.flash - dt);
-  b.x += b.dir * (30 + 10 * b.level) * sec;
+  b.x += b.dir * (20 + 5 * b.level) * sec;
   if (b.x < 8) { b.x = 8; b.dir = 1; } else if (b.x > W - 8 - b.w) { b.x = W - 8 - b.w; b.dir = -1; }
   const cx = b.x + b.w / 2;
   const cy = b.y + b.h;
@@ -127,11 +128,13 @@ function updateBoss(s, dt) {
     for (let i = 0; i < 16; i++) bullet(s, cx, cy - b.h / 2, b.spin + (i * Math.PI) / 8, 60);
   }
   // Below half health, a two-armed spiral joins in.
-  if (b.hp <= b.maxHp / 2 && (t.spiral -= dt) <= 0) {
-    t.spiral += 110 * pace;
-    b.spin += 0.27;
-    bullet(s, cx, cy, b.spin, 70);
-    bullet(s, cx, cy, b.spin + Math.PI, 70);
+  // Several pairs can fire in one long frame, so the density doesn't depend on the frame rate.
+  if (b.hp <= b.maxHp / 2) {
+    for (t.spiral -= dt; t.spiral <= 0; t.spiral += 110 * pace) {
+      b.spin += 0.27;
+      bullet(s, cx, cy, b.spin, 70);
+      bullet(s, cx, cy, b.spin + Math.PI, 70);
+    }
   }
 }
 
@@ -158,7 +161,8 @@ export function update(s, dt, input) {
     s.patches = xs.map((x) => ({ x, y: PLAYER_Y - 6, w: 1, h: 4 }));
   }
 
-  const speed = s.power?.kind === 'hotfix' ? 440 : 220;
+  // Patches fly faster in boss fights, so a shot reaches the boss before it sweeps away.
+  const speed = (s.power?.kind === 'hotfix' ? 440 : 220) * (s.boss ? 1.6 : 1);
   // True when the patch hit something (and is used up). Patches move in steps no taller than
   // themselves, so a fast patch can't skip past a bug.
   const hit = (patch) => {
@@ -252,7 +256,7 @@ export function update(s, dt, input) {
   if (s.zeroDay) {
     s.zeroDay.x += s.zeroDay.dir * 50 * sec;
     if (s.zeroDay.x < -20 || s.zeroDay.x > W + 20) s.zeroDay = null;
-  } else {
+  } else if (!s.boss) {
     s.zeroDayTimer -= dt;
     if (s.zeroDayTimer <= 0) {
       const dir = s.rand() < 0.5 ? 1 : -1;

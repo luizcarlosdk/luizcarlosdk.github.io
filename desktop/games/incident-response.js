@@ -41,7 +41,7 @@ export function drawField(ctx, s, c) {
     ctx.fillRect(40, 3, W - 80, 3);
     ctx.fillStyle = c.accent;
     ctx.fillRect(40, 3, Math.ceil(((W - 80) * s.boss.hp) / s.boss.maxHp), 3);
-    sprite(ctx, BOSS, s.boss.x, s.boss.y, s.boss.flash ? c.fg : c.accent, { o: c.fg });
+    sprite(ctx, BOSS, s.boss.x, s.boss.y, s.boss.flash ? c.fg : c.accent, { o: c.bg });
   }
   ctx.fillStyle = c.alt;
   for (const sh of s.shields) sh.bits.forEach((row, y) => row.forEach((on, x) => { if (on) ctx.fillRect(sh.x + x, sh.y + y, 1, 1); }));
