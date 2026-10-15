@@ -167,6 +167,7 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-game__canvas:focus-visible { outline: 3px solid var(--md-primary); outline-offset: 3px; }
 .dt-game__overlay { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; padding: 20px; border-radius: 12px; background: color-mix(in srgb, var(--md-inverse-surface) 80%, transparent); color: var(--md-inverse-on-surface); text-align: center; }
 .dt-game__overlay[hidden], .dt-game__action[hidden] { display: none; }
+.dt-game__status { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .dt-game__title { margin: 0; font-family: var(--display); font-size: 30px; }
 .dt-game__msg { margin: 0; max-width: 30ch; font-size: 14px; }
 .dt-game__pad { display: none; }
