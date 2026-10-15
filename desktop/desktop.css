@@ -157,9 +157,32 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
   .dt-doc--contact .contact-card__content { grid-template-columns: minmax(0, 1fr) minmax(260px, .7fr); }
 }
 
-/* Games (filled in by milestone 3) */
-.dt-game { min-height: 100%; display: grid; place-items: center; }
-.dt-placeholder { margin: 0; color: var(--md-on-surface-variant); text-align: center; }
+/* Games */
+.dt-game { min-height: 100%; display: grid; justify-items: center; align-content: start; gap: 12px; }
+.dt-placeholder { margin: auto 0; color: var(--md-on-surface-variant); text-align: center; }
+.dt-game__hud { width: min(100%, var(--game-w)); display: flex; justify-content: space-between; color: var(--md-on-surface-variant); font-family: var(--dt-mono); font-size: 13px; }
+.dt-game__hud b { color: var(--md-on-surface); font-weight: 600; }
+.dt-game__stage { position: relative; width: min(100%, var(--game-w)); }
+.dt-game__canvas { display: block; width: 100%; height: auto; border-radius: 12px; background: var(--md-inverse-surface); image-rendering: pixelated; touch-action: none; }
+.dt-game__canvas:focus-visible { outline: 3px solid var(--md-primary); outline-offset: 3px; }
+.dt-game__overlay { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; padding: 20px; border-radius: 12px; background: color-mix(in srgb, var(--md-inverse-surface) 80%, transparent); color: var(--md-inverse-on-surface); text-align: center; }
+.dt-game__overlay[hidden], .dt-game__action[hidden] { display: none; }
+.dt-game__title { margin: 0; font-family: var(--display); font-size: 30px; }
+.dt-game__msg { margin: 0; max-width: 30ch; font-size: 14px; }
+.dt-game__pad { display: none; }
+.dt-game__help { margin: 0; color: var(--md-on-surface-variant); font-size: 13px; text-align: center; }
+.dt-pad-btn { min-height: 52px; border: 1px solid var(--md-outline-variant); border-radius: 14px; background: var(--md-surface-container-high); color: var(--md-on-surface); font: inherit; font-size: 20px; font-weight: 600; touch-action: none; user-select: none; cursor: pointer; }
+.dt-pad-btn:active { background: var(--md-primary-container); color: var(--md-on-primary-container); }
+.dt-game__pad--dpad { grid-template-columns: repeat(3, 58px); grid-template-areas: ". up ." "left . right" ". down ."; gap: 6px; }
+.dt-game__pad--dpad [data-action="up"] { grid-area: up; }
+.dt-game__pad--dpad [data-action="left"] { grid-area: left; }
+.dt-game__pad--dpad [data-action="right"] { grid-area: right; }
+.dt-game__pad--dpad [data-action="down"] { grid-area: down; }
+.dt-game__pad--shooter { width: min(100%, var(--game-w)); grid-template-columns: 72px 1fr 72px; gap: 10px; }
+@media (max-width: 760px), (pointer: coarse) {
+  .dt-game__pad { display: grid; }
+  .dt-game__help { display: none; }
+}
 
 /* Login */
 .dt-login { position: absolute; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, var(--md-inverse-surface) 86%, transparent); color: var(--md-inverse-on-surface); text-align: center; backdrop-filter: blur(22px); transition: opacity 400ms var(--ease-standard); }

@@ -13,8 +13,8 @@ export const APPS = {
   resume: { title: 'Résumé.pdf', icon: 'pdf', href: 'assets/luiz_carlos_resume.pdf' },
   memoir: { title: 'memoir', icon: 'file', size: [780, 680], project: 0, thumb: 'assets/memoir-mainpage.png' },
   divination: { title: 'divination', icon: 'file', size: [780, 680], project: 1, thumb: 'assets/capstone.png' },
-  snake: { title: 'Snake', icon: 'game', size: [460, 580], game: 'snake' },
-  invaders: { title: 'Incident Response', icon: 'bug', size: [560, 660], game: 'incident-response' },
+  snake: { title: 'Snake', icon: 'game', size: [480, 600], game: 'snake' },
+  invaders: { title: 'Incident Response', icon: 'bug', size: [580, 720], game: 'incident-response' },
 };
 
 export const DESKTOP_ICONS = ['about', 'experience', 'skills', 'projects', 'contact', 'games', 'settings', 'resume'];
@@ -75,7 +75,11 @@ function buildFolder(ids, ctx) {
 function buildGame(app) {
   const el = document.createElement('div');
   el.className = 'dt-game';
-  el.innerHTML = `<p class="dt-placeholder">${app.title} arrives in the next update.</p>`;
+  el.innerHTML = '<p class="dt-placeholder">Loading…</p>';
+  import(`./games/${app.game}.js`).then(
+    (mod) => mod.mount(el),
+    () => { el.innerHTML = '<p class="dt-placeholder">This game couldn’t load. Try again later.</p>'; },
+  );
   return el;
 }
 

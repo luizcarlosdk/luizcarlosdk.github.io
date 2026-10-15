@@ -54,7 +54,11 @@ export function createWM({ layer, desk, dock, onChange }) {
   const topmost = () => visible().sort((a, b) => Number(b[1].el.style.zIndex) - Number(a[1].el.style.zIndex))[0]?.[0] ?? null;
 
   function focus(id) {
-    for (const [wid, w] of wins) w.el.classList.toggle('is-focused', wid === id);
+    for (const [wid, w] of wins) {
+      const was = w.el.classList.contains('is-focused');
+      w.el.classList.toggle('is-focused', wid === id);
+      if (was !== (wid === id)) w.el.dispatchEvent(new CustomEvent('dt:focus', { detail: { focused: wid === id } }));
+    }
     const w = wins.get(id);
     if (w) w.el.style.zIndex = String(++z);
     onChange();
@@ -144,6 +148,7 @@ export function createWM({ layer, desk, dock, onChange }) {
   function close(id, { restoreFocus = true } = {}) {
     const w = wins.get(id);
     if (!w) return;
+    w.el.dispatchEvent(new CustomEvent('dt:close'));
     w.el.remove();
     wins.delete(id);
     const next = topmost();
@@ -165,6 +170,7 @@ export function createWM({ layer, desk, dock, onChange }) {
     const w = wins.get(id);
     if (!w || w.el.hidden || PHONE.matches) return;
     const hide = () => {
+      w.el.dispatchEvent(new CustomEvent('dt:minimize'));
       w.el.hidden = true;
       w.el.classList.remove('is-focused');
       const next = topmost();
