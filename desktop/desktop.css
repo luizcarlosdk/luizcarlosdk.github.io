@@ -100,7 +100,7 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-window__body { flex: 1; min-height: 0; overflow: auto; padding: 28px 32px 36px; container-type: inline-size; overscroll-behavior: contain; }
 
 /* Section content inside windows is sized by the window, not the viewport */
-.dt-doc { max-width: 1180px; margin-inline: auto; }
+.dt-doc:not(.dt-doc--contact) { max-width: 1180px; margin-inline: auto; }
 .dt-doc .section-heading { grid-template-columns: 1fr; gap: 10px; margin-bottom: 28px; }
 .dt-doc .section-heading h2 { font-size: clamp(32px, 7cqi, 52px); }
 .dt-doc .section-heading > p { font-size: 16px; }
