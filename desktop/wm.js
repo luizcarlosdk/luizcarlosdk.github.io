@@ -20,6 +20,20 @@ export function createWM({ layer, desk, dock, onChange }) {
     const d = deskRect();
     return { ...r, left: Math.min(Math.max(r.left, MIN_VISIBLE - r.width), d.width - MIN_VISIBLE), top: Math.min(Math.max(r.top, 0), d.height - 44) };
   };
+  const settle = (r) => {
+    const d = deskRect();
+    const width = Math.min(r.width, d.width);
+    const height = Math.min(r.height, d.height);
+    return { width, height, left: Math.min(Math.max(r.left, 0), d.width - width), top: Math.min(Math.max(r.top, 0), d.height - height) };
+  };
+  const styleRect = (el) => (el.style.width
+    ? { left: parseFloat(el.style.left), top: parseFloat(el.style.top), width: parseFloat(el.style.width), height: parseFloat(el.style.height) }
+    : null);
+  const maxRect = () => {
+    const d = deskRect();
+    const left = Math.round(dock.getBoundingClientRect().right - d.left + 12);
+    return { left, top: 0, width: d.width - left, height: d.height };
+  };
   const visible = () => [...wins].filter(([, w]) => !w.el.hidden);
   // Free area between the dock and the desktop icons.
   const bounds = () => {
@@ -63,7 +77,8 @@ export function createWM({ layer, desk, dock, onChange }) {
   function open(id, { title, iconName, size, build, opener = null, from = null }) {
     const existing = wins.get(id);
     if (existing) {
-      if (existing.el.hidden) restore(id); else focus(id);
+      if (existing.el.hidden) restore(id);
+      else { focus(id); existing.el.focus({ preventScroll: true }); }
       return existing.el;
     }
     if (PHONE.matches) [...wins.keys()].forEach((wid) => close(wid, { restoreFocus: false }));
@@ -87,8 +102,8 @@ export function createWM({ layer, desk, dock, onChange }) {
       <div class="dt-window__body"></div>`;
     el.querySelector('.dt-window__body').append(build());
     layer.append(el);
-    if (!PHONE.matches) place(el, saved[id] ? clamp(saved[id]) : defaultRect(size));
-    wins.set(id, { el, opener });
+    if (!PHONE.matches) place(el, saved[id] ? settle(saved[id]) : defaultRect(size));
+    wins.set(id, { el, opener, size, title });
     wire(id, el);
     focus(id);
     el.focus({ preventScroll: true });
@@ -164,22 +179,37 @@ export function createWM({ layer, desk, dock, onChange }) {
     if (!w) return;
     w.el.hidden = false;
     focus(id);
+    w.el.focus({ preventScroll: true });
     genie(w.el, id, true);
   }
 
   function toggleMaximize(id) {
     const w = wins.get(id);
     if (!w || PHONE.matches) return;
-    if (w.el.classList.toggle('is-maximized')) {
+    const maximized = w.el.classList.toggle('is-maximized');
+    if (maximized) {
       w.prevRect = rectOf(w.el);
-      const d = deskRect();
-      const left = Math.round(dock.getBoundingClientRect().right - d.left + 12);
-      place(w.el, { left, top: 0, width: d.width - left, height: d.height });
+      place(w.el, maxRect());
     } else {
-      place(w.el, w.prevRect);
+      place(w.el, settle(w.prevRect));
     }
+    w.el.querySelector('[data-ctl="max"]').setAttribute('aria-label', `${maximized ? 'Restore' : 'Maximize'} ${w.title}`);
     focus(id);
   }
+
+  // Keep every window usable when the viewport changes: maximized windows refill the desk,
+  // others are pulled inside it, and sheets opened in the phone layout get a real rect.
+  function relayout() {
+    if (PHONE.matches) return;
+    for (const [, w] of wins) {
+      if (w.el.classList.contains('is-maximized')) { place(w.el, maxRect()); continue; }
+      const r = styleRect(w.el);
+      place(w.el, r ? settle(r) : defaultRect(w.size));
+    }
+  }
+  let resizeTimer = 0;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(relayout, 120); });
+  PHONE.addEventListener('change', relayout);
 
   return {
     open, close, focus, focusedId, restore, minimize, toggleMaximize,
