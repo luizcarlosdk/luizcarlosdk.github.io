@@ -1,10 +1,15 @@
 // Incident Response: pure model of an original fixed shooter. Bugs march in formation,
 // the on-call ship fires patches, firewalls erode, and a zero-day crosses for bonus points.
+// Destroyed bugs sometimes, and the zero-day always, drop a power-up for the ship to catch.
 export const W = 240;
 export const H = 260;
 export const PLAYER_Y = H - 22;
 export const ROW_POINTS = [30, 20, 20, 10, 10];
 export const ZERO_DAY_POINTS = [50, 100, 150, 300];
+export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback'];
+const POWER_MS = 8000;
+const DROP_CHANCE = 0.08;
+const MAX_LIVES = 5;
 const COLS = 8;
 const ROWS = 5;
 const CELL_W = 22;
@@ -33,11 +38,12 @@ function newWave(s) {
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) s.bugs.push({ r, c, alive: true });
   s.formation = { x: 24, y: 36 + 8 * Math.min(s.wave, 4), dir: 1, timer: 0, frame: 0 };
   s.shots = [];
-  s.patch = null;
+  s.patches = [];
+  s.drops = [];
 }
 
 export function createInvaders(rand = Math.random) {
-  const s = { rand, score: 0, lives: 3, wave: 0, over: false, player: { x: W / 2, invulnerable: 0 }, patch: null, shots: [], zeroDay: null, zeroDayTimer: 15000, shields: [], bugs: [], formation: null };
+  const s = { rand, score: 0, lives: 3, wave: 0, over: false, player: { x: W / 2, invulnerable: 0 }, patches: [], drops: [], power: null, collected: null, shots: [], zeroDay: null, zeroDayTimer: 15000, shields: [], bugs: [], formation: null };
   s.shields = [0, 1, 2].map((i) => ({ x: Math.round((W * (i + 1)) / 4 - SHIELD_W / 2), y: PLAYER_Y - 34, bits: shieldBits() }));
   newWave(s);
   return s;
@@ -69,6 +75,16 @@ function hitsShield(s, shot) {
   return false;
 }
 
+const drop = (s, x, y) => s.drops.push({ kind: POWER_KINDS[Math.floor(s.rand() * POWER_KINDS.length)], x: x - 3, y, w: 7, h: 7 });
+
+// Rebuild and rollback act at once; hotfix (faster patches) and spread (three patches) last a while.
+function collect(s, kind) {
+  if (kind === 'rebuild') s.shields.forEach((sh) => { sh.bits = shieldBits(); });
+  else if (kind === 'rollback') s.lives = Math.min(MAX_LIVES, s.lives + 1);
+  else s.power = { kind, ms: POWER_MS };
+  s.collected = kind;
+}
+
 export function update(s, dt, input) {
   if (s.over) return s;
   const sec = dt / 1000;
@@ -76,18 +92,31 @@ export function update(s, dt, input) {
   if (input.left) p.x = Math.max(8, p.x - 120 * sec);
   if (input.right) p.x = Math.min(W - 8, p.x + 120 * sec);
   p.invulnerable = Math.max(0, p.invulnerable - dt);
-  if (input.fire && !s.patch) s.patch = { x: p.x, y: PLAYER_Y - 6, w: 1, h: 4 };
+  if (s.power && (s.power.ms -= dt) <= 0) s.power = null;
+  if (input.fire && !s.patches.length) {
+    const xs = s.power?.kind === 'spread' ? [p.x - 5, p.x, p.x + 5] : [p.x];
+    s.patches = xs.map((x) => ({ x, y: PLAYER_Y - 6, w: 1, h: 4 }));
+  }
 
-  if (s.patch) {
-    s.patch.y -= 220 * sec;
-    if (s.patch.y < 0) s.patch = null;
-  }
-  if (s.patch) {
-    const target = alive(s).find((b) => overlaps(s.patch, bugBox(s, b)));
-    if (target) { target.alive = false; s.score += ROW_POINTS[target.r]; s.patch = null; }
-    else if (s.zeroDay && overlaps(s.patch, s.zeroDay)) { s.score += s.zeroDay.points; s.zeroDay = null; s.patch = null; }
-    else if (hitsShield(s, s.patch)) s.patch = null;
-  }
+  const speed = s.power?.kind === 'hotfix' ? 440 : 220;
+  s.patches = s.patches.filter((patch) => {
+    patch.y -= speed * sec;
+    if (patch.y < 0) return false;
+    const target = alive(s).find((b) => overlaps(patch, bugBox(s, b)));
+    if (target) {
+      target.alive = false;
+      s.score += ROW_POINTS[target.r];
+      if (s.rand() < DROP_CHANCE) { const box = bugBox(s, target); drop(s, box.x + box.w / 2, box.y + box.h); }
+      return false;
+    }
+    if (s.zeroDay && overlaps(patch, s.zeroDay)) {
+      s.score += s.zeroDay.points;
+      drop(s, s.zeroDay.x + s.zeroDay.w / 2, s.zeroDay.y + s.zeroDay.h);
+      s.zeroDay = null;
+      return false;
+    }
+    return !hitsShield(s, patch);
+  });
 
   const f = s.formation;
   f.timer += dt;
@@ -110,6 +139,11 @@ export function update(s, dt, input) {
 
   for (const shot of s.shots) shot.y += 90 * sec;
   const ship = { x: p.x - 6, y: PLAYER_Y, w: 13, h: 7 };
+  s.drops = s.drops.filter((d) => {
+    d.y += 40 * sec;
+    if (overlaps(d, ship)) { collect(s, d.kind); return false; }
+    return d.y < H;
+  });
   s.shots = s.shots.filter((shot) => {
     if (shot.y > H || hitsShield(s, shot)) return false;
     if (overlaps(shot, ship)) {

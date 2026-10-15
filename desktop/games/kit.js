@@ -141,6 +141,7 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
 
   return {
     host, canvas, ctx, width, height, held, colors, setState, focus,
+    announce: (text) => { host.querySelector('.dt-game__status').textContent = text; },
     setScore: (n) => write(scoreEl, n),
     finish: (score) => { best = Math.max(best, recordBest(bestKey, score)); write(bestEl, best); },
     onAction: (fn) => listeners.add(fn),
