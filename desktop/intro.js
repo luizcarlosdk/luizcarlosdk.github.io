@@ -1,5 +1,5 @@
 // Login screen and the cursor intro that opens about.md.
-import { PHONE, storage } from './ui.js';
+import { PHONE } from './ui.js';
 
 const CURSOR = '<svg viewBox="0 0 22 26" aria-hidden="true"><path d="M2 2 L2 21 L7 16.5 L10.5 24 L14 22.5 L10.6 15 L17 15 Z" fill="#fff" stroke="#1d1a1d" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 
@@ -65,15 +65,15 @@ export function runIntro({ root, target, select, open }) {
       root.querySelectorAll('.dt-ripple').forEach((r) => r.remove());
       window.removeEventListener('keydown', end, true);
       window.removeEventListener('pointerdown', end, true);
-      storage.set('sessionStorage', 'lc.intro', '1');
       open();
       resolve();
     };
     window.addEventListener('keydown', end, true);
     window.addEventListener('pointerdown', end, true);
+    // Phones: the home screen shows for a moment, then about.md is tapped open.
     if (PHONE.matches) {
-      ripple();
-      timers.push(setTimeout(end, 520));
+      timers.push(setTimeout(() => { select(target); ripple(); }, 750));
+      timers.push(setTimeout(end, 1200));
       return;
     }
     root.append(cursor);

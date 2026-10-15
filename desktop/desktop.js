@@ -2,7 +2,7 @@ import { createShell } from './shell.js';
 import { createWM } from './wm.js';
 import { APPS, buildApp } from './apps.js';
 import { runLogin, runIntro } from './intro.js';
-import { reducedMotion, storage } from './ui.js';
+import { reducedMotion } from './ui.js';
 import { applyPreferences } from './settings.js';
 
 const shell = createShell();
@@ -36,10 +36,11 @@ async function boot() {
     await runIntro({ root: shell.desk, target: aboutIcon(), select: shell.select, open: openAbout });
   }
 
-  shell.bind({ open, wm, logout: () => { storage.set('localStorage', 'lc.mode', null); location.href = location.pathname; } });
+  shell.bind({ open, wm, logout: () => { location.href = location.pathname; } });
   shell.sync(wm);
 
   await runLogin(shell.el, { fast: reducedMotion() });
-  if (!reducedMotion() && storage.get('sessionStorage', 'lc.intro') !== '1') await playIntro();
+  // The intro plays on every visit (any key or tap skips it); reduced motion opens about.md directly.
+  if (!reducedMotion()) await playIntro();
   else openAbout();
 }
