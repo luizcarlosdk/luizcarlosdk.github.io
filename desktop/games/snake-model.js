@@ -19,7 +19,8 @@ export function turn(s, dir) {
   if (DIRS[dir] && dir !== OPPOSITE[s.dir]) s.next = dir;
 }
 
-export const tickMs = (s) => Math.max(70, 130 - 3 * s.score);
+// Milliseconds per step: a calm start that speeds up gently as the snake eats.
+export const tickMs = (s) => Math.max(100, 180 - 2 * s.score);
 
 export function step(s) {
   if (s.over) return s;
