@@ -45,18 +45,25 @@ export function createWM({ layer, desk, dock, onChange }) {
     const right = Math.round(d.width - 16);
     return { left, right: Math.max(right, left + 320), height: d.height };
   };
+  // Each open window steps the next one down and right (wrapping after six), and the new
+  // window shrinks by the same step, so the title bars behind it stay visible.
+  const nextStep = () => (visible().length % 6) * CASCADE;
   // Documents ('fill') take the free area; small apps keep their registry size.
-  const defaultRect = (size) => {
+  const defaultRect = (size, n = nextStep()) => {
     const b = bounds();
     const [w, h] = size === 'fill' ? [DOC_MAX_W, Infinity] : size;
-    // Each open window steps the next one down and right; it shrinks to fit, so the
-    // title bars behind it stay visible.
-    const n = Math.min(visible().length, 4) * CASCADE;
     const width = Math.min(w, b.right - b.left - n);
     const height = Math.min(h, b.height - 32 - n);
     const left = Math.min(b.left + Math.round((b.right - b.left - width) / 2) + n, b.right - width);
     const top = Math.min(Math.max(12, Math.round((b.height - height) / 2) - 16) + n, b.height - height);
     return { width, height, left, top: Math.max(0, top) };
+  };
+  // Documents can't be resized by hand, so they always take the fill size for the current
+  // screen, at their position pulled back beside the dock and icons.
+  const fitDocument = (r, n) => {
+    const b = bounds();
+    const { width, height } = defaultRect('fill', n);
+    return { width, height, left: Math.min(Math.max(r.left, b.left), b.right - width), top: Math.min(Math.max(r.top, 0), b.height - height) };
   };
   const topmost = () => visible().sort((a, b) => Number(b[1].el.style.zIndex) - Number(a[1].el.style.zIndex))[0]?.[0] ?? null;
 
@@ -113,8 +120,9 @@ export function createWM({ layer, desk, dock, onChange }) {
       <div class="dt-window__body"></div>`;
     el.querySelector('.dt-window__body').append(build());
     layer.append(el);
-    if (!PHONE.matches) place(el, saved[id] ? settle(saved[id]) : defaultRect(size));
-    wins.set(id, { el, opener, size, title });
+    const step = nextStep();
+    if (!PHONE.matches) place(el, saved[id] ? (size === 'fill' ? fitDocument(saved[id], 0) : settle(saved[id])) : defaultRect(size, step));
+    wins.set(id, { el, opener, size, title, step: saved[id] ? 0 : step });
     wire(id, el);
     focus(id);
     el.focus({ preventScroll: true });
@@ -204,7 +212,7 @@ export function createWM({ layer, desk, dock, onChange }) {
       w.prevRect = rectOf(w.el);
       place(w.el, maxRect());
     } else {
-      place(w.el, settle(w.prevRect));
+      place(w.el, w.size === 'fill' ? fitDocument(w.prevRect, w.step) : settle(w.prevRect));
     }
     w.el.querySelector('[data-ctl="max"]').setAttribute('aria-label', `${maximized ? 'Restore' : 'Maximize'} ${w.title}`);
     focus(id);
@@ -214,10 +222,12 @@ export function createWM({ layer, desk, dock, onChange }) {
   // others are pulled inside it, and sheets opened in the phone layout get a real rect.
   function relayout() {
     if (PHONE.matches) return;
-    for (const [, w] of wins) {
+    for (const [id, w] of wins) {
       if (w.el.classList.contains('is-maximized')) { place(w.el, maxRect()); continue; }
       const r = styleRect(w.el);
-      place(w.el, r ? settle(r) : defaultRect(w.size));
+      // Documents left where they opened are re-laid out from scratch, so they regrow too.
+      if (w.size === 'fill') place(w.el, r && saved[id] ? fitDocument(r, w.step) : defaultRect('fill', w.step));
+      else place(w.el, r ? settle(r) : defaultRect(w.size, w.step));
     }
   }
   let resizeTimer = 0;

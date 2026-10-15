@@ -26,7 +26,7 @@ export function mount(host) {
     ctx.fillStyle = c.accent;
     s.body.slice(1).forEach((p) => ctx.fillRect(p.x * CELL + 1, p.y * CELL + 1, CELL - 2, CELL - 2));
     const head = s.body[0];
-    const paint = { h: c.alt, '#': c.fg, e: c.bg };
+    const paint = { h: c.accent, '#': c.fg, e: c.bg };
     if (s.dir === 'left' || s.dir === 'right') facing = s.dir;
     dragonHead(s.dir, facing).forEach((row, y) => [...row].forEach((ch, x) => {
       if (!paint[ch]) return;
