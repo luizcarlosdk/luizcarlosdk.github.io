@@ -3,6 +3,8 @@ import { PHONE, icon, reducedMotion } from './ui.js';
 
 const CASCADE = 28;
 const MIN_VISIBLE = 80;
+// Documents open as large as the free area allows, up to this width.
+const DOC_MAX_W = 1400;
 
 export function createWM({ layer, desk, dock, onChange }) {
   const wins = new Map();
@@ -35,18 +37,23 @@ export function createWM({ layer, desk, dock, onChange }) {
     return { left, top: 0, width: d.width - left, height: d.height };
   };
   const visible = () => [...wins].filter(([, w]) => !w.el.hidden);
-  // Free area between the dock and the desktop icons.
+  // Free area to the right of the dock and the desktop icons.
   const bounds = () => {
     const d = deskRect();
-    const left = Math.round(dock.getBoundingClientRect().right - d.left + 16);
-    const right = Math.round(desk.querySelector('.dt-icons').getBoundingClientRect().left - d.left - 16);
+    const edges = [dock, ...desk.querySelectorAll('.dt-icon')].map((el) => el.getBoundingClientRect().right - d.left);
+    const left = Math.round(Math.max(...edges) + 16);
+    const right = Math.round(d.width - 16);
     return { left, right: Math.max(right, left + 320), height: d.height };
   };
+  // Documents ('fill') take the free area; small apps keep their registry size.
   const defaultRect = (size) => {
     const b = bounds();
-    const width = Math.min(size[0], b.right - b.left);
-    const height = Math.min(size[1], b.height - 32);
-    const n = visible().length * CASCADE;
+    const [w, h] = size === 'fill' ? [DOC_MAX_W, Infinity] : size;
+    // Each open window steps the next one down and right; it shrinks to fit, so the
+    // title bars behind it stay visible.
+    const n = Math.min(visible().length, 4) * CASCADE;
+    const width = Math.min(w, b.right - b.left - n);
+    const height = Math.min(h, b.height - 32 - n);
     const left = Math.min(b.left + Math.round((b.right - b.left - width) / 2) + n, b.right - width);
     const top = Math.min(Math.max(12, Math.round((b.height - height) / 2) - 16) + n, b.height - height);
     return { width, height, left, top: Math.max(0, top) };

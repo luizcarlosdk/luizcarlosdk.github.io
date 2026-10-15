@@ -51,8 +51,10 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 
 /* Desk, icons, dock */
 .dt-desk { position: relative; min-height: 0; }
-.dt-icons { position: absolute; z-index: 1; top: 16px; right: 16px; bottom: 16px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 100px); gap: 4px; margin: 0; padding: 0; list-style: none; direction: rtl; }
-.dt-icons > li { direction: ltr; }
+/* Icons fill columns from the dock rightwards. The list spans the desk so its size never depends
+   on the browser's intrinsic sizing; only the icons themselves take clicks. */
+.dt-icons { position: absolute; z-index: 1; inset: 16px 16px 16px 92px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 100px); grid-auto-columns: 108px; justify-content: start; align-content: start; gap: 4px; margin: 0; padding: 0; list-style: none; pointer-events: none; }
+.dt-icons > li { pointer-events: auto; }
 .dt-icon { width: 108px; height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 6px 4px; border: 1px solid transparent; border-radius: 14px; background: transparent; color: var(--md-on-surface); font: inherit; cursor: default; }
 .dt-icon__glyph { width: 52px; height: 52px; display: grid; place-items: center; border: 1px solid var(--md-outline-variant); border-radius: 14px; background: var(--md-surface-container-lowest); color: var(--md-primary); box-shadow: 0 4px 10px rgb(var(--shadow-color) / .12); }
 .dt-icon__glyph .icon { font-size: 28px; }
@@ -98,6 +100,7 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-window__body { flex: 1; min-height: 0; overflow: auto; padding: 28px 32px 36px; container-type: inline-size; overscroll-behavior: contain; }
 
 /* Section content inside windows is sized by the window, not the viewport */
+.dt-doc { max-width: 1180px; margin-inline: auto; }
 .dt-doc .section-heading { grid-template-columns: 1fr; gap: 10px; margin-bottom: 28px; }
 .dt-doc .section-heading h2 { font-size: clamp(32px, 7cqi, 52px); }
 .dt-doc .section-heading > p { font-size: 16px; }
@@ -308,7 +311,7 @@ html[data-mode="desktop"][data-palette="petrol"] {
 @media (max-width: 760px) {
   .dt { --dt-bar: 30px; }
   .dt-bar__host, .dt-bar__title, .dt-bar__settings { display: none; }
-  .dt-icons { position: absolute; inset: 0 0 96px; display: grid; grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: max-content; align-content: start; gap: 18px 4px; padding: 24px 12px; overflow-y: auto; direction: ltr; }
+  .dt-icons { position: absolute; inset: 0 0 96px; display: grid; grid-auto-flow: row; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: max-content; align-content: start; gap: 18px 4px; padding: 24px 12px; overflow-y: auto; pointer-events: auto; }
   .dt-icon { width: 100%; height: auto; padding: 4px 2px; }
   .dt-icon__glyph { width: 60px; height: 60px; border-radius: 18px; }
   .dt-icon__name { max-width: 100%; padding: 1px 2px; font-size: 10px; }

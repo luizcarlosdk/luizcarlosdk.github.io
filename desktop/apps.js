@@ -3,16 +3,16 @@ import { icon } from './ui.js';
 import { buildSettings } from './settings.js';
 
 export const APPS = {
-  about: { title: 'about.md', icon: 'file', size: [760, 620], section: 'about', dock: true },
-  experience: { title: 'experience.log', icon: 'scroll', size: [880, 660], section: 'experience', dock: true },
-  skills: { title: 'skills.json', icon: 'braces', size: [880, 640], section: 'skills', dock: true },
+  about: { title: 'about.md', icon: 'file', size: 'fill', section: 'about', dock: true },
+  experience: { title: 'experience.log', icon: 'scroll', size: 'fill', section: 'experience', dock: true },
+  skills: { title: 'skills.json', icon: 'braces', size: 'fill', section: 'skills', dock: true },
   projects: { title: 'projects/', icon: 'folder', size: [620, 440], folder: ['memoir', 'divination'], dock: true },
-  contact: { title: 'contact.vcf', icon: 'contact', size: [860, 600], section: 'contact', dock: true },
+  contact: { title: 'contact.vcf', icon: 'contact', size: 'fill', section: 'contact', dock: true },
   games: { title: 'Games/', icon: 'game', size: [520, 360], folder: ['snake', 'invaders'] },
   settings: { title: 'Settings', icon: 'gear', size: [540, 540] },
   resume: { title: 'Résumé.pdf', icon: 'pdf', href: 'assets/luiz_carlos_resume.pdf' },
-  memoir: { title: 'memoir', icon: 'file', size: [780, 680], project: 0, thumb: 'assets/memoir-mainpage.png' },
-  divination: { title: 'divination', icon: 'file', size: [780, 680], project: 1, thumb: 'assets/capstone.png' },
+  memoir: { title: 'memoir', icon: 'file', size: 'fill', project: 0, thumb: 'assets/memoir-mainpage.png' },
+  divination: { title: 'divination', icon: 'file', size: 'fill', project: 1, thumb: 'assets/capstone.png' },
   snake: { title: 'Snake', icon: 'game', size: [480, 600], game: 'snake' },
   invaders: { title: 'Incident Response', icon: 'bug', size: [580, 720], game: 'incident-response' },
 };
