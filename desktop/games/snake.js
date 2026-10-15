@@ -1,6 +1,7 @@
 // Snake: canvas view and controls on top of the pure model.
 import { createGame } from './kit.js';
 import { GRID, createSnake, step, turn, tickMs } from './snake-model.js';
+import { dragonHead } from './snake-sprites.js';
 
 const CELL = 20;
 
@@ -10,6 +11,7 @@ export function mount(host) {
   let raf = 0;
   let last = 0;
   let acc = 0;
+  let facing = 'right';
   const state = () => game.host.dataset.state;
 
   const draw = () => {
@@ -21,10 +23,16 @@ export function mount(host) {
       ctx.fillStyle = c.alt;
       ctx.fillRect(s.food.x * CELL + 5, s.food.y * CELL + 5, CELL - 10, CELL - 10);
     }
-    s.body.forEach((p, i) => {
-      ctx.fillStyle = i === 0 ? c.fg : c.accent;
-      ctx.fillRect(p.x * CELL + 1, p.y * CELL + 1, CELL - 2, CELL - 2);
-    });
+    ctx.fillStyle = c.accent;
+    s.body.slice(1).forEach((p) => ctx.fillRect(p.x * CELL + 1, p.y * CELL + 1, CELL - 2, CELL - 2));
+    const head = s.body[0];
+    const paint = { h: c.alt, '#': c.fg, e: c.bg };
+    if (s.dir === 'left' || s.dir === 'right') facing = s.dir;
+    dragonHead(s.dir, facing).forEach((row, y) => [...row].forEach((ch, x) => {
+      if (!paint[ch]) return;
+      ctx.fillStyle = paint[ch];
+      ctx.fillRect(head.x * CELL + x * 2, head.y * CELL + y * 2, 2, 2);
+    }));
   };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
   const frame = (t) => {
