@@ -6,12 +6,12 @@ Live at **https://luizcarlosdk.github.io/**.
 
 ## Two ways to look around
 
-On a first visit, a short chooser offers two modes. The choice is remembered, and both modes can switch to the other at any time.
+Every visit starts on a short chooser with a direct résumé download and two modes. Both modes can switch to the other at any time, and a refresh returns to the chooser.
 
 - **Simple:** the whole résumé on one page (about, experience, skills, projects, contact). This is the canonical content, readable without JavaScript and by search engines.
-- **Desktop:** a playful workstation. It has a short login, then apps for each section (`about.md`, `experience.log`, `skills.json`, `projects/`, `contact.vcf`), a Settings app with themes, and two small games: Snake and Incident Response. On phones it becomes a home screen with full-screen apps.
+- **Interactive:** a playful workstation. It has a short login, then apps for each section (`about.md`, `experience.log`, `skills.json`, `projects/`, `contact.vcf`), a Settings app with themes, and two small games: Snake and Incident Response. On phones it becomes a home screen with full-screen apps.
 
-Desktop mode reads its content from the Simple page, so the résumé lives in one place: `index.html`.
+Interactive mode reads its content from the Simple page, so the résumé lives in one place: `index.html`.
 
 ### Direct links
 
@@ -29,7 +29,7 @@ Résumé-backed information about experience, education, skills, and production 
 
 - Static site with no build step, framework or package manager. GitHub Pages serves it from `main`.
 - `index.html`: the chooser, Simple mode, theme tokens and an inline SVG icon sprite.
-- `desktop/`: plain ES modules, loaded only when Desktop mode starts:
+- `desktop/`: plain ES modules, loaded only when Interactive mode starts:
   - the window manager;
   - the shell (system bar, desktop icons, dock);
   - the apps;
@@ -40,7 +40,7 @@ Résumé-backed information about experience, education, skills, and production 
   - keyboard support throughout;
   - `prefers-reduced-motion` respected;
   - WCAG AA contrast in every theme;
-  - a Simple-mode fallback with a notice if Desktop mode can't load.
+  - a Simple-mode fallback with a notice if Interactive mode can't load.
 
 ## Local preview
 
@@ -48,7 +48,7 @@ Résumé-backed information about experience, education, skills, and production 
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. To see the chooser again, clear `lc.mode` in localStorage or use a private window.
+Then open http://localhost:8000. Refreshing always returns to the chooser.
 
 ## Repo layout
 

@@ -6,14 +6,14 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const read = () => { try { return localStorage.getItem('lc.mode'); } catch (_) { return null; } };
-      const write = (v) => { try { localStorage.setItem('lc.mode', v); } catch (_) { /* storage blocked */ } };
       const valid = (v) => v === 'simple' || v === 'desktop';
       const asked = new URLSearchParams(location.search).get('mode');
-      let mode;
-      if (valid(asked)) { mode = asked; write(mode); }
-      else if (location.hash.length > 1) mode = 'simple';
-      else mode = valid(read()) ? read() : 'chooser';
+      // The choice isn't remembered: a refresh always shows the chooser, while a direct link
+      // (?mode=… or a #section) opens where it points.
+      const reload = performance.getEntriesByType?.('navigation')[0]?.type === 'reload';
+      let mode = 'chooser';
+      if (!reload && valid(asked)) mode = asked;
+      else if (!reload && location.hash.length > 1) mode = 'simple';
       root.dataset.mode = mode;
     })();
   </script>
@@ -697,9 +697,12 @@
     .chooser__label { font-family: var(--display); font-size: 34px; line-height: 1.05; }
     .chooser__desc { font-size: 16px; }
     .chooser__meta { color: var(--md-on-surface-variant); font-size: 14px; }
-    .chooser__footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; margin: 28px 0 0; font-size: 14px; }
-    .chooser__footer a { color: var(--md-on-surface-variant); text-decoration: underline; text-underline-offset: 3px; }
-    .chooser__footer a:hover { color: var(--md-on-surface); }
+    .chooser__actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 20px; margin: 0 0 26px; }
+    .chooser__resume { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; background: var(--md-primary); color: var(--md-on-primary); font-size: 16px; font-weight: 650; box-shadow: 0 8px 20px rgb(var(--shadow-color) / .18); transition: transform 180ms var(--ease-standard); }
+    .chooser__resume:hover { transform: translateY(-2px); }
+    .chooser__resume .icon { font-size: 20px; --duo-fill: currentColor; }
+    .chooser__email { color: var(--md-on-surface-variant); font-size: 15px; text-decoration: underline; text-underline-offset: 3px; }
+    .chooser__email:hover { color: var(--md-on-surface); }
     .toast { position: fixed; left: 50%; bottom: 24px; z-index: 450; max-width: min(92vw, 460px); padding: 14px 18px; border-radius: 16px; background: var(--md-inverse-surface); color: var(--md-inverse-on-surface); box-shadow: 0 10px 28px rgb(var(--shadow-color) / .25); font-size: 14px; transform: translateX(-50%); }
     .toast:empty { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); box-shadow: none; }
     @media (max-width: 760px) {
@@ -919,7 +922,11 @@
         <img class="chooser__photo" src="assets/luiz-photo.jpg" alt="" width="96" height="96">
         <h2 class="chooser__name" id="chooser-title">Luiz Carlos</h2>
         <p class="chooser__role">AI Engineer: LLM systems, backend and automation</p>
-        <p class="chooser__prompt">How would you like to look around?</p>
+        <p class="chooser__actions">
+          <a class="chooser__resume" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pdf"/></svg>Download résumé</a>
+          <a class="chooser__email" href="mailto:luizcarloszdk@gmail.com">luizcarloszdk@gmail.com</a>
+        </p>
+        <p class="chooser__prompt">Or look around:</p>
       </div>
       <div class="chooser__options">
         <button class="chooser__option" type="button" data-choose="simple">
@@ -929,16 +936,12 @@
           <span class="chooser__meta">About a minute</span>
         </button>
         <button class="chooser__option chooser__option--desktop" type="button" data-choose="desktop">
-          <span class="chooser__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-desktop"/></svg></span>
-          <span class="chooser__label">Desktop</span>
-          <span class="chooser__desc">Log in to my workstation.</span>
-          <span class="chooser__meta">Apps, settings and two games</span>
+          <span class="chooser__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-game"/></svg></span>
+          <span class="chooser__label">Interactive</span>
+          <span class="chooser__desc">Explore my apps and play two games.</span>
+          <span class="chooser__meta">A workstation on computers, a home screen on phones</span>
         </button>
       </div>
-      <p class="chooser__footer">
-        <a href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener">Résumé (PDF)</a>
-        <a href="mailto:luizcarloszdk@gmail.com">luizcarloszdk@gmail.com</a>
-      </p>
     </div>
   </div>
   <div class="toast" role="status" aria-live="polite"></div>
@@ -970,7 +973,7 @@
         <a href="#contact" data-section="contact">Contact</a>
       </nav>
 
-      <a class="mode-switch" href="?mode=desktop" data-mode-link="desktop" aria-label="Open desktop mode"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-desktop"/></svg><span>Open desktop</span></a>
+      <a class="mode-switch" href="?mode=desktop" data-mode-link="desktop" aria-label="Open the interactive version"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-game"/></svg><span>Interactive</span></a>
       <a class="resume-action" href="assets/luiz_carlos_resume.pdf" download="luiz-carlos-resume.pdf" target="_blank" rel="noopener" aria-label="Download Luiz Carlos's résumé as a PDF">
         <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-download"/></svg>
         <span>Résumé</span>
@@ -1240,7 +1243,6 @@
       const chooser = document.getElementById('chooser');
       const toast = document.querySelector('.toast');
       const simpleSurfaces = () => [document.querySelector('.skip-link'), document.getElementById('app-bar'), document.getElementById('main-content'), document.querySelector('.mobile-nav')];
-      const store = (mode) => { try { localStorage.setItem('lc.mode', mode); } catch (_) { /* storage blocked */ } };
       let toastTimer = 0;
       const clearNotice = () => { clearTimeout(toastTimer); toast.textContent = ''; };
       const notify = (text, { persist = false } = {}) => {
@@ -1274,9 +1276,9 @@
           settle();
           css.remove();
           js.remove();
-          setMode('simple', { remember: false });
+          setMode('simple');
           document.getElementById('hero-title')?.focus({ preventScroll: true });
-          notify('Desktop mode couldn’t load, so here’s the simple page instead.');
+          notify('The interactive version couldn’t load, so here’s the simple page instead.');
         };
         const timer = setTimeout(fail, 8000);
         // Returns false when this attempt already fell back, so a late desktop.js can stand down.
@@ -1290,13 +1292,12 @@
         css.addEventListener('error', fail);
         js.addEventListener('error', fail);
         window.addEventListener('error', onRuntimeError);
-        notify('Opening desktop…', { persist: true });
+        notify('Opening the interactive version…', { persist: true });
         document.head.append(css, js);
       };
-      const setMode = (mode, { remember = true } = {}) => {
+      const setMode = (mode) => {
         const from = root.dataset.mode;
         root.dataset.mode = mode;
-        if (remember) store(mode);
         syncSurfaces();
         if (mode === 'desktop') bootDesktop();
         if (mode === 'simple' && from === 'chooser') document.getElementById('hero-title')?.focus({ preventScroll: true });
