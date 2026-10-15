@@ -88,10 +88,11 @@ export function drawField(ctx, s, c, { banner = null } = {}) {
   ctx.fillText(waveTitle(s), W / 2, H - 2);
   if (banner) {
     ctx.fillStyle = c.bg;
-    ctx.fillRect(30, 112, W - 60, 26);
+    // Below the formation's starting rows and above the firewalls.
+    ctx.fillRect(30, 152, W - 60, 26);
     ctx.fillStyle = s.boss ? c.accent : c.fg;
     ctx.font = `bold 16px ${FONT}`;
-    ctx.fillText(banner, W / 2, 131);
+    ctx.fillText(banner, W / 2, 171);
   }
 }
 

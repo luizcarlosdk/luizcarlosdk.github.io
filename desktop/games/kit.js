@@ -1,5 +1,6 @@
 // Shared game chrome: canvas, HUD, overlay, input (keys, swipe, pads), best scores, pause hooks.
 import { storage } from '../ui.js';
+import { setFireLeft } from '../settings.js';
 
 const SCALE = 3;
 const KEYS = {
@@ -9,9 +10,11 @@ const KEYS = {
 };
 const PADS = {
   dpad: ['up', 'left', 'right', 'down'].map((a) => `<button class="dt-pad-btn" type="button" data-action="${a}" aria-label="${a[0].toUpperCase() + a.slice(1)}">${{ up: '↑', left: '←', right: '→', down: '↓' }[a]}</button>`).join(''),
-  shooter: '<button class="dt-pad-btn" type="button" data-action="left" aria-label="Move left">←</button>'
-    + '<button class="dt-pad-btn" type="button" data-action="primary" aria-label="Fire">Fire</button>'
-    + '<button class="dt-pad-btn" type="button" data-action="right" aria-label="Move right">→</button>',
+  // One thumb drags the stick to move, the other holds Fire. Keyboard and screen-reader users
+  // move with the arrow keys, so the stick itself is hidden from assistive tech.
+  shooter: '<div class="dt-stick" aria-hidden="true"><span class="dt-stick__knob"></span></div>'
+    + '<button class="dt-pad-swap" type="button" aria-label="Swap the Fire button side">⇄</button>'
+    + '<button class="dt-pad-btn dt-pad-btn--fire" type="button" data-action="primary" aria-label="Fire">Fire</button>',
 };
 
 export function recordBest(key, score) {
@@ -100,6 +103,36 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
   });
   // A long press on a pad would open the browser's menu mid-game.
   host.querySelector('.dt-game__pad').addEventListener('contextmenu', (e) => e.preventDefault());
+  host.querySelector('.dt-pad-swap')?.addEventListener('click', () => setFireLeft(!document.documentElement.hasAttribute('data-fire-left')));
+  // Move stick: the ship moves while the thumb is held left or right of where it touched down.
+  const stick = host.querySelector('.dt-stick');
+  if (stick) {
+    const DEAD = 8;
+    const REACH = 36;
+    let origin = null;
+    const steer = (dx) => {
+      stick.style.setProperty('--stick-x', `${Math.max(-REACH, Math.min(REACH, dx))}px`);
+      held.delete('left');
+      held.delete('right');
+      if (dx < -DEAD) held.add('left');
+      if (dx > DEAD) held.add('right');
+    };
+    const release = (e) => {
+      if (!origin || e.pointerId !== origin.id) return;
+      origin = null;
+      steer(0);
+    };
+    stick.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      origin = { id: e.pointerId, x: e.clientX };
+      try { stick.setPointerCapture(e.pointerId); } catch (_) { /* synthetic pointer */ }
+      steer(0);
+    });
+    stick.addEventListener('pointermove', (e) => { if (origin && e.pointerId === origin.id) steer(e.clientX - origin.x); });
+    stick.addEventListener('pointerup', release);
+    stick.addEventListener('pointercancel', release);
+    suspenders.add(() => { origin = null; stick.style.setProperty('--stick-x', '0px'); });
+  }
   host.querySelectorAll('[data-action]').forEach((b) => {
     const a = b.dataset.action;
     const release = () => held.delete(a);
