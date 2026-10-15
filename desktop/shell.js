@@ -70,10 +70,13 @@ export function createShell() {
   const iconFor = (id) => icons.querySelector(`.dt-icon[data-icon="${id}"]`);
 
   function bind({ open, wm, logout }) {
+    // Touch screens open apps with a single tap; double-tap would zoom instead.
+    let lastPointer = 'mouse';
+    icons.addEventListener('pointerdown', (e) => { lastPointer = e.pointerType; });
     icons.addEventListener('click', (e) => {
       const b = e.target.closest('.dt-icon');
       if (!b) return;
-      if (PHONE.matches) { open(b.dataset.icon, b); return; }
+      if (PHONE.matches || lastPointer === 'touch') { open(b.dataset.icon, b); return; }
       select(b);
     });
     icons.addEventListener('dblclick', (e) => {
@@ -99,7 +102,12 @@ export function createShell() {
     }));
     el.querySelector('.dt-bar').addEventListener('click', (e) => {
       const opener = e.target.closest('[data-open]');
-      if (opener) { closeMenus(); open(opener.dataset.open, opener); }
+      if (opener) {
+        // Items inside a menu disappear when it closes; focus returns to the menu's button instead.
+        const menuButton = menuButtons.find((b) => menuOf(b).contains(opener));
+        closeMenus();
+        open(opener.dataset.open, menuButton ?? opener);
+      }
       if (e.target.closest('[data-action="logout"]')) logout();
     });
     el.addEventListener('pointerdown', (e) => { if (!e.target.closest('.dt-bar__menu')) closeMenus(); });
@@ -116,7 +124,11 @@ export function createShell() {
     const focused = wm.focusedId();
     title.textContent = focused ? APPS[focused].title : 'Desktop';
     dock.querySelectorAll('.dt-dock__app').forEach((b) => b.classList.toggle('is-running', wm.isOpen(b.dataset.open)));
-    dock.querySelector('.dt-dock__running').replaceChildren(...wm.openIds().filter((id) => !APPS[id].dock).map((id) => {
+    const running = dock.querySelector('.dt-dock__running');
+    const ids = wm.openIds().filter((id) => !APPS[id].dock);
+    if (running.dataset.ids === ids.join()) return;
+    running.dataset.ids = ids.join();
+    running.replaceChildren(...ids.map((id) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'dt-dock__item is-running';

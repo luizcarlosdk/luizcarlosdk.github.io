@@ -1260,7 +1260,7 @@
       // ready() falls back to Simple. Each attempt gets its own token so late events from an
       // abandoned attempt are ignored.
       let bootSeq = 0;
-      let markReady = () => {};
+      let markReady = () => false;
       const bootDesktop = () => {
         if (document.getElementById('desktop-js')) return;
         const attempt = ++bootSeq;
@@ -1279,11 +1279,13 @@
           notify('Desktop mode couldn’t load, so here’s the simple page instead.');
         };
         const timer = setTimeout(fail, 8000);
+        // Returns false when this attempt already fell back, so a late desktop.js can stand down.
         markReady = () => {
-          if (attempt !== bootSeq) return;
+          if (attempt !== bootSeq) return false;
           bootSeq++;
           settle();
           clearNotice();
+          return true;
         };
         css.addEventListener('error', fail);
         js.addEventListener('error', fail);
