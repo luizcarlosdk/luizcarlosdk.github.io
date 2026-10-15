@@ -5,7 +5,7 @@ import { APPS, DESKTOP_ICONS } from './apps.js';
 const iconItem = (id) => {
   const app = APPS[id];
   return `<li><button class="dt-icon${app.folder ? ' dt-icon--folder' : ''}" type="button" data-icon="${id}">`
-    + `<span class="dt-icon__glyph">${icon(app.icon)}</span><span class="dt-icon__name">${app.title}</span></button></li>`;
+    + `<span class="dt-icon__glyph">${icon(app.icon)}</span><span class="dt-icon__name">${app.title.replace('.', '<wbr>.')}</span></button></li>`;
 };
 const dockApp = (id) => `<button class="dt-dock__item dt-dock__app" type="button" data-open="${id}" aria-label="${APPS[id].title}" title="${APPS[id].title}">${icon(APPS[id].icon)}</button>`;
 
