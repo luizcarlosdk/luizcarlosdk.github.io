@@ -1,6 +1,7 @@
 // Incident Response: pure model of an original fixed shooter. Bugs march in formation,
 // the on-call ship fires patches, firewalls erode, and a zero-day crosses for bonus points.
 // Destroyed bugs sometimes, and the zero-day always, drop a power-up for the ship to catch.
+// Every third wave is a boss fight: Kernel Panic sweeps the top and fills the field with bullets.
 export const W = 240;
 export const H = 260;
 export const PLAYER_Y = H - 22;
@@ -10,6 +11,12 @@ export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback'];
 export const POWER_MS = 8000;
 const DROP_CHANCE = 0.08;
 const MAX_LIVES = 5;
+export const BOSS_W = 32;
+export const BOSS_H = 14;
+const BOSS_Y = 12;
+const MAX_BULLETS = 160;
+// Every third wave (index 2, 5, 8…) is a boss wave; each boss is tougher than the last.
+export const isBossWave = (wave) => wave % 3 === 2;
 const COLS = 8;
 const ROWS = 5;
 const CELL_W = 22;
@@ -33,9 +40,16 @@ function shieldBits() {
   return rows;
 }
 
+function createBoss(level) {
+  const hp = 40 + 25 * (level - 1);
+  return { level, x: (W - BOSS_W) / 2, y: BOSS_Y, w: BOSS_W, h: BOSS_H, hp, maxHp: hp, dir: 1, flash: 0, spin: 0, timers: { fan: 300, ring: 600, spiral: 0 } };
+}
+
 function newWave(s) {
   s.bugs = [];
-  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) s.bugs.push({ r, c, alive: true });
+  s.boss = null;
+  if (isBossWave(s.wave)) { s.boss = createBoss(Math.floor(s.wave / 3) + 1); s.event = 'boss'; }
+  else for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) s.bugs.push({ r, c, alive: true });
   s.formation = { x: 24, y: 36 + 8 * Math.min(s.wave, 4), dir: 1, timer: 0, frame: 0 };
   s.shots = [];
   s.patches = [];
@@ -43,7 +57,7 @@ function newWave(s) {
 }
 
 export function createInvaders(rand = Math.random) {
-  const s = { rand, score: 0, lives: 3, wave: 0, over: false, player: { x: W / 2, invulnerable: 0 }, patches: [], drops: [], power: null, collected: null, shots: [], zeroDay: null, zeroDayTimer: 15000, shields: [], bugs: [], formation: null };
+  const s = { rand, score: 0, lives: 3, wave: 0, over: false, player: { x: W / 2, invulnerable: 0 }, patches: [], drops: [], power: null, collected: null, boss: null, event: null, breather: 0, shots: [], zeroDay: null, zeroDayTimer: 15000, shields: [], bugs: [], formation: null };
   s.shields = [0, 1, 2].map((i) => ({ x: Math.round((W * (i + 1)) / 4 - SHIELD_W / 2), y: PLAYER_Y - 34, bits: shieldBits() }));
   newWave(s);
   return s;
@@ -85,6 +99,52 @@ function collect(s, kind) {
   s.collected = kind;
 }
 
+// Bullet patterns. Angles are in radians from the +x axis; π/2 points straight down.
+function bullet(s, x, y, angle, speed) {
+  if (s.shots.length < MAX_BULLETS) s.shots.push({ x, y, w: 2, h: 2, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, boss: true });
+}
+
+function updateBoss(s, dt) {
+  const b = s.boss;
+  const sec = dt / 1000;
+  const pace = 0.85 ** (b.level - 1);
+  b.flash = Math.max(0, b.flash - dt);
+  b.x += b.dir * (30 + 10 * b.level) * sec;
+  if (b.x < 8) { b.x = 8; b.dir = 1; } else if (b.x > W - 8 - b.w) { b.x = W - 8 - b.w; b.dir = -1; }
+  const cx = b.x + b.w / 2;
+  const cy = b.y + b.h;
+  const t = b.timers;
+  // Aimed fan: five bullets spread around the ship's position.
+  if ((t.fan -= dt) <= 0) {
+    t.fan += 900 * pace;
+    const aim = Math.atan2(PLAYER_Y - cy, s.player.x - cx);
+    for (let i = -2; i <= 2; i++) bullet(s, cx, cy, aim + i * 0.22, 85);
+  }
+  // Ring: sixteen bullets in every direction, rotated a little each time.
+  if ((t.ring -= dt) <= 0) {
+    t.ring += 1600 * pace;
+    b.spin += 0.2;
+    for (let i = 0; i < 16; i++) bullet(s, cx, cy - b.h / 2, b.spin + (i * Math.PI) / 8, 60);
+  }
+  // Below half health, a two-armed spiral joins in.
+  if (b.hp <= b.maxHp / 2 && (t.spiral -= dt) <= 0) {
+    t.spiral += 110 * pace;
+    b.spin += 0.27;
+    bullet(s, cx, cy, b.spin, 70);
+    bullet(s, cx, cy, b.spin + Math.PI, 70);
+  }
+}
+
+function defeatBoss(s) {
+  s.score += 1000 * s.boss.level;
+  drop(s, s.boss.x + s.boss.w / 2, s.boss.y + s.boss.h);
+  s.shots = [];
+  s.boss = null;
+  s.event = 'boss-down';
+  // A breather before the next wave, so the reward can be caught.
+  s.breather = 6000;
+}
+
 export function update(s, dt, input) {
   if (s.over) return s;
   const sec = dt / 1000;
@@ -107,6 +167,12 @@ export function update(s, dt, input) {
       target.alive = false;
       s.score += ROW_POINTS[target.r];
       if (s.rand() < DROP_CHANCE) { const box = bugBox(s, target); drop(s, box.x + box.w / 2, box.y + box.h); }
+      return true;
+    }
+    if (s.boss && overlaps(patch, s.boss)) {
+      s.boss.hp -= 1;
+      s.boss.flash = 80;
+      s.score += 10;
       return true;
     }
     if (s.zeroDay && overlaps(patch, s.zeroDay)) {
@@ -144,16 +210,23 @@ export function update(s, dt, input) {
     }
   }
 
-  for (const shot of s.shots) shot.y += 90 * sec;
+  if (s.boss) {
+    if (s.boss.hp <= 0) defeatBoss(s);
+    else updateBoss(s, dt);
+  }
+
+  for (const shot of s.shots) { shot.x += (shot.vx ?? 0) * sec; shot.y += (shot.vy ?? 90) * sec; }
   const ship = { x: p.x - 6, y: PLAYER_Y, w: 13, h: 7 };
+  // Boss bullets only count on the ship's centre, as in bullet-hell games, so gaps can be threaded.
+  const core = { x: p.x - 2, y: PLAYER_Y + 2, w: 5, h: 4 };
   s.drops = s.drops.filter((d) => {
     d.y += 40 * sec;
     if (overlaps(d, ship)) { collect(s, d.kind); return false; }
     return d.y < H;
   });
   s.shots = s.shots.filter((shot) => {
-    if (shot.y > H || hitsShield(s, shot)) return false;
-    if (overlaps(shot, ship)) {
+    if (shot.y > H || shot.y < -4 || shot.x < -4 || shot.x > W + 4 || hitsShield(s, shot)) return false;
+    if (overlaps(shot, shot.boss ? core : ship)) {
       if (!p.invulnerable) {
         s.lives -= 1;
         p.invulnerable = 1000;
@@ -188,6 +261,7 @@ export function update(s, dt, input) {
     }
   }
 
-  if (!s.over && !alive(s).length) { s.wave += 1; newWave(s); }
+  if (s.breather) s.breather = s.drops.length ? Math.max(0, s.breather - dt) : 0;
+  if (!s.over && !alive(s).length && !s.boss && !s.breather) { s.wave += 1; newWave(s); }
   return s;
 }
