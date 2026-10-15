@@ -22,13 +22,15 @@ export function recordBest(key, score) {
 
 export function createGame(host, { label, bestKey, width, height, pad, help }) {
   host.classList.add('dt-game');
-  host.style.setProperty('--game-w', `${width * (width < 300 ? 2 : 1)}px`);
+  const native = width * (width < 300 ? 2 : 1);
+  host.style.setProperty('--game-w', `${native}px`);
   host.dataset.state = 'ready';
   host.innerHTML = `
-    <div class="dt-game__hud" aria-live="polite"><span>Score <b data-score>0</b></span><span>Best <b data-best>0</b></span></div>
+    <div class="dt-game__hud"><span>Score <b data-score>0</b></span><span>Best <b data-best>0</b></span></div>
     <div class="dt-game__stage">
-      <canvas class="dt-game__canvas" tabindex="0" aria-label="${label}" width="${width * SCALE}" height="${height * SCALE}" style="aspect-ratio: ${width} / ${height}"></canvas>
+      <canvas class="dt-game__canvas" tabindex="0" role="application" aria-label="${label}" width="${width * SCALE}" height="${height * SCALE}" style="aspect-ratio: ${width} / ${height}"></canvas>
       <div class="dt-game__overlay"><p class="dt-game__title"></p><p class="dt-game__msg"></p><button class="dt-btn dt-game__action" type="button"></button></div>
+      <p class="dt-game__status" role="status"></p>
     </div>
     <div class="dt-game__pad dt-game__pad--${pad}">${PADS[pad]}</div>
     <p class="dt-game__help">${help}</p>`;
@@ -50,8 +52,13 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
     const v = (n) => css.getPropertyValue(n).trim();
     return { bg: v('--md-inverse-surface'), fg: v('--md-inverse-on-surface'), accent: v('--md-inverse-primary'), alt: v('--md-tertiary-container'), dim: v('--md-outline') };
   };
-  const showBest = () => { host.querySelector('[data-best]').textContent = Number(storage.get('localStorage', bestKey)) || 0; };
-  showBest();
+  // Writes only on change, so the HUD doesn't churn every frame.
+  const write = (el, n) => { if (el.textContent !== String(n)) el.textContent = n; };
+  const scoreEl = host.querySelector('[data-score]');
+  const bestEl = host.querySelector('[data-best]');
+  // Kept in memory too, so the session's best still shows when storage is blocked.
+  let best = Number(storage.get('localStorage', bestKey)) || 0;
+  write(bestEl, best);
 
   function setState(state, { title = '', message = '', action: text = '' } = {}) {
     host.dataset.state = state;
@@ -60,17 +67,27 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
     host.querySelector('.dt-game__msg').textContent = message;
     action.textContent = text;
     action.hidden = !text;
+    host.querySelector('.dt-game__status').textContent = [title, message].filter(Boolean).join('. ');
   }
 
-  canvas.addEventListener('keydown', (e) => {
+  // Keys are read on the whole window, so play continues after the window itself takes focus
+  // (restore from the dock, a title-bar click). Buttons keep their own keys.
+  const win = host.closest('.dt-window');
+  const keyTarget = win ?? host;
+  const onKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      // Escape pauses a running game instead of closing it; once paused it closes as usual.
+      if (host.dataset.state === 'running') { e.preventDefault(); e.stopPropagation(); emit('pause'); }
+      return;
+    }
     const a = KEYS[e.key];
-    if (!a) return;
+    if (!a || e.target.closest('button, a, input, select, textarea')) return;
     e.preventDefault();
-    if (!e.repeat) emit(a);
     held.add(a);
-  });
-  canvas.addEventListener('keyup', (e) => { const a = KEYS[e.key]; if (a) held.delete(a); });
-  canvas.addEventListener('blur', () => held.clear());
+    if (!e.repeat) emit(a);
+  };
+  keyTarget.addEventListener('keydown', onKeyDown);
+  keyTarget.addEventListener('keyup', (e) => { const a = KEYS[e.key]; if (a) held.delete(a); });
   let touch = null;
   canvas.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') touch = { x: e.clientX, y: e.clientY }; focus(); });
   canvas.addEventListener('pointerup', (e) => {
@@ -92,18 +109,40 @@ export function createGame(host, { label, bestKey, width, height, pad, help }) {
   action.addEventListener('click', () => { emit('primary'); focus(); });
 
   const suspend = () => { held.clear(); suspenders.forEach((fn) => fn()); };
-  const win = host.closest('.dt-window');
   win?.addEventListener('dt:focus', (e) => { if (!e.detail.focused) suspend(); });
   win?.addEventListener('dt:minimize', suspend);
   win?.addEventListener('dt:close', () => destroyers.forEach((fn) => fn()), { once: true });
+  // Focus leaving the window (a menu, the desk) pauses too. Checked after focus settles,
+  // because hiding the overlay's button can blur it before the canvas takes focus.
+  keyTarget.addEventListener('focusout', () => setTimeout(() => { if (!keyTarget.contains(document.activeElement)) suspend(); }));
   const onVisibility = () => { if (document.hidden) suspend(); };
   document.addEventListener('visibilitychange', onVisibility);
-  destroyers.add(() => document.removeEventListener('visibilitychange', onVisibility));
+  window.addEventListener('blur', suspend);
+  destroyers.add(() => { document.removeEventListener('visibilitychange', onVisibility); window.removeEventListener('blur', suspend); });
+
+  // Fit the stage to the window's height as well as its width, so the whole field stays in view.
+  const body = host.closest('.dt-window__body');
+  const stage = host.querySelector('.dt-game__stage');
+  const fit = () => {
+    if (!body.clientHeight) return;
+    const pad = getComputedStyle(body);
+    const gap = parseFloat(getComputedStyle(host).rowGap) || 0;
+    const others = [...host.children].filter((c) => c !== stage && c.getClientRects().length);
+    const chrome = others.reduce((sum, c) => sum + c.offsetHeight + gap, 0);
+    const avail = body.clientHeight - parseFloat(pad.paddingTop) - parseFloat(pad.paddingBottom) - chrome;
+    host.style.setProperty('--game-w', `${Math.max(200, Math.min(native, Math.floor((avail * width) / height)))}px`);
+  };
+  if (body) {
+    // Twice: the help line can wrap once the stage narrows.
+    const ro = new ResizeObserver(() => { fit(); fit(); });
+    ro.observe(body);
+    destroyers.add(() => ro.disconnect());
+  }
 
   return {
     host, canvas, ctx, width, height, held, colors, setState, focus,
-    setScore: (n) => { host.querySelector('[data-score]').textContent = n; },
-    finish: (score) => { recordBest(bestKey, score); showBest(); },
+    setScore: (n) => write(scoreEl, n),
+    finish: (score) => { best = Math.max(best, recordBest(bestKey, score)); write(bestEl, best); },
     onAction: (fn) => listeners.add(fn),
     onSuspend: (fn) => suspenders.add(fn),
     onDestroy: (fn) => destroyers.add(fn),

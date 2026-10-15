@@ -38,7 +38,7 @@ export function mount(host) {
     ctx.fillStyle = c.accent;
     for (const shot of s.shots) ctx.fillRect(Math.round(shot.x), Math.round(shot.y), 1, 4);
     if (s.zeroDay) sprite(ZERO_DAY, s.zeroDay.x, s.zeroDay.y, c.accent);
-    for (let i = 0; i < s.lives; i++) sprite(SHIP, 6 + i * 16, H - 9, c.dim);
+    for (let i = 0; i < s.lives; i++) sprite(SHIP, 6 + i * 16, H - 9, c.alt);
     ctx.fillStyle = c.dim;
     ctx.fillRect(0, H - 11, W, 1);
   };
@@ -59,6 +59,8 @@ export function mount(host) {
   const start = () => {
     if (s.over || state() === 'ready') { s = createInvaders(); game.setScore(0); }
     game.setState('running');
+    // The Space or Fire press that started the game shouldn't also fire a patch.
+    game.held.delete('primary');
     last = performance.now();
     stop();
     raf = requestAnimationFrame(frame);

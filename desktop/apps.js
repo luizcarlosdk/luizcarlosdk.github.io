@@ -76,10 +76,10 @@ function buildGame(app) {
   const el = document.createElement('div');
   el.className = 'dt-game';
   el.innerHTML = '<p class="dt-placeholder">Loading…</p>';
-  import(`./games/${app.game}.js`).then(
-    (mod) => mod.mount(el),
-    () => { el.innerHTML = '<p class="dt-placeholder">This game couldn’t load. Try again later.</p>'; },
-  );
+  import(`./games/${app.game}.js`)
+    // A window closed while the game was loading stays closed.
+    .then((mod) => { if (el.isConnected) mod.mount(el); })
+    .catch(() => { el.innerHTML = '<p class="dt-placeholder">This game couldn’t load. Try again later.</p>'; });
   return el;
 }
 
