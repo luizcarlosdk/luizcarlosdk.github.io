@@ -12,6 +12,8 @@ export const POWER_KINDS = ['hotfix', 'spread', 'rebuild', 'rollback', 'sandbox'
 const TIMED = new Set(['hotfix', 'spread', 'ratelimit', 'pierce']);
 export const POWER_MS = 8000;
 const DROP_CHANCE = 0.08;
+// Each hit on the boss may knock a power-up loose, so the fight has its own supply.
+const BOSS_DROP_CHANCE = 0.15;
 const MAX_LIVES = 5;
 // Match the 32×14 BOSS art in invaders-sprites.js (m5-boss checks they agree).
 export const BOSS_W = 32;
@@ -187,6 +189,7 @@ export function update(s, dt, input) {
       s.boss.hp -= 1;
       s.boss.flash = 80;
       s.score += 10;
+      if (s.boss.hp > 0 && s.rand() < BOSS_DROP_CHANCE) drop(s, patch.x, s.boss.y + s.boss.h);
       return true;
     }
     if (s.zeroDay && overlaps(patch, s.zeroDay)) {
