@@ -77,6 +77,10 @@
       --skill-3-on: #001b3e;
       --skill-4-container: #dfeaa0;
       --skill-4-on: #181e00;
+      --tool-api: #bdece0; --tool-api-on: #00201a;
+      --tool-llm: #ffd8ec; --tool-llm-on: #3a002a;
+      --tool-rules: #d6e3ff; --tool-rules-on: #001b3e;
+      --tool-human: #dfeaa0; --tool-human-on: #181e00;
       --duo-fill: var(--md-tertiary);
       --duo-opacity: .38;
       --md-success: #315f42;
@@ -411,15 +415,15 @@
     .method__steps li:not(:last-child)::after { content: ""; position: absolute; top: 34px; bottom: -12px; left: 14.5px; width: 1px; background: var(--md-outline-variant); }
     .method__step { padding-top: 4px; font-size: 15px; font-weight: 600; line-height: 1.35; }
     .tool { justify-self: start; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
-    .tool--api { background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
-    .tool--llm { background: var(--md-primary-container); color: var(--md-on-primary-container); }
-    .tool--rules { background: var(--skill-3-container); color: var(--skill-3-on); }
-    .tool--human { background: var(--skill-4-container); color: var(--skill-4-on); }
+    .tool--api { background: var(--tool-api); color: var(--tool-api-on); }
+    .tool--llm { background: var(--tool-llm); color: var(--tool-llm-on); }
+    .tool--rules { background: var(--tool-rules); color: var(--tool-rules-on); }
+    .tool--human { background: var(--tool-human); color: var(--tool-human-on); }
     .tool-ref { padding-inline: .08em; border-radius: .12em; background: linear-gradient(transparent 58%, var(--ref, transparent) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-    .tool-ref--api { --ref: var(--md-tertiary-container); }
-    .tool-ref--llm { --ref: var(--md-primary-container); }
-    .tool-ref--rules { --ref: var(--skill-3-container); }
-    .tool-ref--human { --ref: var(--skill-4-container); }
+    .tool-ref--api { --ref: var(--tool-api); }
+    .tool-ref--llm { --ref: var(--tool-llm); }
+    .tool-ref--rules { --ref: var(--tool-rules); }
+    .tool-ref--human { --ref: var(--tool-human); }
     .facts { display: grid; gap: 14px; margin: 0; padding-top: 20px; border-top: 1px solid var(--md-outline-variant); }
     .facts div { display: grid; gap: 2px; }
     .facts dt { color: var(--md-on-surface-variant); font-size: 13px; font-weight: 650; }

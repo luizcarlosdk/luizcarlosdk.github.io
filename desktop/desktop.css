@@ -112,7 +112,7 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-doc .experience-card h3 { font-size: 24px; }
 .dt-doc .skill-card { grid-template-columns: 1fr; gap: 6px; padding: 18px 0; }
 .dt-doc .skill-card h3 { font-size: 24px; }
-.dt-doc__hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center; margin-bottom: 36px; }
+.dt-doc__hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: start; margin-bottom: 36px; }
 .dt-doc__hero .hero__photo { width: 108px; border-radius: 26px; }
 .dt-doc__hero .hero__title { font-size: clamp(40px, 9cqi, 64px); }
 .dt-doc__hero .hero__role { font-size: 21px; }
