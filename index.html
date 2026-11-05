@@ -191,9 +191,11 @@
     }
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
-    button, a { -webkit-tap-highlight-color: transparent; }
+    button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     button { font: inherit; }
     p, h1, h2, h3, h4 { margin-top: 0; }
+    h1, h2, h3 { text-wrap: balance; }
+    p, li { text-wrap: pretty; }
     ::selection { background: var(--md-primary-container); color: var(--md-on-primary-container); }
 
     :focus-visible {
@@ -462,9 +464,7 @@
       border-radius: var(--shape-large);
       background: var(--md-surface-container-lowest);
       box-shadow: 0 1px 2px rgb(var(--shadow-color) / .06);
-      transition: border-color 180ms var(--ease-standard), box-shadow 180ms var(--ease-standard), transform 180ms var(--ease-standard);
     }
-    .experience-card:hover { border-color: var(--md-outline); box-shadow: 0 8px 22px rgb(var(--shadow-color) / .09); transform: translateY(-2px); }
     .experience-card::before {
       content: "";
       position: absolute;
@@ -489,9 +489,9 @@
       padding: 0 12px;
       border-radius: 999px;
       font-family: var(--body);
-      font-size: 10px;
+      font-size: 11.5px;
       font-weight: 650;
-      letter-spacing: .06em;
+      letter-spacing: .05em;
       text-transform: uppercase;
     }
     .date-chip { background: var(--md-primary-container); color: var(--md-on-primary-container); }
@@ -534,9 +534,7 @@
       background: var(--md-surface-container-lowest);
       border: 1px solid color-mix(in srgb, var(--md-outline-variant) 72%, transparent);
       box-shadow: 0 2px 5px rgb(var(--shadow-color) / .06);
-      transition: transform 200ms var(--ease-standard), box-shadow 200ms var(--ease-standard);
     }
-    .skill-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgb(var(--shadow-color) / .1); }
     .skill-card__head { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
     .skill-card__icon { width: 48px; height: 48px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 16px; background: var(--md-primary-container); color: var(--md-on-primary-container); }
     .skill-card:nth-child(2) .skill-card__icon { background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
@@ -560,7 +558,7 @@
     .project-card__content { display: flex; flex-direction: column; align-items: flex-start; padding: clamp(32px, 5vw, 56px); }
     .project-card__number { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--md-primary); font-family: var(--body); font-size: 11px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
     .project-card__number::before { content: ""; width: 24px; height: 2px; background: currentColor; }
-    .project-card h3 { max-width: 16ch; margin-bottom: 18px; font-family: var(--display); font-size: clamp(36px, 4.3vw, 56px); font-weight: 400; letter-spacing: -.035em; line-height: 1.05; }
+    .project-card h3 { max-width: 18ch; margin-bottom: 18px; font-family: var(--display); font-size: clamp(34px, 3.7vw, 48px); font-weight: 400; letter-spacing: -.035em; line-height: 1.05; }
     .project-card h3 em { color: var(--md-primary); font-weight: 400; font-style: normal; }
     .project-card__description { max-width: 62ch; margin-bottom: 22px; color: var(--md-on-surface-variant); font-size: 16px; }
     .project-card .chip-row { margin-bottom: 28px; }
@@ -637,7 +635,7 @@
     .contact-link:hover { background: rgb(255 255 255 / .1); border-color: rgb(255 255 255 / .35); transform: translateX(4px); }
     .contact-link .icon { color: var(--md-inverse-primary); }
     .contact-link div { min-width: 0; display: grid; line-height: 1.3; }
-    .contact-link small { color: color-mix(in srgb, var(--md-inverse-on-surface) 58%, transparent); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .contact-link small { color: color-mix(in srgb, var(--md-inverse-on-surface) 68%, transparent); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; }
     .contact-link strong { overflow-wrap: anywhere; font-size: 14px; font-weight: 580; }
     .contact-link > .arrow { margin-left: auto; color: color-mix(in srgb, var(--md-inverse-on-surface) 50%, transparent); font-size: 19px; }
     .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px 4px 0; color: var(--md-on-surface-variant); font-size: 13px; }
@@ -653,6 +651,7 @@
       display: grid;
       place-items: center;
       overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 32px 16px;
       background:
         radial-gradient(circle at 26% 18%, rgb(255 255 255 / .7), transparent 34rem),
@@ -774,6 +773,7 @@
 
     @media (max-width: 760px) {
       :root { --app-bar-height: 64px; }
+      html { scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
       body { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
       .ambient-effects__grid { opacity: .2; background-size: 48px 48px; }
       .ambient-effects__orb { width: 120vw; opacity: .28; animation: none; will-change: auto; }
@@ -811,7 +811,7 @@
         gap: 2px;
         border-radius: 16px;
         color: var(--md-on-surface-variant);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 620;
       }
       .mobile-nav .icon-state { min-width: 50px; height: 30px; display: grid; place-items: center; border-radius: 999px; transition: background 180ms var(--ease-standard); }
@@ -920,10 +920,10 @@
     <div class="chooser__inner">
       <div class="chooser__intro">
         <img class="chooser__photo" src="assets/luiz-photo.jpg" alt="" width="96" height="96">
-        <h2 class="chooser__name" id="chooser-title">Luiz Carlos</h2>
+        <h2 class="chooser__name" id="chooser-title" translate="no">Luiz Carlos</h2>
         <p class="chooser__role">AI Engineer · Senior Specialist<br>LLM systems, AI agents &amp; RAG</p>
         <p class="chooser__actions">
-          <a class="chooser__resume" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pdf"/></svg>Download résumé</a>
+          <a class="chooser__resume" href="assets/luiz_carlos_resume.pdf" download="luiz-carlos-resume.pdf"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pdf"/></svg>Download résumé</a>
           <a class="chooser__email" href="mailto:luizcarloszdk@gmail.com">luizcarloszdk@gmail.com</a>
         </p>
         <p class="chooser__prompt">Or look around:</p>
@@ -960,7 +960,7 @@
       <a class="brand" href="#home" aria-label="Luiz Carlos, home">
         <span class="brand__mark" aria-hidden="true">L</span>
         <span class="brand__text">
-          <strong>Luiz Carlos</strong>
+          <strong translate="no">Luiz Carlos</strong>
           <small>AI Engineer</small>
         </span>
       </a>
@@ -992,15 +992,15 @@
   <main id="main-content">
     <section class="hero" id="home" aria-labelledby="hero-title">
       <div class="container hero__inner">
-        <div class="hero__photo reveal" data-reveal="scale"><img src="assets/luiz-photo.jpg" alt="Luiz Carlos smiling" width="196" height="196"></div>
+        <div class="hero__photo reveal" data-reveal="scale"><img src="assets/luiz-photo.jpg" alt="Luiz Carlos smiling" width="196" height="196" fetchpriority="high"></div>
         <div class="hero__copy reveal" data-reveal="up">
           <p class="hero__eyebrow">AI Engineer · Senior Specialist · São Paulo</p>
-          <h1 class="hero__title" id="hero-title" tabindex="-1">Luiz Carlos</h1>
+          <h1 class="hero__title" id="hero-title" tabindex="-1" translate="no">Luiz Carlos</h1>
           <p class="hero__role">LLM systems, AI agents &amp; RAG. Applied AI and automation.</p>
           <p class="hero__summary">I build production LLM systems, backend services, and the automation around them. I lead AI and automation at BWG; before that, I built agent pipelines at Auria AI that processed 3,000+ security incidents a day.</p>
           <div class="button-row">
             <a class="button button--filled" href="mailto:luizcarloszdk@gmail.com"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>Get in touch</span></a>
-            <a class="button button--tonal" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-file"/></svg><span>Résumé</span></a>
+            <a class="button button--tonal" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-file"/></svg><span>View résumé</span></a>
           </div>
         </div>
         <div class="hero__stats reveal" data-reveal="up" aria-label="Career highlights">
@@ -1074,7 +1074,7 @@
                 <li>Built an LLM document-extraction pipeline in which every extracted field links back to its source and missing data is flagged instead of guessed.</li>
                 <li>Deploy and operate the platform on Kubernetes, with CI/CD pipelines and automated backups.</li>
               </ul>
-              <div class="chip-row"><span class="chip">TypeScript</span><span class="chip">React</span><span class="chip">Node.js</span><span class="chip">PostgreSQL</span><span class="chip">Gemini</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span></div>
+              <div class="chip-row" translate="no"><span class="chip">TypeScript</span><span class="chip">React</span><span class="chip">Node.js</span><span class="chip">PostgreSQL</span><span class="chip">Gemini</span><span class="chip">Kubernetes</span><span class="chip">CI/CD</span></div>
             </div>
           </article>
 
@@ -1092,7 +1092,7 @@
                 <li>Built Auria’s Metabase BI from scratch, including operational dashboards, KPI analyses, and threshold-based alerts used daily by incident-response leadership.</li>
                 <li>Designed and shipped an on-call alerting bot that calls the responsible engineers through Twilio with AI-generated incident summaries, reducing overnight outage detection from 8+ hours to near-immediate.</li>
               </ul>
-              <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">PostgreSQL</span><span class="chip">SQLAlchemy</span><span class="chip">Metabase</span><span class="chip">Twilio</span></div>
+              <div class="chip-row" translate="no"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">PostgreSQL</span><span class="chip">SQLAlchemy</span><span class="chip">Metabase</span><span class="chip">Twilio</span></div>
             </div>
           </article>
 
@@ -1108,7 +1108,7 @@
                 <li>Maintained the innovation platform of AUSPIN (USP’s Innovation Agency), which catalogs 1,000+ patents, 3,000+ companies, 3,000+ professors, and 100+ innovation initiatives.</li>
                 <li>Migrated the platform’s backend from a legacy Ruby on Rails system to Kotlin, redesigning domain models, REST APIs, automated tests, and Docker deployment infrastructure.</li>
               </ul>
-              <div class="chip-row"><span class="chip">Kotlin</span><span class="chip">Ruby on Rails</span><span class="chip">REST APIs</span><span class="chip">Docker</span><span class="chip">Automated testing</span></div>
+              <div class="chip-row" translate="no"><span class="chip">Kotlin</span><span class="chip">Ruby on Rails</span><span class="chip">REST APIs</span><span class="chip">Docker</span><span class="chip">Automated testing</span></div>
             </div>
           </article>
 
@@ -1123,7 +1123,7 @@
               <ul>
                 <li>Served as President from January 2022 to August 2023, leading 20+ members; organized two university hackathons, secured sponsorships, mentored participants, and managed event budgets.</li>
               </ul>
-              <div class="chip-row"><span class="chip">Leadership</span><span class="chip">Mentorship</span><span class="chip">Event operations</span><span class="chip">Web development</span></div>
+              <div class="chip-row" translate="no"><span class="chip">Leadership</span><span class="chip">Mentorship</span><span class="chip">Event operations</span><span class="chip">Web development</span></div>
             </div>
           </article>
         </div>
@@ -1143,19 +1143,19 @@
         <div class="skill-grid">
           <article class="skill-card reveal" data-reveal="scale">
             <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-server"/></svg></div><div><h3>Backend</h3><small>Core engineering</small></div></div>
-            <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">asyncio</span><span class="chip">Pydantic</span><span class="chip">SQLAlchemy</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">REST APIs</span><span class="chip">Microservices</span><span class="chip">Pytest</span></div>
+            <div class="chip-row" translate="no"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">asyncio</span><span class="chip">Pydantic</span><span class="chip">SQLAlchemy</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">REST APIs</span><span class="chip">Microservices</span><span class="chip">Pytest</span></div>
           </article>
           <article class="skill-card reveal" data-reveal="scale">
             <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkle"/></svg></div><div><h3>AI &amp; LLMs</h3><small>Applied intelligence</small></div></div>
-            <div class="chip-row"><span class="chip">AI Agents</span><span class="chip">RAG</span><span class="chip">Embeddings</span><span class="chip">Prompt Engineering</span><span class="chip">Structured Outputs</span><span class="chip">LangChain</span><span class="chip">Pydantic-AI</span><span class="chip">Gemini</span><span class="chip">OpenAI</span><span class="chip">Claude</span></div>
+            <div class="chip-row" translate="no"><span class="chip">AI Agents</span><span class="chip">RAG</span><span class="chip">Embeddings</span><span class="chip">Prompt Engineering</span><span class="chip">Structured Outputs</span><span class="chip">LangChain</span><span class="chip">Pydantic-AI</span><span class="chip">Gemini</span><span class="chip">OpenAI</span><span class="chip">Claude</span></div>
           </article>
           <article class="skill-card reveal" data-reveal="scale">
             <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-database"/></svg></div><div><h3>Data &amp; Tools</h3><small>Production infrastructure</small></div></div>
-            <div class="chip-row"><span class="chip">PostgreSQL</span><span class="chip">SQLite</span><span class="chip">Redis</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Git</span><span class="chip">Metabase</span><span class="chip">Twilio API</span><span class="chip">Vector Search</span><span class="chip">CI/CD</span></div>
+            <div class="chip-row" translate="no"><span class="chip">PostgreSQL</span><span class="chip">SQLite</span><span class="chip">Redis</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Git</span><span class="chip">Metabase</span><span class="chip">Twilio API</span><span class="chip">Vector Search</span><span class="chip">CI/CD</span></div>
           </article>
           <article class="skill-card reveal" data-reveal="scale">
             <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-browser"/></svg></div><div><h3>Frontend</h3><small>Product interfaces</small></div></div>
-            <div class="chip-row"><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Vue.js</span><span class="chip">React</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
+            <div class="chip-row" translate="no"><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Vue.js</span><span class="chip">React</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
           </article>
         </div>
       </div>
@@ -1176,14 +1176,14 @@
             <div class="project-card__grid">
               <div class="project-card__content">
                 <div class="project-card__number"><span>01</span><span>Open source</span><span>Since 2026</span></div>
-                <h3>Memoir — AI meeting knowledge <em>workspace.</em></h3>
+                <h3><span translate="no">Memoir</span> — AI meeting knowledge <em>workspace.</em></h3>
                 <p class="project-card__description">An open-source full-stack app that turns meeting transcripts into searchable summaries, decisions, action items, participant profiles, and structured transcript segments. It detects Zoom and Google Meet formats automatically, with a Gemini fallback for messy or unsupported ones, and Pytest coverage protects parsing and core workflows.</p>
-                <div class="chip-row"><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">SQLAlchemy</span><span class="chip">SQLite</span><span class="chip">Gemini</span><span class="chip">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Pytest</span></div>
+                <div class="chip-row" translate="no"><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">SQLAlchemy</span><span class="chip">SQLite</span><span class="chip">Gemini</span><span class="chip">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Pytest</span></div>
                 <a class="project-link" href="https://github.com/luizcarlosdk/memoir" target="_blank" rel="noopener"><span>View on GitHub</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a>
               </div>
 
               <div class="project-card__visual">
-                <div class="project-image project-image--memoir"><img src="assets/memoir-mainpage.png" alt="Memoir meeting workspace showing meeting summaries, decisions, action items, and transcript previews" loading="lazy" decoding="async"></div>
+                <div class="project-image project-image--memoir"><img src="assets/memoir-mainpage.png" width="1710" height="919" alt="Memoir meeting workspace showing meeting summaries, decisions, action items, and transcript previews" loading="lazy" decoding="async"></div>
               </div>
             </div>
           </article>
@@ -1192,13 +1192,13 @@
             <div class="project-card__grid">
               <div class="project-card__content">
                 <div class="project-card__number"><span>02</span><span>Capstone</span><span>2024</span></div>
-                <h3>Divination — RAG assistant for <em>Dungeon Masters.</em></h3>
+                <h3><span translate="no">Divination</span> — RAG assistant for <em>Dungeon Masters.</em></h3>
                 <p class="project-card__description">A RAG assistant grounded in the official 2024 D&amp;D Free Rules using LangChain, vector search, and GPT-4o. Built with a FastAPI backend and Vue 3 frontend as my B.Sc. capstone project at IME-USP.</p>
-                <div class="chip-row"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Vue 3</span><span class="chip">LangChain</span><span class="chip">GPT-4o</span><span class="chip">Vector Search</span></div>
+                <div class="chip-row" translate="no"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Vue 3</span><span class="chip">LangChain</span><span class="chip">GPT-4o</span><span class="chip">Vector Search</span></div>
                 <a class="project-link" href="https://luizcarlosdk.github.io/capstone-project/" target="_blank" rel="noopener"><span>View project</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg></a>
               </div>
               <div class="project-card__visual">
-                <div class="project-image"><img src="assets/capstone.png" alt="Divination RAG assistant interface" loading="lazy" decoding="async"></div>
+                <div class="project-image"><img src="assets/capstone.png" width="1014" height="806" alt="Divination RAG assistant interface" loading="lazy" decoding="async"></div>
               </div>
             </div>
           </article>
