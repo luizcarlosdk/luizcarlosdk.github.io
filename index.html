@@ -403,29 +403,27 @@
     .about-copy p { margin-bottom: 22px; font-family: var(--display); font-size: clamp(21px, 2.15vw, 27px); line-height: 1.55; }
     .about-copy p:last-child { margin-bottom: 0; }
     .about-copy strong { font-weight: 600; }
-    .details-stack { display: grid; gap: 16px; }
-    .info-card {
-      padding: 24px;
-      border-radius: var(--shape-large);
-      background: var(--md-surface-container-lowest);
-      box-shadow: 0 1px 3px rgb(var(--shadow-color) / .08);
-      border: 1px solid color-mix(in srgb, var(--md-outline-variant) 70%, transparent);
-    }
-    .info-card__icon {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 18px;
-      border-radius: 14px;
-      background: var(--md-primary-container);
-      color: var(--md-on-primary-container);
-    }
-    .info-card h3 { margin-bottom: 8px; font-size: 17px; }
-    .info-card p { margin-bottom: 0; color: var(--md-on-surface-variant); font-size: 14px; }
-    .language-list { display: grid; gap: 12px; margin-top: 16px; }
-    .language-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 14px; }
-    .language-item span:last-child { padding: 4px 10px; border-radius: 999px; background: var(--md-surface-container-high); color: var(--md-on-surface-variant); font-size: 12px; font-weight: 620; }
+    .method { padding: 28px; border: 1px solid color-mix(in srgb, var(--md-outline-variant) 70%, transparent); border-radius: var(--shape-large); background: var(--md-surface-container-lowest); }
+    .method h3 { margin-bottom: 20px; font-family: var(--display); font-size: 24px; font-weight: 500; line-height: 1.2; }
+    .method__steps { display: grid; gap: 14px; margin: 0 0 26px; padding: 0; list-style: none; counter-reset: step; }
+    .method__steps li { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 14px; row-gap: 4px; counter-increment: step; }
+    .method__steps li::before { content: counter(step); grid-row: span 2; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--md-surface-container-high); color: var(--md-on-surface); font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .method__steps li:not(:last-child)::after { content: ""; position: absolute; top: 34px; bottom: -12px; left: 14.5px; width: 1px; background: var(--md-outline-variant); }
+    .method__step { padding-top: 4px; font-size: 15px; font-weight: 600; line-height: 1.35; }
+    .tool { justify-self: start; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+    .tool--api { background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
+    .tool--llm { background: var(--md-primary-container); color: var(--md-on-primary-container); }
+    .tool--rules { background: var(--skill-3-container); color: var(--skill-3-on); }
+    .tool--human { background: var(--skill-4-container); color: var(--skill-4-on); }
+    .tool-ref { padding-inline: .08em; border-radius: .12em; background: linear-gradient(transparent 58%, var(--ref, transparent) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    .tool-ref--api { --ref: var(--md-tertiary-container); }
+    .tool-ref--llm { --ref: var(--md-primary-container); }
+    .tool-ref--rules { --ref: var(--skill-3-container); }
+    .tool-ref--human { --ref: var(--skill-4-container); }
+    .facts { display: grid; gap: 14px; margin: 0; padding-top: 20px; border-top: 1px solid var(--md-outline-variant); }
+    .facts div { display: grid; gap: 2px; }
+    .facts dt { color: var(--md-on-surface-variant); font-size: 13px; font-weight: 650; }
+    .facts dd { margin: 0; font-size: 15px; line-height: 1.45; }
 
     /* Experience */
     .timeline { position: relative; display: grid; gap: 64px; padding-left: 40px; }
@@ -739,7 +737,6 @@
       .section-heading { margin-bottom: 38px; }
       .about-grid { grid-template-columns: 1fr; }
       .about-copy p { font-size: 21px; }
-      .details-stack { grid-template-columns: 1fr 1fr; }
       .experience-card { grid-template-columns: 1fr; gap: 12px; }
       .experience-card__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-top: 0; }
       .skill-card { grid-template-columns: 1fr; gap: 6px; padding: 20px 0; }
@@ -761,7 +758,6 @@
       .brand__text strong { font-size: 16px; }
       .button-row { display: grid; }
       .button { width: 100%; }
-      .details-stack { grid-template-columns: 1fr; }
       .experience-card h3 { font-size: 27px; }
       .skill-card h3 { font-size: 24px; }
       .project-card__visual { min-height: 330px; padding: 18px; }
@@ -925,27 +921,25 @@
 
         <div class="about-grid">
           <div class="about-copy">
-            <p>At <strong>BWG</strong>, I lead AI and automation for a corporate benefits company, from process discovery to deployment and adoption, reporting directly to the CEO. Each step of a workflow gets the right tool: an API integration, deterministic automation, LLM assistance, or human review.</p>
+            <p>At <strong>BWG</strong>, I lead AI and automation for a corporate benefits company, from process discovery to deployment and adoption, reporting directly to the CEO. Each step of a workflow gets the right tool: <span class="tool-ref tool-ref--api">an API integration</span>, <span class="tool-ref tool-ref--rules">deterministic automation</span>, <span class="tool-ref tool-ref--llm">LLM assistance</span>, or <span class="tool-ref tool-ref--human">human review</span>.</p>
             <p>Before that, at <strong>Auria AI</strong>, I built <strong>20+ production AI agents</strong> in an incident-response pipeline handling 3,000+ B2B security incidents a day, along with the PostgreSQL data layer, BI dashboards, and on-call alerting around them.</p>
             <p>Earlier, I migrated a legacy Ruby on Rails platform to Kotlin at IME-USP. I hold a <strong>B.Sc. in Computer Science from the University of São Paulo.</strong></p>
           </div>
 
-          <div class="details-stack">
-            <article class="info-card">
-              <div class="info-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-graduation"/></svg></div>
-              <h3>Education</h3>
-              <p>B.Sc. in Computer Science<br>University of São Paulo (IME-USP)<br>2020–2024</p>
-            </article>
-            <article class="info-card">
-              <div class="info-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-translate"/></svg></div>
-              <h3>Languages</h3>
-              <div class="language-list">
-                <div class="language-item"><span>Portuguese</span><span>Native</span></div>
-                <div class="language-item"><span>English</span><span>Advanced</span></div>
-                <div class="language-item"><span>Mandarin</span><span>Learning</span></div>
-              </div>
-            </article>
-          </div>
+          <aside class="method" aria-labelledby="method-title">
+            <h3 id="method-title">One workflow, four kinds of step</h3>
+            <ol class="method__steps">
+              <li><span class="method__step">A request comes in</span><span class="tool tool--api">API integration</span></li>
+              <li><span class="method__step">Documents get read</span><span class="tool tool--llm">LLM assistance</span></li>
+              <li><span class="method__step">Rules and calculations run</span><span class="tool tool--rules">Deterministic automation</span></li>
+              <li><span class="method__step">Unclear cases get checked</span><span class="tool tool--human">Human review</span></li>
+              <li><span class="method__step">The answer goes back</span><span class="tool tool--api">API integration</span></li>
+            </ol>
+            <dl class="facts">
+              <div><dt>Education</dt><dd>B.Sc. in Computer Science, University of São Paulo (IME-USP), 2020–2024</dd></div>
+              <div><dt>Languages</dt><dd>Portuguese (native), English (advanced), Mandarin (learning)</dd></div>
+            </dl>
+          </aside>
         </div>
       </div>
     </section>
