@@ -428,11 +428,11 @@
     .language-item span:last-child { padding: 4px 10px; border-radius: 999px; background: var(--md-surface-container-high); color: var(--md-on-surface-variant); font-size: 12px; font-weight: 620; }
 
     /* Experience */
-    .timeline { position: relative; display: grid; gap: 20px; padding-left: 28px; }
+    .timeline { position: relative; display: grid; gap: 64px; padding-left: 40px; }
     .timeline::before {
       content: "";
       position: absolute;
-      top: 8px;
+      top: 10px;
       bottom: 8px;
       left: 4px;
       width: 3px;
@@ -447,19 +447,14 @@
     .experience-card {
       position: relative;
       display: grid;
-      grid-template-columns: 190px minmax(0, 1fr);
+      grid-template-columns: 200px minmax(0, 1fr);
       gap: 40px;
-      padding: 34px;
-      border: 1px solid var(--md-outline-variant);
-      border-radius: var(--shape-large);
-      background: var(--md-surface-container-lowest);
-      box-shadow: 0 1px 2px rgb(var(--shadow-color) / .06);
     }
     .experience-card::before {
       content: "";
       position: absolute;
-      top: 42px;
-      left: -30px;
+      top: 7px;
+      left: -42px;
       width: 14px;
       height: 14px;
       border: 3px solid var(--md-surface);
@@ -474,69 +469,26 @@
     .experience-card:nth-child(4) { --dot-delay: 1200ms; }
     .motion-ready .experience-card::before { scale: 0; }
     .motion-ready .timeline.is-visible .experience-card::before { scale: 1; }
-    .experience-card__meta { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-    .date-chip, .type-chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 32px;
-      padding: 0 12px;
-      border-radius: 999px;
-      font-family: var(--body);
-      font-size: 11.5px;
-      font-weight: 650;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-    }
-    .date-chip { background: var(--md-primary-container); color: var(--md-on-primary-container); }
-    .type-chip { border: 1px solid var(--md-outline-variant); color: var(--md-on-surface-variant); }
+    .experience-card__meta { display: grid; align-content: start; gap: 4px; padding-top: 6px; }
+    .date-chip { color: var(--md-on-surface); font-size: 15px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .type-chip { color: var(--md-on-surface-variant); font-size: 14px; }
     .experience-card h3 { margin-bottom: 4px; font-family: var(--display); font-size: 31px; font-weight: 500; letter-spacing: -.02em; line-height: 1.15; }
-    .experience-card__org { margin-bottom: 20px; color: var(--md-primary); font-size: 15px; font-weight: 650; }
+    .experience-card__org { margin-bottom: 18px; color: var(--md-primary); font-size: 16px; font-weight: 600; }
     .experience-card ul { display: grid; gap: 11px; margin: 0 0 22px; padding: 0; list-style: none; }
-    .experience-card li { position: relative; padding-left: 28px; color: var(--md-on-surface-variant); font-size: 15px; }
-    .experience-card li::before {
-      content: "";
-      position: absolute;
-      top: 4px;
-      left: 0;
-      width: 18px;
-      height: 18px;
-      background: var(--md-primary);
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='currentColor' d='M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m45.66 85.66l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32'/%3E%3C/svg%3E") center / contain no-repeat;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath fill='currentColor' d='M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m45.66 85.66l-56 56a8 8 0 0 1-11.32 0l-24-24a8 8 0 0 1 11.32-11.32L112 148.69l50.34-50.35a8 8 0 0 1 11.32 11.32'/%3E%3C/svg%3E") center / contain no-repeat;
-    }
-    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 32px;
-      padding: 0 12px;
-      border: 1px solid var(--md-outline-variant);
-      border-radius: 10px;
-      background: var(--md-surface-container-low);
-      color: var(--md-on-surface-variant);
-      font-size: 12px;
-      font-weight: 610;
-    }
+    .experience-card li { position: relative; max-width: 72ch; padding-left: 24px; color: var(--md-on-surface-variant); font-size: 16px; }
+    .experience-card li::before { content: ""; position: absolute; top: .78em; left: 2px; width: 10px; height: 2px; border-radius: 2px; background: var(--md-primary); }
+    .chip-row { color: var(--md-on-surface-variant); font-size: 15px; line-height: 1.6; }
+    .chip { display: inline; }
+    .chip:not(:last-child)::after { content: ", "; }
+    .experience-card .chip-row::before,
+    .project-card .chip-row::before { content: "Skills: "; color: var(--md-on-surface); font-weight: 600; }
+    .project-card .chip-row::before { content: "Built with "; }
 
     /* Skills */
-    .skill-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-    .skill-card {
-      min-height: 250px;
-      padding: 28px;
-      border-radius: var(--shape-large);
-      background: var(--md-surface-container-lowest);
-      border: 1px solid color-mix(in srgb, var(--md-outline-variant) 72%, transparent);
-      box-shadow: 0 2px 5px rgb(var(--shadow-color) / .06);
-    }
-    .skill-card__head { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-    .skill-card__icon { width: 48px; height: 48px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 16px; background: var(--md-primary-container); color: var(--md-on-primary-container); }
-    .skill-card:nth-child(2) .skill-card__icon { background: var(--md-tertiary-container); color: var(--md-on-tertiary-container); }
-    .skill-card:nth-child(3) .skill-card__icon { background: var(--skill-3-container); color: var(--skill-3-on); }
-    .skill-card:nth-child(4) .skill-card__icon { background: var(--skill-4-container); color: var(--skill-4-on); }
-    .skill-card h3 { margin-bottom: 1px; font-family: var(--display); font-size: 25px; font-weight: 500; }
-    .skill-card__head small { color: var(--md-on-surface-variant); font-size: 12px; }
-    .skill-card .chip-row { gap: 9px; }
-    .skill-card .chip { min-height: 36px; border: 0; background: var(--md-surface-container); color: var(--md-on-surface); font-size: 13px; }
+    .skill-grid { display: grid; border-bottom: 1px solid var(--md-outline-variant); }
+    .skill-card { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; align-items: baseline; padding: 26px 0; border-top: 1px solid var(--md-outline-variant); }
+    .skill-card h3 { margin: 0; font-family: var(--display); font-size: 28px; font-weight: 500; letter-spacing: -.01em; }
+    .skill-card .chip-row { color: var(--md-on-surface); font-size: 17px; }
 
     /* Projects */
     .projects-list { display: grid; gap: 24px; }
@@ -780,17 +732,17 @@
       .mobile-nav a.active { color: var(--md-on-surface); }
       .mobile-nav a.active .icon-state { background: var(--md-primary-container); color: var(--md-on-primary-container); }
       .mobile-nav a.active .icon { --duo-opacity: .55; }
-      .timeline { padding-left: 18px; }
+      .timeline { gap: 48px; padding-left: 26px; }
       .timeline::before { left: 2px; }
-      .experience-card::before { top: 34px; left: -22px; }
+      .experience-card::before { top: 3px; left: -30px; }
       .section { padding: 80px 0; }
       .section-heading { margin-bottom: 38px; }
       .about-grid { grid-template-columns: 1fr; }
       .about-copy p { font-size: 21px; }
       .details-stack { grid-template-columns: 1fr 1fr; }
-      .experience-card { grid-template-columns: 1fr; gap: 20px; padding: 26px; }
-      .experience-card__meta { flex-direction: row; flex-wrap: wrap; }
-      .skill-grid { grid-template-columns: 1fr; }
+      .experience-card { grid-template-columns: 1fr; gap: 12px; }
+      .experience-card__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-top: 0; }
+      .skill-card { grid-template-columns: 1fr; gap: 6px; padding: 20px 0; }
       .project-card { border-radius: 30px; }
       .project-card__content { padding: 32px 26px 36px; }
       .project-card__visual { min-height: 380px; padding: 26px; }
@@ -811,6 +763,7 @@
       .button { width: 100%; }
       .details-stack { grid-template-columns: 1fr; }
       .experience-card h3 { font-size: 27px; }
+      .skill-card h3 { font-size: 24px; }
       .project-card__visual { min-height: 330px; padding: 18px; }
       .contact-card { padding: 34px 24px; }
       .contact-card h2 { font-size: 48px; }
@@ -1010,7 +963,7 @@
         <div class="timeline" data-motion-track>
           <article class="experience-card">
             <div class="experience-card__meta">
-              <span class="date-chip">Aug 2026 — Present</span>
+              <span class="date-chip">Aug 2026 – Present</span>
               <span class="type-chip">Applied AI</span>
             </div>
             <div>
@@ -1029,7 +982,7 @@
 
           <article class="experience-card">
             <div class="experience-card__meta">
-              <span class="date-chip">Aug 2025 — Jul 2026</span>
+              <span class="date-chip">Aug 2025 – Jul 2026</span>
               <span class="type-chip">Engineering</span>
             </div>
             <div>
@@ -1047,7 +1000,7 @@
 
           <article class="experience-card">
             <div class="experience-card__meta">
-              <span class="date-chip">Jan 2021 — Aug 2023</span>
+              <span class="date-chip">Jan 2021 – Aug 2023</span>
               <span class="type-chip">Research</span>
             </div>
             <div>
@@ -1063,7 +1016,7 @@
 
           <article class="experience-card">
             <div class="experience-card__meta">
-              <span class="date-chip">Jan 2021 — Mar 2024</span>
+              <span class="date-chip">Jan 2021 – Mar 2024</span>
               <span class="type-chip">Leadership</span>
             </div>
             <div>
@@ -1091,19 +1044,19 @@
 
         <div class="skill-grid">
           <article class="skill-card">
-            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-server"/></svg></div><div><h3>Backend</h3><small>Core engineering</small></div></div>
+            <h3>Backend</h3>
             <div class="chip-row" translate="no"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">asyncio</span><span class="chip">Pydantic</span><span class="chip">SQLAlchemy</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">REST APIs</span><span class="chip">Microservices</span><span class="chip">Pytest</span></div>
           </article>
           <article class="skill-card">
-            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkle"/></svg></div><div><h3>AI &amp; LLMs</h3><small>Applied intelligence</small></div></div>
+            <h3>AI &amp; LLMs</h3>
             <div class="chip-row" translate="no"><span class="chip">AI Agents</span><span class="chip">RAG</span><span class="chip">Embeddings</span><span class="chip">Prompt Engineering</span><span class="chip">Structured Outputs</span><span class="chip">LangChain</span><span class="chip">Pydantic-AI</span><span class="chip">Gemini</span><span class="chip">OpenAI</span><span class="chip">Claude</span></div>
           </article>
           <article class="skill-card">
-            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-database"/></svg></div><div><h3>Data &amp; Tools</h3><small>Production infrastructure</small></div></div>
+            <h3>Data &amp; Tools</h3>
             <div class="chip-row" translate="no"><span class="chip">PostgreSQL</span><span class="chip">SQLite</span><span class="chip">Redis</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Git</span><span class="chip">Metabase</span><span class="chip">Twilio API</span><span class="chip">Vector Search</span><span class="chip">CI/CD</span></div>
           </article>
           <article class="skill-card">
-            <div class="skill-card__head"><div class="skill-card__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-browser"/></svg></div><div><h3>Frontend</h3><small>Product interfaces</small></div></div>
+            <h3>Frontend</h3>
             <div class="chip-row" translate="no"><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Vue.js</span><span class="chip">React</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
           </article>
         </div>

@@ -107,18 +107,22 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-doc .about-grid { grid-template-columns: 1fr; gap: 28px; }
 .dt-doc .about-copy p { font-size: 19px; }
 .dt-doc .details-stack { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.dt-doc .experience-card { grid-template-columns: 1fr; gap: 14px; padding: 22px 24px; }
-.dt-doc .experience-card__meta { flex-direction: row; flex-wrap: wrap; }
+.dt-doc .experience-card { grid-template-columns: 1fr; gap: 10px; }
+.dt-doc .experience-card__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-top: 0; }
+.dt-doc .experience-card::before { top: 3px; }
 .dt-doc .experience-card h3 { font-size: 24px; }
-.dt-doc .skill-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.dt-doc .skill-card { min-height: 0; }
+.dt-doc .skill-card { grid-template-columns: 1fr; gap: 6px; padding: 18px 0; }
+.dt-doc .skill-card h3 { font-size: 24px; }
 .dt-doc__hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center; margin-bottom: 36px; }
 .dt-doc__hero .hero__photo { width: 108px; border-radius: 26px; }
 .dt-doc__hero .hero__title { font-size: clamp(40px, 9cqi, 64px); }
 .dt-doc__hero .hero__role { font-size: 21px; }
 .dt-doc__hero .hero__summary { font-size: 16px; }
 @container (min-width: 720px) {
-  .dt-doc .experience-card { grid-template-columns: 160px minmax(0, 1fr); }
+  .dt-doc .experience-card { grid-template-columns: 160px minmax(0, 1fr); gap: 28px; }
+  .dt-doc .experience-card__meta { display: grid; padding-top: 6px; }
+  .dt-doc .experience-card::before { top: 7px; }
+  .dt-doc .skill-card { grid-template-columns: 180px minmax(0, 1fr); gap: 24px; }
   .dt-doc .about-grid { grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr); }
 }
 @container (max-width: 520px) {
