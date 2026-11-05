@@ -117,8 +117,6 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-doc__hero .hero__title { font-size: clamp(40px, 9cqi, 64px); }
 .dt-doc__hero .hero__role { font-size: 21px; }
 .dt-doc__hero .hero__summary { font-size: 16px; }
-.dt-doc__hero .hero__stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-.dt-doc__hero .hero__stat strong { font-size: 30px; }
 @container (min-width: 720px) {
   .dt-doc .experience-card { grid-template-columns: 160px minmax(0, 1fr); }
   .dt-doc .about-grid { grid-template-columns: minmax(0, 1.4fr) minmax(220px, .6fr); }
