@@ -106,7 +106,6 @@ html[data-mode="desktop"] :is(.skip-link, .app-bar, #main-content, .mobile-nav, 
 .dt-doc .section-heading > p { font-size: 16px; }
 .dt-doc .about-grid { grid-template-columns: 1fr; gap: 28px; }
 .dt-doc .about-copy p { font-size: 19px; }
-.dt-doc .details-stack { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .dt-doc .experience-card { grid-template-columns: 1fr; gap: 10px; }
 .dt-doc .experience-card__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-top: 0; }
 .dt-doc .experience-card::before { top: 3px; }
