@@ -280,7 +280,7 @@
     }
     .brand__text { display: grid; line-height: 1.15; }
     .brand__text strong { font-family: var(--display); font-size: 18px; font-weight: 500; }
-    .brand__text small { color: var(--md-on-surface-variant); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .brand__text small { color: var(--md-on-surface-variant); font-size: 13px; }
     .desktop-nav {
       display: flex;
       align-items: center;
@@ -388,14 +388,10 @@
       margin-bottom: 16px;
       color: var(--md-primary);
       font-family: var(--body);
-      font-size: 11px;
-      font-weight: 650;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 600;
     }
-    .section-heading__label .icon { font-size: 19px; }
-    .section-heading__num { color: var(--md-on-surface-variant); }
-    .contact-card .section-heading__num { color: color-mix(in srgb, var(--md-inverse-on-surface) 75%, transparent); }
+    .section-heading__label .icon { font-size: 20px; }
     .section-heading h2 {
       margin-bottom: 0;
       font-family: var(--display);
@@ -555,7 +551,7 @@
     }
     .project-card__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, .95fr); align-items: stretch; }
     .project-card__content { display: flex; flex-direction: column; align-items: flex-start; padding: clamp(32px, 5vw, 56px); }
-    .project-card__number { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; color: var(--md-primary); font-family: var(--body); font-size: 11px; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
+    .project-card__number { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; color: var(--md-primary); font-family: var(--body); font-size: 15px; font-weight: 600; }
     .project-card__number::before { content: ""; width: 24px; height: 2px; background: currentColor; }
     .project-card h3 { max-width: 18ch; margin-bottom: 18px; font-family: var(--display); font-size: clamp(34px, 3.7vw, 48px); font-weight: 400; letter-spacing: -.035em; line-height: 1.05; }
     .project-card__description { max-width: 62ch; margin-bottom: 22px; color: var(--md-on-surface-variant); font-size: 16px; }
@@ -632,7 +628,7 @@
     .contact-link:hover { background: rgb(255 255 255 / .1); border-color: rgb(255 255 255 / .35); transform: translateX(4px); }
     .contact-link .icon { color: var(--md-inverse-primary); }
     .contact-link div { min-width: 0; display: grid; line-height: 1.3; }
-    .contact-link small { color: color-mix(in srgb, var(--md-inverse-on-surface) 68%, transparent); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; }
+    .contact-link small { color: color-mix(in srgb, var(--md-inverse-on-surface) 68%, transparent); font-size: 13px; }
     .contact-link strong { overflow-wrap: anywhere; font-size: 14px; font-weight: 580; }
     .contact-link > .arrow { margin-left: auto; color: color-mix(in srgb, var(--md-inverse-on-surface) 50%, transparent); font-size: 19px; }
     .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px 4px 0; color: var(--md-on-surface-variant); font-size: 13px; }
@@ -670,7 +666,7 @@
     .chooser__photo { width: 96px; height: 96px; margin: 0 auto 18px; object-fit: cover; border: 5px solid var(--md-surface-container-lowest); border-radius: 30px; box-shadow: 0 12px 28px rgb(var(--shadow-color) / .16); }
     .chooser__name { margin-bottom: 6px; font-family: var(--display); font-size: clamp(40px, 6vw, 64px); font-weight: 400; letter-spacing: -.03em; line-height: 1; }
     .chooser__role { margin-bottom: 22px; color: var(--md-on-surface-variant); font-size: 17px; }
-    .chooser__prompt { margin-bottom: 0; color: var(--md-on-surface-variant); font-size: 15px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+    .chooser__prompt { margin-bottom: 0; color: var(--md-on-surface-variant); font-size: 15px; font-weight: 600; }
     .chooser__options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .chooser__option {
       display: grid;
@@ -923,7 +919,7 @@
           <a class="chooser__resume" href="assets/luiz_carlos_resume.pdf" download="luiz-carlos-resume.pdf"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pdf"/></svg>Download résumé</a>
           <a class="chooser__email" href="mailto:luizcarloszdk@gmail.com">luizcarloszdk@gmail.com</a>
         </p>
-        <p class="chooser__prompt">Or look around:</p>
+        <p class="chooser__prompt">Or look around</p>
       </div>
       <div class="chooser__options">
         <button class="chooser__option" type="button" data-choose="simple">
@@ -1012,7 +1008,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"/></svg><span class="section-heading__num">01</span>About</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"/></svg>About</div>
             <h2>Engineering at the edge of data and AI.</h2>
           </div>
           <p>I’m most useful where models, backend systems, and real business processes meet.</p>
@@ -1049,7 +1045,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg><span class="section-heading__num">02</span>Experience</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg>Experience</div>
             <h2>Building, migrating, and leading.</h2>
           </div>
           <p>Applied AI and production engineering, built on a foundation in research and technical leadership.</p>
@@ -1131,7 +1127,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg><span class="section-heading__num">03</span>Skills</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg>Skills</div>
             <h2>A production-minded toolkit.</h2>
           </div>
           <p>Backend-first, with the AI, data, and frontend range needed to take a product from an idea to production.</p>
@@ -1162,7 +1158,7 @@
       <div class="container">
         <header class="section-heading reveal" data-reveal="up">
           <div>
-            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg><span class="section-heading__num">04</span>Projects</div>
+            <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-rocket"/></svg>Projects</div>
             <h2>Ideas made useful.</h2>
           </div>
           <p>Selected work across meeting intelligence and retrieval-augmented generation.</p>
@@ -1172,7 +1168,7 @@
           <article class="project-card reveal" data-reveal="scale">
             <div class="project-card__grid">
               <div class="project-card__content">
-                <div class="project-card__number"><span>01</span><span>Open source</span><span>Since 2026</span></div>
+                <div class="project-card__number">Open source, since 2026</div>
                 <h3><span translate="no">Memoir</span> — AI meeting knowledge workspace.</h3>
                 <p class="project-card__description">An open-source full-stack app that turns meeting transcripts into searchable summaries, decisions, action items, participant profiles, and structured transcript segments. It detects Zoom and Google Meet formats automatically, with a Gemini fallback for messy or unsupported ones, and Pytest coverage protects parsing and core workflows.</p>
                 <div class="chip-row" translate="no"><span class="chip">FastAPI</span><span class="chip">Pydantic-AI</span><span class="chip">SQLAlchemy</span><span class="chip">SQLite</span><span class="chip">Gemini</span><span class="chip">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">Pytest</span></div>
@@ -1188,7 +1184,7 @@
           <article class="project-card project-card--divination reveal" data-reveal="scale">
             <div class="project-card__grid">
               <div class="project-card__content">
-                <div class="project-card__number"><span>02</span><span>Capstone</span><span>2024</span></div>
+                <div class="project-card__number">B.Sc. capstone, 2024</div>
                 <h3><span translate="no">Divination</span> — RAG assistant for Dungeon Masters.</h3>
                 <p class="project-card__description">A RAG assistant grounded in the official 2024 D&amp;D Free Rules using LangChain, vector search, and GPT-4o. Built with a FastAPI backend and Vue 3 frontend as my B.Sc. capstone project at IME-USP.</p>
                 <div class="chip-row" translate="no"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Vue 3</span><span class="chip">LangChain</span><span class="chip">GPT-4o</span><span class="chip">Vector Search</span></div>
@@ -1208,7 +1204,7 @@
         <div class="contact-card reveal" data-reveal="scale">
           <div class="contact-card__content">
             <div>
-              <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wave"/></svg><span class="section-heading__num">05</span>Contact</div>
+              <div class="section-heading__label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wave"/></svg>Contact</div>
               <h2>Let’s build something solid.</h2>
               <p>Happy to talk about LLM systems, process automation, or something you’re building. Based in São Paulo, reachable from anywhere.</p>
               <div class="button-row">
