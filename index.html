@@ -358,15 +358,10 @@
     .hero__inner { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: center; }
     .hero__photo { width: clamp(132px, 15vw, 196px); aspect-ratio: 1; overflow: hidden; border: 6px solid var(--md-surface-container-lowest); border-radius: 36px; box-shadow: 0 18px 40px rgb(var(--shadow-color) / .16); }
     .hero__photo img { width: 100%; height: 100%; object-fit: cover; }
-    .hero__eyebrow { margin-bottom: 14px; color: var(--md-primary); font-size: 14px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
     .hero__title { margin-bottom: 14px; font-family: var(--display); font-size: clamp(56px, 8.4vw, 116px); font-weight: 400; letter-spacing: -.035em; line-height: .95; }
     .hero__title:focus { outline: none; }
-    .hero__role { margin-bottom: 18px; font-family: var(--display); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.25; }
+    .hero__role { margin-bottom: 20px; color: var(--md-primary); font-family: var(--display); font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; }
     .hero__summary { max-width: 62ch; margin-bottom: 28px; color: var(--md-on-surface-variant); font-size: 18px; }
-    .hero__stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: clamp(16px, 3vw, 32px); }
-    .hero__stat { padding: 20px 22px; border: 1px solid color-mix(in srgb, var(--md-outline-variant) 70%, transparent); border-radius: var(--shape-large); background: color-mix(in srgb, var(--md-surface-container-lowest) 82%, transparent); }
-    .hero__stat strong { display: block; margin-bottom: 4px; color: var(--md-primary); font-family: var(--display); font-size: clamp(32px, 3.4vw, 44px); font-weight: 400; line-height: 1; }
-    .hero__stat span { color: var(--md-on-surface-variant); font-size: 14px; }
     .mode-switch { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--md-outline-variant); border-radius: 999px; color: var(--md-on-surface); font-size: 14px; font-weight: 620; transition: background 180ms var(--ease-standard), border-color 180ms var(--ease-standard); }
     .mode-switch:hover { background: var(--md-surface-container-high); border-color: var(--md-outline); }
     .mode-switch .icon { color: var(--md-primary); font-size: 19px; }
@@ -805,7 +800,6 @@
       .hero { padding: calc(var(--app-bar-height) + 36px) 0 56px; }
       .hero__inner { grid-template-columns: 1fr; gap: 22px; }
       .hero__photo { width: 112px; border-radius: 28px; }
-      .hero__stats { grid-template-columns: 1fr; }
       .mode-switch { width: 48px; margin-left: auto; padding: 0; justify-content: center; }
       .mode-switch span:last-child { display: none; }
       .resume-action { margin-left: 0; }
@@ -955,19 +949,13 @@
       <div class="container hero__inner">
         <div class="hero__photo reveal" data-reveal="scale"><img src="assets/luiz-photo.jpg" alt="Luiz Carlos smiling" width="196" height="196" fetchpriority="high"></div>
         <div class="hero__copy reveal" data-reveal="up">
-          <p class="hero__eyebrow">AI Engineer · Senior Specialist · São Paulo</p>
           <h1 class="hero__title" id="hero-title" tabindex="-1" translate="no">Luiz Carlos</h1>
-          <p class="hero__role">LLM systems, AI agents &amp; RAG. Applied AI and automation.</p>
-          <p class="hero__summary">I build production LLM systems, backend services, and the automation around them. I lead AI and automation at BWG; before that, I built agent pipelines at Auria AI that processed 3,000+ security incidents a day.</p>
+          <p class="hero__role">AI Engineer · Senior Specialist</p>
+          <p class="hero__summary">I build production LLM systems, AI agents and RAG pipelines, and the automation around them. I lead AI and automation at BWG in São Paulo. Before that, I built 20+ production AI agents at Auria AI that handled 3,000+ security incidents a day.</p>
           <div class="button-row">
             <a class="button button--filled" href="mailto:luizcarloszdk@gmail.com"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><span>Get in touch</span></a>
             <a class="button button--tonal" href="assets/luiz_carlos_resume.pdf" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-file"/></svg><span>View résumé</span></a>
           </div>
-        </div>
-        <div class="hero__stats reveal" data-reveal="up" aria-label="Career highlights">
-          <div class="hero__stat"><strong>20+</strong><span>production AI agents built</span></div>
-          <div class="hero__stat"><strong>3,000+</strong><span>security incidents processed daily</span></div>
-          <div class="hero__stat"><strong>2</strong><span>open-source AI projects</span></div>
         </div>
       </div>
     </section>
