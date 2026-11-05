@@ -1,6 +1,6 @@
 # luizcarlosdk.github.io
 
-Personal portfolio for [Luiz Carlos](https://luizcarlosdk.github.io/), an AI Engineer building production LLM systems, backend services, and business process automation.
+Personal portfolio for [Luiz Carlos](https://luizcarlosdk.github.io/), an AI Engineer · Senior Specialist building production LLM systems, AI agents and RAG, backend services, and business process automation.
 
 Live at **https://luizcarlosdk.github.io/**.
 
